@@ -17,13 +17,15 @@ app.get("/" , (req, res) => {
 app.post("/registr_submit", (req, res) => {
     true_email(req.body.email)
         .then(result => {
+            res.send(result);
             console.log(result); // true
         })
         .catch(error => {
+            res.send(error);
             console.log(error); // false
         });
     console.log(req.body);
-    res.send("poxos");
+    
 });
 app.post("/login_submit", (req, res) => {
     console.log(req.body);

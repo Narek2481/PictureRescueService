@@ -5,7 +5,7 @@ import registration_submit from "../../action/registr";
 const Registration = () => {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
-  const [login, setLogin] = useState('');
+  const [lastname, setLastName] = useState('');
   const [password, setPassword] = useState('');
   const [valid_err, setValid_err] = useState('');
 
@@ -35,6 +35,15 @@ const Registration = () => {
         />
         <Input_lable_component
           props={{
+            text: "Last Name",
+            name: "Last_name",
+            type: "text",
+            value: lastname,
+            setValue: setLastName
+          }}
+        />
+        <Input_lable_component
+          props={{
             text: "Email",
             name: "Email",
             type: "email",
@@ -42,15 +51,7 @@ const Registration = () => {
             setValue: setEmail
           }}
         />
-        <Input_lable_component
-          props={{
-            text: "Login",
-            name: "Login",
-            type: "login",
-            value: login,
-            setValue: setLogin
-          }}
-        />
+        
         <Input_lable_component
           props={{
             text: "Password",
@@ -64,9 +65,9 @@ const Registration = () => {
           if (contains_valid_name(name) && validate_password(password)) {
             setEmail("");
             setName("");
-            setLogin("");
+            setLastName("");
             setPassword("");
-            registration_submit(name, email, login, password)
+            registration_submit(name, email, lastname, password)
               // .then(Response => console.log(Response));
           } else {
             setValid_err("Err write corect")
