@@ -1,5 +1,5 @@
 import express from "express";
-import path from "path"
+// import path from "path"
 // import bp from "body-parser";
 import cors from "cors";
 import true_email from "./true_email.js"
@@ -24,7 +24,7 @@ const images = [
         image_url: "kartinka_motivatsiya_tsitata_9.jpg" 
     }];
 const app = express();
-console.log(images)
+// console.log(images)
 app.use(express.static("./client/public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -32,12 +32,10 @@ app.use(cors());
 app.listen(4000);
 app.get("/", (req, res) => {
     console.log(req.body);
-
     res.send("ok");
 });
 app.get("/image_loud", (req, res) => {
     console.log(req.body);
-
     res.send(images);
 });
 app.post("/registr_submit", (req, res) => {

@@ -1,37 +1,46 @@
 import { useEffect, useState } from "react";
-import home from "../../action/home";
+import axios from "axios";
 import Image_component from "./image_forme/image_component";
+import Image_submit from "./image_submit/image_submit";
 
 
 export default function Home({ category }) {
+
     const [fetching, setFetching] = useState(true);
     const [data, setData] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
+    // const [currentPage, setCurrentPage] = useState(1);
+    console.log(data)
     useEffect(() => {
         // setLoading(true);
         if (fetching) {
-            home(category)
-            .then((res) => {
-                setData(res.data);
-            });
+            console.log("fetchhing")
+            axios.get("http://localhost:4000/image_loud")
+                .then((res) => {
+                    setData((data) => [...data,...res.data]);
+                    // setCurrentPage(prevState => prevState + 1);
+                })
+                .catch(err =>{
+                    alert(err)
+                })
+                .finally(() => setFetching(false))
+                
         }
 
         // setLoading(false);
-    }, [fetching])
+    }, [fetching]);
     useEffect(() => {
-        document.addEventListener("scroll", scroll_hendler)
-
+        document.addEventListener("scroll", scroll_hendler);
         return function () {
             document.removeEventListener("scroll", scroll_hendler)
         }
     }, []);
 
     const scroll_hendler = (e) => {
-        if(e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop+ window.innerHeight)<100){
+        if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100) {
             console.log("scroll")
             setFetching(true);
         }
-       
+
     }
 
 
@@ -44,10 +53,11 @@ export default function Home({ category }) {
     // } else {
     return (
         <div className="home">
+            <Image_submit></Image_submit>
             {
                 data.map((elem, index) => {
                     return (
-                        <Image_component props={elem} key={index + Date.now()}></Image_component>
+                        <Image_component props={elem} key={index+Math.random()}></Image_component>
                     )
                 })
             }

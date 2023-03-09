@@ -24,9 +24,11 @@ nav {
   cursor: pointer;
   display: none;
 }
-.none_span{
+
+.none_span {
   display: none !important;
 }
+
 .manue_icon .all_span {
   display: block;
   background-color: white;
@@ -38,21 +40,23 @@ nav {
 
 
 
-.manue_close_1{
+.manue_close_1 {
   transform: rotate(50deg);
-  margin :0  !important;
+  margin: 0 !important;
   transform: 1s;
   transition: 0.6s;
 }
-.manue_close_2{
-  
+
+.manue_close_2 {
+
   transform: rotate(-50deg);
-  margin :0 !important;
+  margin: 0 !important;
   transform: 1s;
   transition: 0.6s;
 
 }
-.manue_icon{
+
+.manue_icon {
   padding-top: 5px;
 }
 
@@ -110,18 +114,37 @@ nav>ul li:hover {
   border-bottom: 1px solid white;
   transition: 0.5s;
 }
+
 /* Home ----------------------------------------------------------------------------------------------- */
-.home{
+.home {
   padding: 20px 0;
 }
-.iamage_container{
+
+
+.iamage_container {
+  flex-basis: 350px;
+  text-align: center;
+  margin-top: 30px;
+  padding: 20px;
+}
+
+.iamage_container img {
+    width: 300px;
+}
+
+.iamage_container h4 {
+  margin-bottom: 30px;
+  color: cornflowerblue;
+}
+.form_image{
   text-align: center;
 }
-.iamage_container img{
-
+.form_image form input {
   display: inline-block;
-  width: 40%;
-  height: 150px;
+  text-align: center;
+  border: none;
+  color: cornflowerblue;
+  
 }
 /* registration ------------------------------------------------------------------------------------------- */
 .registration {
@@ -222,6 +245,7 @@ input:focus {
   color: #000000;
   text-decoration: none;
 }
+
 /* footer ----------------------------------------------------------------------------------------- */
 footer ul {
   display: flex;
@@ -256,10 +280,12 @@ footer ul li a {
     transition: 0.5s;
 
   }
+
   nav>ul li:hover {
     border: none !important;
   }
-  nav>ul li{
+
+  nav>ul li {
     border: none !important;
   }
 

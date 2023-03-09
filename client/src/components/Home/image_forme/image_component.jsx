@@ -5,7 +5,8 @@ export default function Image_component({ props }) {
     // console.log(img)
     if (props) {
         return (
-            <div className="iamage_container">
+            <div className="iamage_container" >
+                <h4>img  width height</h4>
                 <img src={img} alt="" />
             </div>
         )
