@@ -9,6 +9,10 @@ body {
   background-color: whitesmoke;
 }
 
+
+
+
+/*  Nav ----------------------------------------------------------------------------------------- */
 nav {
   background-color: black;
   padding: 15px 5% 5px;
@@ -32,7 +36,7 @@ nav {
   transition: 0.6s;
 }
 
-  
+
 
 .manue_close_1{
   transform: rotate(50deg);
@@ -106,7 +110,20 @@ nav>ul li:hover {
   border-bottom: 1px solid white;
   transition: 0.5s;
 }
+/* Home ----------------------------------------------------------------------------------------------- */
+.home{
+  padding: 20px 0;
+}
+.iamage_container{
+  text-align: center;
+}
+.iamage_container img{
 
+  display: inline-block;
+  width: 40%;
+  height: 150px;
+}
+/* registration ------------------------------------------------------------------------------------------- */
 .registration {
   padding: 25px 0 0 0;
   text-align: center;
@@ -136,6 +153,20 @@ nav>ul li:hover {
   padding-bottom: 10px;
 }
 
+.registration button,
+.sign_in button {
+  display: inline-block;
+  width: 200px;
+  border: none;
+  color: white;
+  background-color: black;
+  padding: 10px 5px;
+  margin-bottom: 50px;
+  cursor: pointer;
+  border-radius: 30px;
+}
+
+/* sign in --------------------------------------------------------------------------------------- */
 .sign_in h2 {
   margin-bottom: 30px;
 }
@@ -152,18 +183,6 @@ input:focus {
 }
 
 
-.registration button,
-.sign_in button {
-  display: inline-block;
-  width: 200px;
-  border: none;
-  color: white;
-  background-color: black;
-  padding: 10px 5px;
-  margin-bottom: 50px;
-  cursor: pointer;
-  border-radius: 30px;
-}
 
 .sign_in {
   padding: 25px 0 0 0;
@@ -174,6 +193,7 @@ input:focus {
   padding-bottom: 35px;
 }
 
+/* about us ---------------------------------------------------------------------------------------*/
 .about_us {
   text-align: center;
   padding-top: 50px;
@@ -202,7 +222,7 @@ input:focus {
   color: #000000;
   text-decoration: none;
 }
-
+/* footer ----------------------------------------------------------------------------------------- */
 footer ul {
   display: flex;
   background-color: #000000;

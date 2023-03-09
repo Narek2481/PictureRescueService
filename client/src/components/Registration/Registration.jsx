@@ -67,7 +67,7 @@ const Registration = () => {
             setName("");
             setLastName("");
             setPassword("");
-            registration_submit(name, email, lastname, password)
+            registration_submit(name,  lastname, email,password)
               // .then(Response => console.log(Response));
           } else {
             setValid_err("Err write corect")

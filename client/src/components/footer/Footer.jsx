@@ -1,4 +1,4 @@
-import About_us from "../anout_us/About_us"
+import About_us from "../about_us/About_us"
 import Sign_in from "../sign_in/Sign_in"
 import Registration from "../Registration/Registration"
 import { Link, Route, Routes } from "react-router-dom";

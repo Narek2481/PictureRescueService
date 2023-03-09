@@ -1,14 +1,16 @@
 import { Link, Route, Routes } from "react-router-dom";
-import About_us from "../anout_us/About_us"
+import About_us from "../about_us/About_us"
 import Sign_in from "../sign_in/Sign_in"
 import Registration from "../Registration/Registration"
 import { useState } from "react";
+import Home from "../Home/Home";
 
 export default function Nav() {
     const [manue, setManu] = useState("");
     const [icon_2, setIcon_2] = useState("");
     const [icon_1, setIcon_1] = useState("");
     const [none, setnone] = useState("");
+
     return (
         <>
             <nav>
@@ -35,7 +37,7 @@ export default function Nav() {
                     </div>
                     <div className={"navigation "+manue }>
                         <li>
-                            <Link to={"/"}>Home</Link>
+                            <Link to={"/home"}>Home</Link>
                         </li>
                         <li>
                             <Link to="About_us">About us</Link>
@@ -51,8 +53,8 @@ export default function Nav() {
                 </ul>
             </nav>
             <Routes>
-                <Route path="/" element></Route>
-                <Route path="/About_us/*" element={<About_us></About_us>}></Route>
+                <Route path="/home/*" element={<Home/>}></Route>
+                <Route path="/About_us/*" element={<About_us/>}></Route>
                 <Route path="/Registration/*" element={<Registration />}></Route>
                 <Route path="/Sign_in/*" element={<Sign_in />}></Route>
             </Routes>
