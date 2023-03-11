@@ -5,26 +5,18 @@ import { Link, Route, Routes } from "react-router-dom";
 
 export default function Footer() {
     return (
-        <>
-            <footer>
-                <ul>
-                    <li>
-                        <Link to='/'>Home</Link>
-                    </li>
-                    <li>
-                        <Link to="About_us">About us</Link>
-                    </li>
-                    <li>
-                        <Link to="Sign_in">Sign in</Link>
-                    </li>
-                </ul>
-            </footer>
-            <Routes>
-                <Route path="/" element></Route>
-                <Route path="/About_us" element={<About_us></About_us>}></Route>
-                <Route path="/Sign_in" element={<Sign_in />}></Route>
-            </Routes>
-
-        </>
+        <footer>
+            <ul>
+                <li>
+                    <Link to='/home'>Home</Link>
+                </li>
+                <li>
+                    <Link to="/About_us">About us</Link>
+                </li>
+                <li>
+                    <Link to="/Sign_in">Sign in</Link>
+                </li>
+            </ul>
+        </footer>
     );
 }

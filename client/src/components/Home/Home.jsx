@@ -57,7 +57,7 @@ export default function Home({ category }) {
             {
                 data.map((elem, index) => {
                     return (
-                        <Image_component props={elem} key={index+Math.random()}></Image_component>
+                        <Image_component props={elem} key={(index+Math.random()+Date.now())/100000}></Image_component>
                     )
                 })
             }
