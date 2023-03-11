@@ -4,6 +4,8 @@ import Sign_in from "../sign_in/Sign_in"
 import Registration from "../Registration/Registration"
 import { useState } from "react";
 import Home from "../Home/Home";
+import Link_component from "./link_component/link_component";
+
 
 export default function Nav() {
     const [manue, setManu] = useState("");
@@ -22,7 +24,7 @@ export default function Nav() {
                                 setIcon_1("manue_close_1");
                                 setIcon_2("manue_close_2");
                                 setnone("none_span");
-                                setManu('manu_block' );
+                                setManu('manu_block');
                             } else {
                                 setIcon_1("");
                                 setIcon_2("");
@@ -30,33 +32,47 @@ export default function Nav() {
                                 setManu('');
                             }
                         }}>
-                            <span className={"all_span "+icon_1}></span>
-                            <span className={"all_span  "+icon_2} ></span>
-                            <span className={"all_span  "+none}></span>
+                            <span className={"all_span " + icon_1}></span>
+                            <span className={"all_span  " + icon_2} ></span>
+                            <span className={"all_span  " + none}></span>
                         </div>
                     </div>
-                    <div className={"navigation "+manue }>
-                        <li>
-                            <Link to={"/home"}>Home</Link>
-                        </li>
-                        <li>
-                            <Link to="About_us">About us</Link>
-                        </li>
-                        <li>
-                            <Link to="Sign_in">Sign in</Link>
-                        </li>
-                        <li>
-                            <Link to="Registration">Registration</Link>
-                        </li>
+                    <div className={"navigation " + manue}>
+                        <Link_component props={
+                            {
+                                path: "home",
+                                text: "Home"
+                            }}
+                        />
+                        <Link_component props={
+                            {
+                                path: "about_us",
+                                text: "About us"
+                            }}
+                        />
+                        <Link_component props={
+                            {
+                                path: "sign_in",
+                                text: "Sign in"
+                            }}
+                        />
+
+                        <Link_component props={
+                            {
+                                path: "registration",
+                                text: "Registration"
+                            }}
+                        />
                     </div>
 
                 </ul>
             </nav>
             <Routes>
-                <Route path="/home/*" element={<Home/>}></Route>
-                <Route path="/About_us/*" element={<About_us/>}></Route>
-                <Route path="/Registration/*" element={<Registration />}></Route>
-                <Route path="/Sign_in/*" element={<Sign_in />}></Route>
+                <Route path="/" element={<Home />}></Route>
+                <Route path="/home/*" element={<Home />}></Route>
+                <Route path="/about_us/*" element={<About_us />}></Route>
+                <Route path="/registration/*" element={<Registration />}></Route>
+                <Route path="/sign_in/*" element={<Sign_in />}></Route>
             </Routes>
         </>
     );
