@@ -114,13 +114,61 @@ nav>ul li:hover {
   border-bottom: 1px solid white;
   transition: 0.5s;
 }
+/* Add_image -------------------------------------------------------------------------------------------*/
+.add_price{
+  text-align: center;
+  margin-top: 50px;
+}
+.add_price img{
+  display: block;
+  margin: 0 auto;
+  margin-top: 30px;
+  width:10%;
+}
+.add_price input{
+  
+}
+.add_price button{
+  display: flex;
+  margin: 0 auto;
+  margin-top: 30px;
+  border: none;
+  color: white;
+  background-color: #000000;
+  width: 160px;
+  justify-content: center;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 20px;
+  margin-bottom: 30px;
+}
+.add_price button:hover{
+  background-color: green;
 
+}
 /* Home ----------------------------------------------------------------------------------------------- */
 .home {
   padding: 20px 0;
 }
+.add_container{
+  text-align: center;
+}
+.go_add_image{
+  display: inline-block;
+  background-color: #000000;
+  text-decoration: none;
+  color: white;
+  padding: 10px 30px;
+  border-radius: 10px;
+  margin-top: 50px;
+  font-size: 20px;
+  cursor: pointer;
+}
 
-
+.go_add_image:hover{
+  background-color: green;
+}
 .iamage_container {
   flex-basis: 350px;
   text-align: center;

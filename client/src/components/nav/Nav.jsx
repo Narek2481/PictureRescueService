@@ -5,6 +5,7 @@ import Registration from "../Registration/Registration"
 import { useState } from "react";
 import Home from "../Home/Home";
 import Link_component from "./link_component/link_component";
+import Add_picture from "../add picture/add_picture";
 
 
 export default function Nav() {
@@ -69,10 +70,11 @@ export default function Nav() {
             </nav>
             <Routes>
                 <Route path="/" element={<Home />}></Route>
-                <Route path="/home/*" element={<Home />}></Route>
+                <Route path="/home" element={<Home />}></Route>
                 <Route path="/about_us/*" element={<About_us />}></Route>
                 <Route path="/registration/*" element={<Registration />}></Route>
                 <Route path="/sign_in/*" element={<Sign_in />}></Route>
+                <Route path="/add_image/*" element={<Add_picture/>}></Route>
             </Routes>
         </>
     );
