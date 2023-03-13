@@ -16,14 +16,14 @@ export default function Home({ category }) {
             console.log("fetchhing")
             axios.get("http://localhost:4000/image_loud")
                 .then((res) => {
-                    setData((data) => [...data,...res.data]);
+                    setData((data) => [...data, ...res.data]);
                     // setCurrentPage(prevState => prevState + 1);
                 })
-                .catch(err =>{
+                .catch(err => {
                     alert(err)
                 })
                 .finally(() => setFetching(false))
-                
+
         }
 
         // setLoading(false);
@@ -44,20 +44,22 @@ export default function Home({ category }) {
     }
 
 
-    // if (fetching) {
-    //     return (
-    //         <div className="home">
-    //             loading...
-    //         </div>
-    //     );
-    // } else {
+
     return (
         <div className="home">
             <Image_submit></Image_submit>
+            <div style={
+                {
+                    textAlign: "center", 
+                    padding:"20px 0 0 0"
+                }
+            }>
+                {fetching ? "Loding..." : ""}
+            </div>
             {
                 data.map((elem, index) => {
                     return (
-                        <Image_component props={elem} key={(index+Math.random()+Date.now())/100000}></Image_component>
+                        <Image_component props={elem} key={(index + Math.random() + Date.now()) / 100000}></Image_component>
                     )
                 })
             }
