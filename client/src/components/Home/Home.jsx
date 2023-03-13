@@ -3,7 +3,7 @@ import axios from "axios";
 import Image_component from "./image_forme/image_component";
 import { Link } from "react-router-dom"
 import Select_category from "./select_category/select_category";
-// import Image_submit from "./image_submit/image_submit";
+
 
 
 
@@ -27,11 +27,11 @@ export default function Home() {
     // requset image download
     useEffect(() => {
         document.addEventListener("scroll", scroll_hendler);
-        return function () {
+        return () => {
             document.removeEventListener("scroll", scroll_hendler)
         }
     }, []);
-
+    // requset select 
     useEffect(() => {
         if (nesting > 0) {
             axios.get("http://localhost:4000/select_get",
@@ -46,6 +46,7 @@ export default function Home() {
                 })
         }
     }, [nesting]);
+    // function scroll event 
     const scroll_hendler = (e) => {
         if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100) {
             // console.log("scroll")
@@ -55,11 +56,12 @@ export default function Home() {
     return (
         <div className="home">
             <div className="add_container">
+                {/* route for adding pictures */}
                 <Link className="go_add_image" to={"/add_image"}>
                     Add Image
                 </Link>
-
             </div>
+            {/* category for pictures */}
             <Select_category props={{ set_nesting }}></Select_category>
             <div style={
                 {
@@ -67,9 +69,13 @@ export default function Home() {
                     padding: "20px 0 0 0"
                 }
             }>
-                {fetching ? "Loading..." : ""}
+                {
+                    // backend request for images upload
+                    fetching ? "Loading..." : ""
+                }
             </div>
             {
+                // an array from the backend that is being rendered for component Image_component
                 data.map((elem) => {
                     return (
                         <Image_component props={elem} key={Math.random() * 100}></Image_component>
