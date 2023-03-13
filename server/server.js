@@ -21,8 +21,28 @@ const images = [
         image_url: "images.jpeg"
     },
     {
-        image_url: "kartinka_motivatsiya_tsitata_9.jpg" 
-    }];
+        image_url: "kartinka_motivatsiya_tsitata_9.jpg"
+    }
+];
+const select = [
+    {
+        value: "poxos"
+    },
+    {
+        value: "hopar"
+    },
+    {
+        value: "chgitem"
+    },
+    {
+        value: "anhayt"
+    },
+    {
+        value: "errrr"
+    },
+];
+
+
 const app = express();
 // console.log(images)
 app.use(express.static("./client/public"));
@@ -54,4 +74,8 @@ app.post("/registr_submit", (req, res) => {
 app.post("/login_submit", (req, res) => {
     console.log(req.body);
     res.send("all good");
+});
+app.get("/image_get", (req, res) => {
+    console.log(req.body)
+    res.send(select);
 });

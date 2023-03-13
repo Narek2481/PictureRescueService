@@ -115,6 +115,15 @@ nav>ul li:hover {
   transition: 0.5s;
 }
 /* Add_image -------------------------------------------------------------------------------------------*/
+.category_container{
+  display: flex;
+  justify-content: center;
+  padding: 50px 0 0 ;
+  gap: 5px;
+}
+.category_container select{
+  
+}
 .add_price{
   text-align: center;
   margin-top: 50px;
@@ -125,9 +134,9 @@ nav>ul li:hover {
   margin-top: 30px;
   width:10%;
 }
-.add_price input{
-  
-}
+/* .add_price input{
+
+} */
 .add_price button{
   display: flex;
   margin: 0 auto;
