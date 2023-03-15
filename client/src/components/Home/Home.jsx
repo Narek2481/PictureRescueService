@@ -1,10 +1,12 @@
-import { useEffect, useState , memo, useCallback} from "react";
-import axios from "axios";
+import { useEffect, useState, memo, useCallback } from "react";
 import Image_component from "./image_forme/image_component";
 import { Link } from "react-router-dom"
 import Select_category from "./select_category/select_category";
+import image_loud from "../../action/image_loud";
+import { image_category_get, image_category_post } from "../../action/image_category";
 
 function Home() {
+
     const [fetching, setFetching] = useState(true);
     const [fetching_category, set_fetching_category] = useState(true);
     const [select_value, set_select_value] = useState("All")
@@ -15,10 +17,10 @@ function Home() {
     // requset image download
     useEffect(() => {
         if (fetching) {
-            axios.get("http://localhost:4000/image_loud")
+            image_loud()
                 .then((res) => {
                     setData((data) => [...data, ...res.data]);
-                    
+
                 })
                 .catch(err => {
                     alert(err)
@@ -26,6 +28,7 @@ function Home() {
                 .finally(() => setFetching(false))
         }
     }, [fetching]);
+
     // requset image download
     useEffect(() => {
         document.addEventListener("scroll", scroll_hendler);
@@ -33,11 +36,12 @@ function Home() {
             document.removeEventListener("scroll", scroll_hendler)
         }
     }, []);
+
     // requset category
     useEffect(() => {
         // requset category first 
         if (fetching_category) {
-            axios.post("http://localhost:4000/image_category")
+            image_category_get()
                 .then((res) => {
                     set_requset_category(res.data);
                 })
@@ -48,15 +52,16 @@ function Home() {
         }
         // requset category in  category
         if (nesting > 0) {
-            axios.post("http://localhost:4000/image_category",{category:select_value,nesting})
+            image_category_post({ category: select_value, nesting })
                 .then((res) => {
-                    set_requset_category((state) => [...state,...res.data]);
+                    set_requset_category((state) => [...state, ...res.data]);
                 })
                 .catch(err => {
                     alert(err)
-                })
+                });
         }
     }, [nesting, fetching_category]);
+
     // function scroll event 
     const scroll_hendler = useCallback((e) => {
         if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100) {
@@ -64,7 +69,8 @@ function Home() {
             setFetching(true);
         }
     })
-    console.log(requset_category);
+
+    console.log(data);
     return (
         <div className="home">
             <div className="add_container">
@@ -74,9 +80,11 @@ function Home() {
                 </Link>
             </div>
             {/* category for pictures */}
-            {requset_category.map((elem,index) => {
-                return <Select_category props={{elem,set_select_value,set_nesting}} key={index}></Select_category>
-            })}
+            {
+                requset_category.map((elem, index) => {
+                    return <Select_category props={{ elem, set_select_value, set_nesting }} key={index}/>
+                })
+            }
             <div style={
                 {
                     textAlign: "center",
@@ -92,7 +100,7 @@ function Home() {
                 // an array from the backend that is being rendered for component Image_component
                 data.map((elem) => {
                     return (
-                        <Image_component props={elem} key={Math.random() * 100}></Image_component>
+                        <Image_component props={elem} key={Math.random() * 100}/>
                     )
                 })
             }

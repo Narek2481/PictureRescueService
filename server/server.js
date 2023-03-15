@@ -1,8 +1,9 @@
 import express from "express";
-// import path from "path"
+import path from "path";
 // import bp from "body-parser";
 import cors from "cors";
 import true_email from "./true_email.js"
+
 
 const images = [
     {
@@ -42,9 +43,8 @@ const select = [
     },
 ];
 
-
 const app = express();
-// console.log(images)
+
 app.use(express.static("./client/public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -59,7 +59,8 @@ app.get("/image_loud", (req, res) => {
     res.send(images);
 });
 app.post("/image_push", (req, res) => {
-    console.log(req);
+    let data = req.data;
+    console.log(req.body.image);
     res.send("ok");
 });
 app.post("/registr_submit", (req, res) => {

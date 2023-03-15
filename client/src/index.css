@@ -114,28 +114,31 @@ nav>ul li:hover {
   border-bottom: 1px solid white;
   transition: 0.5s;
 }
+
 /* Add_image -------------------------------------------------------------------------------------------*/
-.category_container{
+.category_container {
   display: flex;
   justify-content: center;
-  padding: 50px 0 0 ;
+  padding: 50px 0 0;
   gap: 5px;
 }
 
-.add_price{
+.add_price {
   text-align: center;
   margin-top: 50px;
 }
-.add_price img{
+
+.add_price img {
   display: block;
   margin: 0 auto;
   margin-top: 30px;
-  width:10%;
+  width: 10%;
 }
+
 /* .add_price input{
 
 } */
-.add_price button{
+.add_price button {
   display: flex;
   margin: 0 auto;
   margin-top: 30px;
@@ -150,18 +153,22 @@ nav>ul li:hover {
   font-size: 20px;
   margin-bottom: 30px;
 }
-.add_price button:hover{
+
+.add_price button:hover {
   background-color: green;
 
 }
+
 /* Home ----------------------------------------------------------------------------------------------- */
 .home {
   padding: 20px 0;
 }
-.add_container{
+
+.add_container {
   text-align: center;
 }
-.go_add_image{
+
+.go_add_image {
   display: inline-block;
   background-color: #000000;
   text-decoration: none;
@@ -173,9 +180,10 @@ nav>ul li:hover {
   cursor: pointer;
 }
 
-.go_add_image:hover{
+.go_add_image:hover {
   background-color: green;
 }
+
 .iamage_container {
   flex-basis: 350px;
   text-align: center;
@@ -184,14 +192,15 @@ nav>ul li:hover {
 }
 
 .iamage_container img {
-    width: 300px;
+  width: 300px;
 }
 
 .iamage_container h4 {
   margin-bottom: 30px;
   color: cornflowerblue;
 }
-.form_image{
+
+.form_image {
   text-align: center;
 }
 
@@ -203,53 +212,56 @@ nav>ul li:hover {
 }
 
 .input-file {
-	position: relative;
-	display: inline-block;
+  position: relative;
+  display: inline-block;
 }
-.input-file span {
-	position: relative;
-	display: inline-block;
-	cursor: pointer;
-	outline: none;
-	text-decoration: none;
-	font-size: 14px;
-	vertical-align: middle;
-	color: rgb(255 255 255);
-	text-align: center;
-	border-radius: 4px;
-	background-color: black;
-	line-height: 22px;
-	height: 40px;
-	padding: 10px 20px;
-	box-sizing: border-box;
-	border: none;
-	margin: 0;
-	transition: background-color 0.2s;
-}
-.input-file input[type=file] {
-	position: absolute;
-	z-index: -1;
-	opacity: 0;
-	display: block;
-	width: 0;
-	height: 0;
-}
- 
 
-.input-file input[type=file]:focus + span {
-	box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+.input-file span {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  outline: none;
+  text-decoration: none;
+  font-size: 14px;
+  vertical-align: middle;
+  color: rgb(255 255 255);
+  text-align: center;
+  border-radius: 4px;
+  background-color: black;
+  line-height: 22px;
+  height: 40px;
+  padding: 10px 20px;
+  box-sizing: border-box;
+  border: none;
+  margin: 0;
+  transition: background-color 0.2s;
 }
- 
+
+.input-file input[type=file] {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+  display: block;
+  width: 0;
+  height: 0;
+}
+
+
+.input-file input[type=file]:focus+span {
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
+}
+
 
 .input-file:hover span {
-	background-color: #59be6e;
+  background-color: #59be6e;
 }
+
 .input-file:active span {
-	background-color: #2E703A;
+  background-color: #2E703A;
 }
- 
-.input-file input[type=file]:disabled + span {
-	background-color: #eee;
+
+.input-file input[type=file]:disabled+span {
+  background-color: #eee;
 }
 
 /* registration ------------------------------------------------------------------------------------------- */

@@ -1,5 +1,4 @@
-import {memo,useCallback} from "react";
-import axios from "axios";
+import { memo, useCallback } from "react";
 
 const Select_category = ({ props }) => {
 
@@ -7,14 +6,14 @@ const Select_category = ({ props }) => {
         <div className="category_container">
             <label htmlFor="category">choose a category:</label>
             <select
-                name="category" 
+                name="category"
                 defaultValue={'All'}
                 onChange={useCallback((e) => {
-                    
+
                     props.set_select_value(e.target.value);
-                    props.set_nesting((state)=> ++state);
-                    
-                },[])}
+                    props.set_nesting((state) => ++state);
+
+                }, [])}
             >
                 <option value={"All"}>All</option>
                 {

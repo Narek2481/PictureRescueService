@@ -10,9 +10,9 @@ function About_us() {
         also find beautiful pictures for each.
         we flutter every day in such a way that we use our site.
       </p>
-      <Our_contacts/>
+      <Our_contacts />
     </div>
   );
 };
 
-export default  About_us;
+export default About_us;

@@ -51,7 +51,6 @@ const Registration = () => {
             setValue: setEmail
           }}
         />
-        
         <Input_lable_component
           props={{
             text: "Password",
@@ -67,8 +66,8 @@ const Registration = () => {
             setName("");
             setLastName("");
             setPassword("");
-            registration_submit(name,  lastname, email,password)
-              // .then(Response => console.log(Response));
+            registration_submit(name, lastname, email, password)
+            // .then(Response => console.log(Response));
           } else {
             setValid_err("Err write corect")
             console.log("err write corect");
