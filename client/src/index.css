@@ -145,7 +145,7 @@ nav>ul li:hover {
   width: 160px;
   justify-content: center;
   padding: 10px 20px;
-  border-radius: 10px;
+  border-radius: 20px;
   cursor: pointer;
   font-size: 20px;
   margin-bottom: 30px;
@@ -167,7 +167,7 @@ nav>ul li:hover {
   text-decoration: none;
   color: white;
   padding: 10px 30px;
-  border-radius: 10px;
+  border-radius: 20px;
   margin-top: 50px;
   font-size: 20px;
   cursor: pointer;
@@ -289,11 +289,13 @@ nav>ul li:hover {
   border: none;
   color: white;
   background-color: black;
-  padding: 10px 5px;
+  padding: 13px 0;
   margin-bottom: 50px;
   cursor: pointer;
   border-radius: 30px;
+  font-size: 20px;
 }
+
 
 /* sign in --------------------------------------------------------------------------------------- */
 .sign_in h2 {

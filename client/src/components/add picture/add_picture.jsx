@@ -20,7 +20,9 @@ const Add_picture = () => {
             <button 
             style={img_styles(image)}
             onClick={() => {
-                axios.post("http://localhost:4000/image_loud",{image});
+                axios.post("http://localhost:4000/image_push",{image})
+                    .then((res)=> alert(res.data))
+                    .catch((e)=>alert(e));
                 setImage(null)
             }}>
                 Add

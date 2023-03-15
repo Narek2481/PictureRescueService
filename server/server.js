@@ -58,6 +58,10 @@ app.get("/image_loud", (req, res) => {
     console.log(req.body);
     res.send(images);
 });
+app.post("/image_push", (req, res) => {
+    console.log(req);
+    res.send("ok");
+});
 app.post("/registr_submit", (req, res) => {
     true_email(req.body.email)
         .then(result => {
@@ -75,7 +79,7 @@ app.post("/login_submit", (req, res) => {
     console.log(req.body);
     res.send("all good");
 });
-app.get("/image_get", (req, res) => {
+app.post("/image_category", (req, res) => {
     console.log(req.body)
-    res.send(select);
+    res.send([select]);
 });
