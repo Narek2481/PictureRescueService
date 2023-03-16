@@ -6,29 +6,18 @@ import image_loud from "../action/image_loud";
 import { image_category_get, image_category_post } from "../action/image_category";
 
 function Home() {
-
     const [fetching, setFetching] = useState(true);
     const [fetching_category, set_fetching_category] = useState(true);
     const [select_value, set_select_value] = useState("All")
     const [requset_category, set_requset_category] = useState([]);
     const [data, setData] = useState([]);
     const [nesting, set_nesting] = useState(0);
-
     // requset image download
     useEffect(() => {
         if (fetching) {
-            image_loud()
-                .then((res) => {
-                    setData((data) => [...data, ...res.data]);
-
-                })
-                .catch(err => {
-                    alert(err)
-                })
-                .finally(() => setFetching(false))
+            image_loud({setData,fetching,setFetching});     
         }
     }, [fetching]);
-
     // requset image download
     useEffect(() => {
         document.addEventListener("scroll", scroll_hendler);
@@ -36,32 +25,18 @@ function Home() {
             document.removeEventListener("scroll", scroll_hendler)
         }
     }, []);
-
     // requset category
     useEffect(() => {
         // requset category first 
         if (fetching_category) {
-            image_category_get()
-                .then((res) => {
-                    set_requset_category(res.data);
-                })
-                .catch(err => {
-                    alert(err)
-                })
-                .finally(() => set_fetching_category(false))
+            image_category_get({set_requset_category,set_fetching_category})
+                
         }
         // requset category in  category
         if (nesting > 0) {
-            image_category_post({ category: select_value, nesting })
-                .then((res) => {
-                    set_requset_category((state) => [...state, ...res.data]);
-                })
-                .catch(err => {
-                    alert(err)
-                });
+            image_category_post({ data:{category: select_value, nesting},set_requset_category })
         }
     }, [nesting, fetching_category]);
-
     // function scroll event 
     const scroll_hendler = useCallback((e) => {
         if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100) {
@@ -70,7 +45,7 @@ function Home() {
         }
     })
 
-    console.log(data);
+    
     return (
         <div className="home">
             <div className="add_container">

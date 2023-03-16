@@ -1,5 +1,4 @@
 import { useState } from "react";
-import axios from "axios";
 import image_push from "../../action/add_image";
 const Add_picture = () => {
     const [image, setImage] = useState(null)
@@ -21,10 +20,7 @@ const Add_picture = () => {
             <button
                 style={img_styles(image)}
                 onClick={() => {
-                    image_push({ image })
-                        .then((res) => alert(res.data))
-                        .catch((e) => alert(e))
-                        .finally(() => setImage(null))
+                    image_push({ image ,setImage });
                 }}>
                 Add
             </button>
