@@ -1,86 +1,24 @@
 import express from "express";
 import path from "path";
 // import bp from "body-parser";
-import cors from "cors";
-import true_email from "./true_email.js"
+import middleware from "./middleware/middleware.js";
+import image_category from "./routes/image_category.js";
+import image_loud from "./routes/image_loud.js";
+import image_push from "./routes/image_push.js";
+import login_submit from "./routes/login_submit.js";
+import registration_submit from "./routes/registration_submit.js";
+import root_route from "./routes/root.js";
 
 
-const images = [
-    {
-        image_url: "1559455754_1.jpg"
-    },
-    {
-        image_url: "1586162565_2.jpg"
-    },
-    {
-        image_url: "download.jpeg"
-    },
-    {
-        image_url: "i.webp"
-    },
-    {
-        image_url: "images.jpeg"
-    },
-    {
-        image_url: "kartinka_motivatsiya_tsitata_9.jpg"
-    }
-];
-const select = [
-    {
-        value: "poxos"
-    },
-    {
-        value: "hopar"
-    },
-    {
-        value: "chgitem"
-    },
-    {
-        value: "anhayt"
-    },
-    {
-        value: "errrr"
-    },
-];
+
 
 const app = express();
-
-app.use(express.static("./client/public"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+middleware(app);
 app.listen(4000);
-app.get("/", (req, res) => {
-    console.log(req.body);
-    res.send("ok");
-});
-app.get("/image_loud", (req, res) => {
-    console.log(req.body);
-    res.send(images);
-});
-app.post("/image_push", (req, res) => {
-    let data = req.data;
-    console.log(req.body.image);
-    res.send("ok");
-});
-app.post("/registr_submit", (req, res) => {
-    true_email(req.body.email)
-        .then(result => {
-            res.send(result);
-            console.log(result); // true
-        })
-        .catch(error => {
-            res.send(error);
-            console.log(error); // false
-        });
-    console.log(req.body);
 
-});
-app.post("/login_submit", (req, res) => {
-    console.log(req.body);
-    res.send("all good");
-});
-app.post("/image_category", (req, res) => {
-    console.log(req.body)
-    res.send([select]);
-});
+image_loud(app);
+image_category(app);
+image_push(app);
+login_submit(app);
+registration_submit(app);
+root_route(app);

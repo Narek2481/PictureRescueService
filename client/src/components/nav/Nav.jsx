@@ -1,11 +1,11 @@
 import { Route, Routes } from "react-router-dom";
-import About_us from "../about_us/About_us"
-import Sign_in from "../sign_in/Sign_in"
-import Registration from "../Registration/Registration"
+import About_us from "../../pages/About_us"
+import Sign_in from "../../pages/Sign_in"
+import Registration from "../../pages/Registration"
 import { useState } from "react";
-import Home from "../Home/Home";
+import Home from "../../pages/Home";
 import Link_component from "./link_component/link_component";
-import Add_picture from "../add picture/add_picture";
+import Add_picture_page from "../../pages/Add_picture_page";
 
 
 export default function Nav() {
@@ -74,7 +74,7 @@ export default function Nav() {
                 <Route path="/about_us/*" element={<About_us />}></Route>
                 <Route path="/registration/*" element={<Registration />}></Route>
                 <Route path="/sign_in/*" element={<Sign_in />}></Route>
-                <Route path="/add_image/*" element={<Add_picture/>}></Route>
+                <Route path="/add_image/*" element={<Add_picture_page/>}></Route>
             </Routes>
         </>
     );

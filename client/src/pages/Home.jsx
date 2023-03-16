@@ -1,9 +1,9 @@
 import { useEffect, useState, memo, useCallback } from "react";
-import Image_component from "./image_forme/image_component";
+import  Image_component from "../components/Home/image_forme/image_component"
 import { Link } from "react-router-dom"
-import Select_category from "./select_category/select_category";
-import image_loud from "../../action/image_loud";
-import { image_category_get, image_category_post } from "../../action/image_category";
+import Select_category from "../components/Home/select_category/select_category";
+import image_loud from "../action/image_loud";
+import { image_category_get, image_category_post } from "../action/image_category";
 
 function Home() {
 

@@ -1,6 +1,6 @@
-import About_us from "../about_us/About_us"
-import Sign_in from "../sign_in/Sign_in"
-import Registration from "../Registration/Registration"
+import About_us from "../../pages/About_us"
+import Sign_in from "../../pages/Sign_in"
+import Registration from "../../pages/Registration"
 import { Link, Route, Routes } from "react-router-dom";
 import { memo } from "react";
 

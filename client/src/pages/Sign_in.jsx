@@ -1,5 +1,5 @@
-import Footer from "../footer/Footer";
-import Sign_in_form from "./sign_in_form/Sign_in_form";
+import Footer from "../components/sign_in/sign_in_form/Sign_in_form";
+import Sign_in_form from "../components/sign_in/sign_in_form/Sign_in_form";
 
 const Sign_in = () => {
   return (

@@ -28,7 +28,11 @@ export default function Sign_in_form() {
             <button type="submit" onClick={(e) => {
                 e.preventDefault();
                 console.log(login, password);
-                login_submit(login, password);
+                login_submit(login, password)
+                    .then(() => {
+                        setLogin("");
+                        setPassword("");
+                    })
             }}>Submit</button>
         </form>
     );

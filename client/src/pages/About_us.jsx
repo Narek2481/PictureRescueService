@@ -1,4 +1,4 @@
-import Our_contacts from "./our_contacts/Our_contacts";
+import  Our_contacts from "../components/about_us/our_contacts/Our_contacts";
 
 function About_us() {
   return (

@@ -1,7 +1,7 @@
-import Footer from "../footer/Footer";
-import Input_lable_component from "./Input_lable_component/Input_lable_component";
+import Footer from "../components/footer/Footer";
+import Input_lable_component from "../components/Registration/Input_lable_component/Input_lable_component";
 import { useState } from "react";
-import registration_submit from "../../action/registr";
+import registration_submit from "../action/registr";
 const Registration = () => {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
