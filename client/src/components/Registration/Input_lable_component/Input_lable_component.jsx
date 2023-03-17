@@ -4,8 +4,11 @@ export default function Input_lable_component({ props }) {
             <div>
                 <label htmlFor={props.name}>{props.text}</label>
             </div>
-            <input onChange={e => props.setValue(e.target.value)}
-                value={props.value} className='input_lable_component_input'
+            <input 
+            
+            onChange={e => props.setValue(e.target.value)}
+                value={props.value} 
+                className='input_lable_component_input form-control'
                 type={props.type} name={props.name} />
         </div>
     );

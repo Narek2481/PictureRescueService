@@ -1,11 +1,10 @@
-import Footer from "../components/sign_in/sign_in_form/Sign_in_form";
+import Footer from "../components/footer/Footer";
 import Sign_in_form from "../components/sign_in/sign_in_form/Sign_in_form";
 
 const Sign_in = () => {
   return (
     <>
       <div className="sign_in">
-
         <h2>Sign in</h2>
         <Sign_in_form />
       </div>

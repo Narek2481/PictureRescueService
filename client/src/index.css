@@ -5,7 +5,6 @@
 }
 
 body {
-  font-size: 25px;
   background-color: whitesmoke;
 }
 
@@ -294,8 +293,10 @@ nav>ul li:hover {
 }
 
 .input_lable_component>.input_lable_component_input {
-  width: 200px;
-  height: 30px;
+  width: 250px;
+  height: 35px;
+  display: inline-block;
+  background-color: rgba(128, 128, 128, 0.089);
 }
 
 .input_lable_component div {
@@ -323,9 +324,11 @@ nav>ul li:hover {
 }
 
 .sign_in div input {
-  width: 200px;
-  height: 30px;
+  width: 250px;
+  height: 35px;
   margin-bottom: 30px;
+  display: inline-block;
+  background-color: rgba(128, 128, 128, 0.089);
 }
 
 input:focus {

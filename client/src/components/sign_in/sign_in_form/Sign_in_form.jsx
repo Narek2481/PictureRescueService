@@ -13,7 +13,10 @@ export default function Sign_in_form() {
                         Login
                     </label>
                 </div>
-                <input type="text" name="login"
+                <input
+                    className="form-control"
+                    type="text"
+                    name="email"
                     value={login} onChange={(e) => setLogin(e.target.value)
                     } />
             </div>
@@ -21,7 +24,11 @@ export default function Sign_in_form() {
                 <div>
                     <label htmlFor="password">Password</label>
                 </div>
-                <input type="password" name="password" value={password}
+                <input
+                    className="form-control"
+                    type="password"
+                    name="password"
+                    value={password}
                     onChange={(e) => setPassword(e.target.value)
                     } />
             </div>

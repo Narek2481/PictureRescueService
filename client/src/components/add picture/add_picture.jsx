@@ -1,15 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import image_push from "../../action/add_image";
 const Add_picture = () => {
-    const [image, setImage] = useState(null)
-
-    const on_image_change = event => {
-        if (event.target.files && event.target.files[0]) {
-            setImage(URL.createObjectURL(event.target.files[0]));
+    const [image_url, set_image_url] = useState(null);
+    const [image_data, set_image_data] = useState(null);
+    useEffect(() => {
+        if (!image_data) {
+            set_image_url(null)
         }
+    }, [image_data]);
+    const on_image_change = event => {
+
+        if (event.target.files && event.target.files[0]) {
+            set_image_data(event.target.files);
+            set_image_url(URL.createObjectURL(event.target.files[0]));
+            console.log(image_data)
+        }
+
     };
-    const img_styles = (image) => {
-        if (!image) {
+    const img_styles = (image_url) => {
+        if (!image_url) {
             return { display: "none" }
         }
         return {}
@@ -18,16 +27,23 @@ const Add_picture = () => {
     return (
         <div className="add_price">
             <button
-                style={img_styles(image)}
+                style={img_styles(image_url)}
                 onClick={() => {
-                    image_push({ image ,setImage });
+                    image_push({ image_data, set_image_data });
                 }}>
                 Add
             </button>
-            <input type="file" onChange={on_image_change} />
+            <input
+                className="file-input"
+                id="inputGroupFile01"
+                type="file"
+                accept="image/*"
+                onChange={on_image_change}
+                multiple
+            />
             <img
-                alt="preview image" src={image}
-                style={img_styles(image)}
+                alt="preview image" src={image_url}
+                style={img_styles(image_url)}
                 accept="image/*"
             />
 

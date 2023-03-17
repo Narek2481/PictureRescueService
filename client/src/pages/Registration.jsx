@@ -2,13 +2,13 @@ import Footer from "../components/footer/Footer";
 import Input_lable_component from "../components/Registration/Input_lable_component/Input_lable_component";
 import { useState } from "react";
 import registration_submit from "../action/registr";
+
 const Registration = () => {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [lastname, setLastName] = useState('');
   const [password, setPassword] = useState('');
   const [valid_err, setValid_err] = useState('');
-
   function contains_valid_name(input) {
     return input.length >= 3 && /[A-Z]/.test(input) && /[a-z]/.test(input);
   }
@@ -60,7 +60,7 @@ const Registration = () => {
             setValue: setPassword
           }} />
         <button type="submit" onClick={(e) => {
-          e.preventDefault()
+          e.preventDefault();
           if (contains_valid_name(name) && validate_password(password)) {
             setEmail("");
             setName("");
@@ -69,7 +69,7 @@ const Registration = () => {
             registration_submit(name, lastname, email, password)
             // .then(Response => console.log(Response));
           } else {
-            setValid_err("Err write corect")
+            setValid_err("Err write corect");
             console.log("err write corect");
           }
         }
