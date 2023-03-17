@@ -1,6 +1,4 @@
 import express from "express";
-import path from "path";
-// import bp from "body-parser";
 import middleware from "./middleware/middleware.js";
 import image_category from "./routes/image_category.js";
 import image_loud from "./routes/image_loud.js";
