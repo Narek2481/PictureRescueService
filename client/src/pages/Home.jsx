@@ -1,9 +1,10 @@
 import { useEffect, useState, memo, useCallback } from "react";
-import  Image_component from "../components/Home/image_forme/image_component"
+import Image_component from "../components/Home/image_forme/image_component"
 import { Link } from "react-router-dom"
 import Select_category from "../components/Home/select_category/select_category";
 import image_loud from "../action/image_loud";
 import { image_category_get, image_category_post } from "../action/image_category";
+
 
 function Home() {
     const [fetching, setFetching] = useState(true);
@@ -15,7 +16,7 @@ function Home() {
     // requset image download
     useEffect(() => {
         if (fetching) {
-            image_loud({setData,fetching,setFetching});     
+            image_loud({ setData, fetching, setFetching });
         }
     }, [fetching]);
     // requset image download
@@ -29,23 +30,23 @@ function Home() {
     useEffect(() => {
         // requset category first 
         if (fetching_category) {
-            image_category_get({set_requset_category,set_fetching_category})
-                
+            image_category_get({ set_requset_category, set_fetching_category })
+
         }
         // requset category in  category
         if (nesting > 0) {
-            image_category_post({ data:{category: select_value, nesting},set_requset_category })
+            image_category_post({ data: { category: select_value, nesting }, set_requset_category })
         }
     }, [nesting, fetching_category]);
     // function scroll event 
     const scroll_hendler = useCallback((e) => {
         if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100) {
-            // console.log("scroll")
-            setFetching(true);
+            console.log("scroll")
+            setFetching((state) => !state);
         }
     })
 
-    
+
     return (
         <div className="home">
             <div className="add_container">
@@ -57,7 +58,7 @@ function Home() {
             {/* category for pictures */}
             {
                 requset_category.map((elem, index) => {
-                    return <Select_category props={{ elem, set_select_value, set_nesting }} key={index}/>
+                    return <Select_category props={{ elem, set_select_value, set_nesting }} key={index} />
                 })
             }
             <div style={
@@ -66,20 +67,24 @@ function Home() {
                     padding: "20px 0 0 0"
                 }
             }>
+
+            </div>
+            <div className="row">
+                {
+                    // an array from the backend that is being rendered for component Image_component
+                    data.map((elem) => {
+                        return (
+                            <Image_component props={elem} key={Math.random() * 100} />
+                        )
+                    })
+                }
+            </div>
+            <div className=" text-center"  style={{height:"150px"}}>
                 {
                     // backend request for images upload
                     fetching ? "Loading..." : ""
                 }
             </div>
-            {
-                // an array from the backend that is being rendered for component Image_component
-                data.map((elem) => {
-                    return (
-                        <Image_component props={elem} key={Math.random() * 100}/>
-                    )
-                })
-            }
-
         </div>
     );
 

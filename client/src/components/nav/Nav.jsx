@@ -17,7 +17,7 @@ export default function Nav() {
     return (
         <>
             <nav>
-                <ul>
+                <ul  className="container">
                     <div className="logo_manue">
                         <div>Logo</div>
                         <div className="manue_icon" onClick={() => {
