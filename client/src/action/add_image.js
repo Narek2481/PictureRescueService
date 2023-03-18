@@ -9,17 +9,33 @@ export default async function image_push(image_data) {
     //     .then((res) => alert(res.data))
     //     .catch((e) => alert(e))
     // // .finally(() => image_data.set_image_data(null))
-    let formData = new FormData();
-    formData.append("image", image_data.image_data);
-    await axios.post('http://localhost:4000/image_push', formData, {
+
+
+
+    // let formData = new FormData();
+    // formData.append("image", image_data.image_data);
+    // await axios.post('http://localhost:4000/image_push', formData, {
+    //     headers: {
+    //         'Content-Type': 'multipart/form-data'
+    //     }
+    // })
+    //     .then((data) => {
+    //         alert(data.status)
+    //         console.log(data)
+    //     })
+    //     .catch((e) => alert(e))
+    const formData = new FormData();
+    formData.append('image', image_data.image_data);
+    console.log(formData);
+    axios.post('http://localhost:4000/image_push', formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
     })
-        .then((data) => {
-            alert(data.status)
-            console.log(data)
+        .then(response => {
+            console.log(response.data);
         })
-        .catch((e) => alert(e))
-
+        .catch(error => {
+            console.error(error);
+        });
 }

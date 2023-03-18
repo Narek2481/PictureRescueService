@@ -11,7 +11,7 @@ const Add_picture = () => {
     const on_image_change = event => {
 
         if (event.target.files && event.target.files[0]) {
-            set_image_data(event.target.files);
+            set_image_data(event.target.files[0]);
             set_image_url(URL.createObjectURL(event.target.files[0]));
             console.log(image_data)
         }
