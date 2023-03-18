@@ -1,4 +1,4 @@
-import Sequelize from "sequelize";
+import { Sequelize, DataTypes } from 'sequelize';
 
 
 const config = {
@@ -12,71 +12,149 @@ const config = {
     }
 };
 const sequelize = new Sequelize(config.development);
-export default sequelize;
+// export default sequelize;
 
-sequelize
-    .authenticate()
+sequelize.authenticate()
     .then(() => {
-        console.log('Connection has been established successfully.');
+        console.log('Connection to database successful');
     })
-    .catch((err) => {
-        console.error('Unable to connect to the database:', err);
+    .catch((error) => {
+        console.error('Unable to connect to the database:', error);
     });
-const User = sequelize.define("User", {
+
+const User = sequelize.define('User', {
+    // Define the User model attributes
     id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
-        primaryKey: true
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
     },
-    Name: {
-        type: Sequelize.STRING(255),
-        allowNull: false,
-        defaultValue: false
+    name: {
+        type: DataTypes.STRING,
+        allowNull: false
     },
-    Emil: {
-        type: Sequelize.STRING(255),
+    email: {
+        type: DataTypes.STRING,
         allowNull: false,
-        defaultValue: false
+        unique: true
     },
-    Password: {
-        type: Sequelize.STRING(255),
-        allowNull: false,
-        defaultValue: false
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false
     },
-    Last_name: {
-        type: Sequelize.STRING(255),
-        allowNull: false,
-        defaultValue: false
+    last_name: {
+        type: DataTypes.STRING,
+        allowNull: false
     }
 });
 
-const image = sequelize.define("image", {
+const Image = sequelize.define('Image', {
+    // Define the Image model attributes
     id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
-        primaryKey: true
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
     },
     ref_or_path: {
-        type: Sequelize.STRING(255),
-        allowNull: false,
-        defaultValue: false
+        type: DataTypes.STRING,
+        allowNull: false
     },
     width_heght: {
-        type: Sequelize.STRING(255),
-        allowNull: false,
-        defaultValue: false
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    category: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'Category', // The name of the referenced table
+            key: 'id' // The primary key of the referenced table
+        }
+    },
+    public_or_private: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'Public', // The name of the referenced table
+            key: 'id' // The primary key of the referenced table
+        }
     }
-    // category: {
-    //     type: Sequelize.INTEGER,
-    //     allowNull: false,
-    //     defaultValue: false,
-
-    // },
-    // public_or_private: {
-    //     type: Sequelize.INTEGER,
-    //     allowNull: false,
-    //     defaultValue: false,
-    // }
 });
-(async () => await User.sync())();
-(async () => await image.sync())();
+
+const Announcement = sequelize.define('Announcement', {
+    // Define the Image model attributes
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    user_ref: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'User', // The name of the referenced table
+            key: 'id' // The primary key of the referenced table
+        }
+    },
+    author_id: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'User', // The name of the referenced table
+            key: 'id' // The primary key of the referenced table
+        }
+    },
+    image_ref: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'Image', // The name of the referenced table
+            key: 'id' // The primary key of the referenced table
+        }
+    }
+});
+
+const Category = sequelize.define('Category', {
+    // Define the Image model attributes
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    name: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    parent: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'Category', // The name of the referenced table
+            key: 'id' // The primary key of the referenced table
+        }
+    }
+
+});
+const Public = sequelize.define('Public', {
+    // Define the Image model attributes
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    public: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+    },
+    author: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'User', // The name of the referenced table
+            key: 'id' // The primary key of the referenced table
+        }
+    }
+
+});
+// Define the relationship between User and Image
+User.belongsTo(Image);
+sequelize.sync()
+    .then(() => {
+        console.log('Database tables created');
+    })
+    .catch((error) => {
+        console.error('Error creating database tables:', error);
+    });
