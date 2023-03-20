@@ -1,30 +1,53 @@
-import instagram from "../../../img_logo/instagram.png"
-import email from "../../../img_logo/email.png"
-import Facebook from "../../../img_logo/twiter.png"
-import twiter from "../../../img_logo/facebook.png"
+import facebook from "../../../img_logo/facebook (1).png"
+import instagram from "../../../img_logo/instagram (1).png"
+import gmail from "../../../img_logo/gmail.png"
+import twitter from "../../../img_logo/twitter.png"
 
 export default function Our_contacts() {
-
+    const style = { hover: { color: "#007bff;" } }
     return (
-        <div className="contacts">
-            <div>
-                <a href="#">
-                    {/* <img src={instagram}></img> */}
-                    Instagram
-                </a>
+        <>
+            <div className="container mt-5">
+                <div className="row ">
+                    <div className="col-3">
+                        <a
+                            className="link-primary"
+                            href="#"
+                        >
+                            <img className="icon_social" src={instagram}></img>
+                            <div>Instagram</div>
+                        </a>
+                    </div>
+                    <div className="col-3">
+
+                        <a
+                            className="link-primary"
+                            href="#"
+                        >
+                            <img className="icon_social " src={twitter} />
+                            <div>twitter</div>
+                        </a>
+                    </div>
+                    <div className="col-3">
+                        <a
+                            className="link-primary"
+                            href="#"
+                        >
+                            <img className="icon_social"  src={gmail} />
+                            <div>Email</div>
+                        </a>
+                    </div>
+                    <div className="col-3 mb-5">
+                        <a
+                            className="link-primary"
+                            href="#"
+                        >
+                            <img className="img-fluid icon_social" src={facebook} />
+                            <div>Facebook</div>
+                        </a>
+                    </div>
+                </div>
             </div>
-            <div>
-                {/* <img src={twiter} /> */}
-                <a href="#">Twiter</a>
-            </div>
-            <div>
-                {/* <img src={email} /> */}
-                <a href="#">Email</a>
-            </div>
-            <div>
-                {/* <img src={Facebook} /> */}
-                <a href="#">Facebook</a>
-            </div>
-        </div>
+        </>
     );
 }
