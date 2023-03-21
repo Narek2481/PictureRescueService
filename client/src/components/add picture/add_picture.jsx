@@ -9,7 +9,6 @@ const Add_picture = () => {
         }
     }, [image_data]);
     const on_image_change = event => {
-
         if (event.target.files && event.target.files[0]) {
             set_image_data(event.target.files[0]);
             set_image_url(URL.createObjectURL(event.target.files[0]));
@@ -26,13 +25,6 @@ const Add_picture = () => {
     };
     return (
         <div className="add_price">
-            <button
-                style={img_styles(image_url)}
-                onClick={() => {
-                    image_push({ image_data, set_image_data });
-                }}>
-                Add
-            </button>
             <input
                 className="file-input"
                 id="inputGroupFile01"
@@ -46,7 +38,13 @@ const Add_picture = () => {
                 style={img_styles(image_url)}
                 accept="image/*"
             />
-
+            <button
+                style={img_styles(image_url)}
+                onClick={() => {
+                    image_push({ image_data, set_image_data });
+                }}>
+                Add
+            </button>
         </div>
     )
 }

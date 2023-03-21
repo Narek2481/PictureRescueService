@@ -4,19 +4,25 @@ import { Link } from "react-router-dom"
 import Select_category from "../components/Home/select_category/select_category";
 import image_loud from "../action/image_loud";
 import { image_category_get, image_category_post } from "../action/image_category";
+import { useDispatch, useSelector } from "react-redux";
 
 
 function Home() {
+    useSelector((state)=>{
+        return state.downlode_data.data
+    })
     const [fetching, setFetching] = useState(true);
     const [fetching_category, set_fetching_category] = useState(true);
     const [select_value, set_select_value] = useState("All")
     const [requset_category, set_requset_category] = useState([]);
     const [data, setData] = useState([]);
     const [nesting, set_nesting] = useState(0);
+    const dispatch = useDispatch()
     // requset image download
     useEffect(() => {
         if (fetching) {
-            image_loud({ setData, fetching, setFetching });
+            image_loud({ setData, fetching, setFetching }); 
+            
         }
     }, [fetching]);
     // requset image download
@@ -79,7 +85,7 @@ function Home() {
                     })
                 }
             </div>
-            <div className=" text-center"  style={{height:"150px"}}>
+            <div className=" text-center"   style={{height:"150px"}}>
                 {
                     // backend request for images upload
                     fetching ? "Loading..." : ""
