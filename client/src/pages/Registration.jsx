@@ -7,10 +7,10 @@ import { edit_current_user, select_current_user } from "../reducers/user/user_sl
 
 const Registration = () => {
   const state = useSelector(select_current_user);
-  const [email, set_email] = useState(state.email);
-  const [name, set_name] = useState(state.name);
-  const [last_name, set_last_name] = useState(state.last_name);
-  const [password, set_password] = useState(state.password);
+  const [email, set_email] = useState("");
+  const [name, set_name] = useState("");
+  const [last_name, set_last_name] = useState("");
+  const [password, set_password] = useState("");
   const [valid_err, setValid_err] = useState('');
   const dispach = useDispatch();
   useEffect(() => {
@@ -69,24 +69,12 @@ const Registration = () => {
         <button type="submit" onClick={(e) => {
           e.preventDefault();
           if (contains_valid_name(name) && validate_password(password)) {
-            let pyload = {
-              type: "current_user_registration",
-              pyload: {
-                register_or_login: false,
-                name,
-                last_name,
-                email,
-                password
-              }
-            }
-
             // console.log(dispach_obj);
-            dispach((pyload));
-
-            // set_email("");
-            // set_name("");
-            // set_last_name("");
-            // set_password("");
+            dispach(edit_current_user({name,email,last_name,password}));
+            set_email("");
+            set_name("");
+            set_last_name("");
+            set_password("");
             registration_submit(name, last_name, email, password)
             setValid_err("")
             console.log(state);
@@ -94,9 +82,9 @@ const Registration = () => {
             setValid_err("Err write corect");
             console.log("err write corect");
           }
-          console.log(state);
         }
         } >Submit</button>
+        <div>{state.name}</div>
         <Footer></Footer>
       </form>
     </div>

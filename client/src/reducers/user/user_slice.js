@@ -1,5 +1,3 @@
-
-
 export const initial_current_user = {
     register_or_login: false,
     email: "",
@@ -9,20 +7,23 @@ export const initial_current_user = {
 };
 
 export function current_user_reducer (state = {}, action) {
-    
     if (action.type === "current_user_registration") {
         let payload = action.pyload
         console.log(payload , "peyload")
-        return  payload;
-    }
-    else if (action.type === "current_user_login") {
-        return {
+        return  {
             ...state,
-            email: action.pyload.email,
-            password: action.pyload.password,
-        }
+            ...payload
+        };
+    }
+    // else if (action.type === "current_user_login") {
+    //     return {
+    //         ...state,
+    //         email: action.pyload.email,
+    //         password: action.pyload.password,
+    //     }
 
-    } else {
+    // } 
+    else {
         return state;
     }
 }
@@ -34,6 +35,6 @@ export function select_current_user(state) {
 export function edit_current_user(pyload) {
     return {
         type:"current_user_registration",
-        pyload 
+        pyload :pyload
     }
 }

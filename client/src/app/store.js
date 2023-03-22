@@ -15,6 +15,6 @@ const store = createStore(combineReducers({
     current_user: initial_current_user,
     downlode_data: initial_downlode_data,
     category_search: initial_category_search
-},applyMiddleware(thunk));
+}, applyMiddleware(thunk));
 
 export default store;

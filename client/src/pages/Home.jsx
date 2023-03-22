@@ -2,27 +2,23 @@ import { useEffect, useState, memo, useCallback } from "react";
 import Image_component from "../components/Home/image_forme/image_component"
 import { Link } from "react-router-dom"
 import Select_category from "../components/Home/select_category/select_category";
-import image_loud from "../action/image_loud";
-import { image_category_get, image_category_post } from "../action/image_category";
 import { useDispatch, useSelector } from "react-redux";
+import { downloud_data } from "../reducers/data/data_slice";
+import { downloud_category_get, downloud_category_post } from "../reducers/category/category_slice";
 
 
 function Home() {
-    useSelector((state)=>{
-        return state.downlode_data.data
-    })
+    const past_data = useSelector((state) => state.downlode_data.data);
+    const requset_category_redux = useSelector(state => state.category_search.category);
     const [fetching, setFetching] = useState(true);
     const [fetching_category, set_fetching_category] = useState(true);
     const [select_value, set_select_value] = useState("All")
-    const [requset_category, set_requset_category] = useState([]);
-    const [data, setData] = useState([]);
     const [nesting, set_nesting] = useState(0);
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     // requset image download
     useEffect(() => {
         if (fetching) {
-            image_loud({ setData, fetching, setFetching }); 
-            
+            dispatch(downloud_data(past_data));
         }
     }, [fetching]);
     // requset image download
@@ -35,13 +31,12 @@ function Home() {
     // requset category
     useEffect(() => {
         // requset category first 
-        if (fetching_category) {
-            image_category_get({ set_requset_category, set_fetching_category })
-
+        if (fetching_category && nesting === 0) {
+            dispatch(downloud_category_get());
         }
         // requset category in  category
         if (nesting > 0) {
-            image_category_post({ data: { category: select_value, nesting }, set_requset_category })
+            dispatch(downloud_category_post(requset_category_redux,select_value));
         }
     }, [nesting, fetching_category]);
     // function scroll event 
@@ -50,8 +45,7 @@ function Home() {
             console.log("scroll")
             setFetching((state) => !state);
         }
-    })
-
+    });
 
     return (
         <div className="home">
@@ -63,7 +57,7 @@ function Home() {
             </div>
             {/* category for pictures */}
             {
-                requset_category.map((elem, index) => {
+                requset_category_redux?.map((elem, index) => {
                     return <Select_category props={{ elem, set_select_value, set_nesting }} key={index} />
                 })
             }
@@ -78,14 +72,14 @@ function Home() {
             <div className="row">
                 {
                     // an array from the backend that is being rendered for component Image_component
-                    data.map((elem) => {
+                    past_data.map((elem) => {
                         return (
                             <Image_component props={elem} key={Math.random() * 100} />
                         )
                     })
                 }
             </div>
-            <div className=" text-center"   style={{height:"150px"}}>
+            <div className=" text-center" style={{ height: "150px" }}>
                 {
                     // backend request for images upload
                     fetching ? "Loading..." : ""
