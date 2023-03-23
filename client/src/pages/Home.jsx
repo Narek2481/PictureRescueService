@@ -11,7 +11,7 @@ function Home() {
     const past_data = useSelector((state) => state.downlode_data.data);
     const requset_category_redux = useSelector(state => state.category_search.category);
     const [fetching, setFetching] = useState(true);
-    const [fetching_category, set_fetching_category] = useState(false);
+    const [fetching_category, set_fetching_category] = useState(true);
     const [select_value, set_select_value] = useState("All")
     const [nesting, set_nesting] = useState(0);
     const dispatch = useDispatch();
@@ -31,7 +31,9 @@ function Home() {
     // requset category
     useEffect(() => {
         // requset category first 
-        if (fetching_category && nesting === 0) {
+        
+        if (fetching_category) {
+            console.log(1)
             dispatch(downloud_category_get());
         }
         // requset category in  category
@@ -46,7 +48,7 @@ function Home() {
             setFetching((state) => !state);
         }
     });
-
+    console.log(requset_category_redux);
     return (
         <div className="home">
             <div className="add_container">

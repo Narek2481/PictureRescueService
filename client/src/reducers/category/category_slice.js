@@ -22,9 +22,11 @@ export function edit_category_search(pyload) {
     }
 }
 export function downloud_category_get() {
+    
     return (dispatch, get_state) => {
         return image_category_get()
             .then((res) => {
+                console.log(res.data)
                 return dispatch(edit_category_search([...res.data]));
             })
             .catch((e) => {
