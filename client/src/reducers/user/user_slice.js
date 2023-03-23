@@ -15,14 +15,6 @@ export function current_user_reducer (state = {}, action) {
             ...payload
         };
     }
-    // else if (action.type === "current_user_login") {
-    //     return {
-    //         ...state,
-    //         email: action.pyload.email,
-    //         password: action.pyload.password,
-    //     }
-
-    // } 
     else {
         return state;
     }

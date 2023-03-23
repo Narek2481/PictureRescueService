@@ -11,7 +11,7 @@ function Home() {
     const past_data = useSelector((state) => state.downlode_data.data);
     const requset_category_redux = useSelector(state => state.category_search.category);
     const [fetching, setFetching] = useState(true);
-    const [fetching_category, set_fetching_category] = useState(true);
+    const [fetching_category, set_fetching_category] = useState(false);
     const [select_value, set_select_value] = useState("All")
     const [nesting, set_nesting] = useState(0);
     const dispatch = useDispatch();

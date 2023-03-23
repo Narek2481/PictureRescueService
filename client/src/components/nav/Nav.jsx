@@ -6,6 +6,8 @@ import { useState } from "react";
 import Home from "../../pages/Home";
 import Link_component from "./link_component/link_component";
 import Add_picture_page from "../../pages/Add_picture_page";
+import { useSelector } from "react-redux";
+import { select_current_user } from "../../reducers/user/user_slice";
 
 
 export default function Nav() {
@@ -13,7 +15,14 @@ export default function Nav() {
     const [icon_2, setIcon_2] = useState("");
     const [icon_1, setIcon_1] = useState("");
     const [none, setnone] = useState("");
-
+    const login_state = useSelector((state)=> state.current_user );
+    console.log(login_state)
+    const display = (login_state.register_or_login ? "none": "");
+    const componenet_not_available = login_state.register_or_login ? [<Home/>,<Home/>] :[<Sign_in />,<Registration />]
+    const style = {
+        display
+    }
+    
     return (
         <>
             <nav>
@@ -51,19 +60,23 @@ export default function Nav() {
                                 text: "About us"
                             }}
                         />
+                        
                         <Link_component props={
                             {
                                 path: "sign_in",
-                                text: "Sign in"
+                                text: "Sign in",
+                                style
                             }}
                         />
 
                         <Link_component props={
                             {
                                 path: "registration",
-                                text: "Registration"
+                                text: "Registration",
+                                style
                             }}
                         />
+                        
                     </div>
 
                 </ul>
@@ -72,9 +85,9 @@ export default function Nav() {
                 <Route path="/" element={<Home />}></Route>
                 <Route path="/home" element={<Home />}></Route>
                 <Route path="/about_us/*" element={<About_us />}></Route>
-                <Route path="/registration/*" element={<Registration />}></Route>
-                <Route path="/sign_in/*" element={<Sign_in />}></Route>
-                <Route path="/add_image/*" element={<Add_picture_page/>}></Route>
+                <Route path="/registration/*" element={componenet_not_available[1]}></Route>
+                <Route path={"/sign_in/*"} element={componenet_not_available[0]}></Route>
+                <Route path={"/add_image/*"} element={<Add_picture_page/>}></Route>
             </Routes>
         </>
     );

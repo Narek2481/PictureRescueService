@@ -1,10 +1,13 @@
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import login_submit from "../../../action/login";
+import { edit_current_user, select_current_user } from "../../../reducers/user/user_slice";
 
 
 export default function Sign_in_form() {
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
+    const dispatch = useDispatch();
     return (
         <form>
             <div>
@@ -36,7 +39,10 @@ export default function Sign_in_form() {
                 e.preventDefault();
                 console.log(login, password);
                 login_submit(login, password)
-                    .then(() => {
+                    .then((res) => {
+                        if (res.data === "ok") {
+                            dispatch(edit_current_user({email:login,password,register_or_login:true}));
+                        }
                         setLogin("");
                         setPassword("");
                     })

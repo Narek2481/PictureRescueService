@@ -13,12 +13,11 @@ const Registration = () => {
   const [password, set_password] = useState("");
   const [valid_err, setValid_err] = useState('');
   const dispach = useDispatch();
-  useEffect(() => {
-    console.log("redux state ++")
-  },[state])
+
   function contains_valid_name(input) {
     return input.length >= 3 && /[A-Z]/.test(input) && /[a-z]/.test(input);
   }
+
   function validate_password(password) {
     if (password.length < 8) {
       console.log("Password must be at least 8 characters long.");
@@ -26,6 +25,7 @@ const Registration = () => {
     }
     return true;
   }
+
   return (
     <div className="registration">
       <h2>Registration</h2>
@@ -69,22 +69,25 @@ const Registration = () => {
         <button type="submit" onClick={(e) => {
           e.preventDefault();
           if (contains_valid_name(name) && validate_password(password)) {
-            // console.log(dispach_obj);
-            dispach(edit_current_user({name,email,last_name,password}));
             set_email("");
             set_name("");
             set_last_name("");
             set_password("");
             registration_submit(name, last_name, email, password)
-            setValid_err("")
-            console.log(state);
+            .then((res)=>{
+              if(res.data === "ok"){
+                dispach(edit_current_user({name,email,last_name,password,register_or_login:true}));
+              }else{
+                setValid_err(res.data)
+              }
+            })
+            setValid_err("");
           } else {
             setValid_err("Err write corect");
             console.log("err write corect");
           }
         }
         } >Submit</button>
-        <div>{state.name}</div>
         <Footer></Footer>
       </form>
     </div>
