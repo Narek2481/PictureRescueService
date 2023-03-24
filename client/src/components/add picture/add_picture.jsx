@@ -1,13 +1,38 @@
-import { useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import image_push from "../../action/add_image";
+import { downloud_category_post } from "../../reducers/category/category_slice";
+import { downloud_category_get } from "../../reducers/category_send/category_send_slice";
+import Footer from "../footer/Footer";
+import Select_category from "../Home/select_category/select_category";
+
+
 const Add_picture = () => {
     const [image_url, set_image_url] = useState(null);
     const [image_data, set_image_data] = useState(null);
+    const requset_category_redux = useSelector(state => state.category_search.category);
+    const fetching_category = true;
+    const [select_value, set_select_value] = useState("All")
+    const [nesting, set_nesting] = useState(0);
+    const dispatch = useDispatch();
+    const [create_category, set_create_category] = useState("")
+
     useEffect(() => {
         if (!image_data) {
             set_image_url(null)
         }
     }, [image_data]);
+    useEffect(() => {
+        // requset category first 
+        if (fetching_category && nesting <= 0) {
+            console.log(1);
+            dispatch(downloud_category_get());
+        }
+        // requset category in  category
+        if (nesting > 0) {
+            dispatch(downloud_category_post(requset_category_redux, select_value));
+        }
+    }, [nesting, fetching_category]);
     const on_image_change = event => {
         if (event.target.files && event.target.files[0]) {
             set_image_data(event.target.files[0]);
@@ -16,6 +41,9 @@ const Add_picture = () => {
         }
 
     };
+    const create_category_change = useCallback( e => {
+        set_create_category(e.target.value);
+    });
     const img_styles = (image_url) => {
         if (!image_url) {
             return { display: "none" }
@@ -23,6 +51,7 @@ const Add_picture = () => {
         return {}
 
     };
+    console.log(create_category)
     return (
         <div className="add_price">
             <input
@@ -31,21 +60,43 @@ const Add_picture = () => {
                 type="file"
                 accept="image/*"
                 onChange={on_image_change}
-                multiple
             />
+            {
+                requset_category_redux?.map((elem, index) => {
+                    return <Select_category props={{ elem, set_select_value, set_nesting }} key={index} />
+                })
+            }
+            <div className="mt-5 text-center">
+                <div>
+                    <label htmlFor="create_category">
+                        create category
+                    </label>
+                </div>
+                <input
+                    className="form-control  create_category mt-2 mb-5"
+                    type="text"
+                    name="create_category"
+                    onChange={create_category_change}
+                />
+            </div>
             <img
                 alt="preview image" src={image_url}
                 style={img_styles(image_url)}
                 accept="image/*"
             />
             <button
+                className="mb-5"
                 style={img_styles(image_url)}
                 onClick={() => {
-                    image_push({ image_data, set_image_data });
+                    if(create_category !== ""){
+                        return image_push({ image_data, set_image_data, select_value ,create_category })
+                    }
+                    return image_push({ image_data, set_image_data,select_value});
                 }}>
                 Add
             </button>
+            <Footer></Footer>
         </div>
     )
 }
-export default Add_picture;
+export default memo(Add_picture);
