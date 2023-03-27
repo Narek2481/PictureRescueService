@@ -149,8 +149,7 @@ const Public = sequelize.define('Public', {
     }
 
 });
-// Define the relationship between User and Image
-User.belongsTo(Image);
+
 sequelize.sync()
     .then(() => {
         console.log('Database tables created');
@@ -158,3 +157,4 @@ sequelize.sync()
     .catch((error) => {
         console.error('Error creating database tables:', error);
     });
+console.log(User.findAndCountAll())

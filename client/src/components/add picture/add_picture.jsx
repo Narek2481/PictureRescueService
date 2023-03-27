@@ -16,7 +16,12 @@ const Add_picture = () => {
     const [nesting, set_nesting] = useState(0);
     const dispatch = useDispatch();
     const [create_category, set_create_category] = useState("")
-
+    const parent = () => {
+        if (select_value === "All") {
+            return ""
+        }
+        return select_value;
+    }
     useEffect(() => {
         if (!image_data) {
             set_image_url(null)
@@ -41,7 +46,7 @@ const Add_picture = () => {
         }
 
     };
-    const create_category_change = useCallback( e => {
+    const create_category_change = useCallback(e => {
         set_create_category(e.target.value);
     });
     const img_styles = (image_url) => {
@@ -69,7 +74,7 @@ const Add_picture = () => {
             <div className="mt-5 text-center">
                 <div>
                     <label htmlFor="create_category">
-                        create category
+                        create a category, and which parent: {parent()}
                     </label>
                 </div>
                 <input
@@ -88,10 +93,10 @@ const Add_picture = () => {
                 className="mb-5"
                 style={img_styles(image_url)}
                 onClick={() => {
-                    if(create_category !== ""){
-                        return image_push({ image_data, set_image_data, select_value ,create_category })
+                    if (create_category !== "") {
+                        return image_push({ image_data, set_image_data, select_value, create_category })
                     }
-                    return image_push({ image_data, set_image_data,select_value});
+                    return image_push({ image_data, set_image_data, select_value });
                 }}>
                 Add
             </button>
