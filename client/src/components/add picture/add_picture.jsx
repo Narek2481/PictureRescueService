@@ -30,7 +30,6 @@ const Add_picture = () => {
     useEffect(() => {
         // requset category first 
         if (fetching_category && nesting <= 0) {
-            console.log(1);
             dispatch(downloud_category_get());
         }
         // requset category in  category
@@ -42,7 +41,6 @@ const Add_picture = () => {
         if (event.target.files && event.target.files[0]) {
             set_image_data(event.target.files[0]);
             set_image_url(URL.createObjectURL(event.target.files[0]));
-            console.log(image_data)
         }
 
     };
@@ -56,7 +54,6 @@ const Add_picture = () => {
         return {}
 
     };
-    console.log(create_category)
     return (
         <div className="add_price">
             <input
@@ -104,4 +101,4 @@ const Add_picture = () => {
         </div>
     )
 }
-export default memo(Add_picture);
+export default Add_picture;

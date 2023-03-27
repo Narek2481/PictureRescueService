@@ -1,7 +1,8 @@
+import { memo } from "react"
 
 
 
-const Social = ({props}) => {
+const Social = memo(({props}) => {
 
     return (
         <li className="col-6 mt-5">
@@ -15,6 +16,6 @@ const Social = ({props}) => {
             </a>
         </li>
     )
-}
+});
 
 export default Social

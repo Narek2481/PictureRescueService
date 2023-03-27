@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import registration_submit from "../action/registr";
 import { useDispatch, useSelector } from "react-redux";
 import { edit_current_user, select_current_user } from "../reducers/user/user_slice";
+import { useMemo } from "react";
 
 const Registration = () => {
   const state = useSelector(select_current_user);
@@ -32,40 +33,62 @@ const Registration = () => {
       <h3>{valid_err}</h3>
       <form >
         <Input_lable_component
-          props={{
-            text: "Name",
-            name: "name",
-            type: "text",
-            value: name,
-            setValue: set_name
-          }}
+          props={useMemo(() => {
+            return (
+              {
+                text: "Name",
+                name: "name",
+                type: "text",
+                value: name,
+                setValue: set_name
+              }
+            )
+          }, [name])}
         />
         <Input_lable_component
-          props={{
-            text: "Last Name",
-            name: "Last_name",
-            type: "text",
-            value: last_name,
-            setValue: set_last_name
-          }}
+          props={
+            useMemo(() => {
+              return (
+                {
+                  text: "Last Name",
+                  name: "Last_name",
+                  type: "text",
+                  value: last_name,
+                  setValue: set_last_name
+                }
+              )
+            }, [last_name])
+          }
         />
         <Input_lable_component
-          props={{
-            text: "Email",
-            name: "Email",
-            type: "email",
-            value: email,
-            setValue: set_email
-          }}
+          props={
+            useMemo(() => {
+              return (
+                {
+                  text: "Email",
+                  name: "Email",
+                  type: "email",
+                  value: email,
+                  setValue: set_email
+                }
+              )
+            }, [email])
+          }
         />
         <Input_lable_component
-          props={{
-            text: "Password",
-            name: "Password",
-            type: "password",
-            value: password,
-            setValue: set_password
-          }} />
+          props={
+            useMemo(() => {
+              return (
+                {
+                  text: "Password",
+                  name: "Password",
+                  type: "password",
+                  value: password,
+                  setValue: set_password
+                }
+              )
+            },[password])
+          } />
         <button type="submit" onClick={(e) => {
           e.preventDefault();
           if (contains_valid_name(name) && validate_password(password)) {
@@ -74,13 +97,13 @@ const Registration = () => {
             set_last_name("");
             set_password("");
             registration_submit(name, last_name, email, password)
-            .then((res)=>{
-              if(res.data === "ok"){
-                dispach(edit_current_user({name,email,last_name,password,register_or_login:true}));
-              }else{
-                setValid_err(res.data)
-              }
-            })
+              .then((res) => {
+                if (res.data === "ok") {
+                  dispach(edit_current_user({ name, email, last_name, password, register_or_login: true }));
+                } else {
+                  setValid_err(res.data)
+                }
+              })
             setValid_err("");
           } else {
             setValid_err("Err write corect");

@@ -41,7 +41,7 @@ export default function Sign_in_form() {
                 login_submit(login, password)
                     .then((res) => {
                         if (res.data === "ok") {
-                            dispatch(edit_current_user({email:login,password,register_or_login:true}));
+                            dispatch(edit_current_user({ email: login, password, register_or_login: true }));
                         }
                         setLogin("");
                         setPassword("");

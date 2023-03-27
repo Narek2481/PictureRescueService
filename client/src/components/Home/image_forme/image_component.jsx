@@ -7,7 +7,6 @@ import { edit_image } from "../../../reducers/image_data/image_data_slice";
 
 export default memo(function Image_component({ props }) {
     const dispatch = useDispatch();
-
     const img = require("/home/narek/Desktop/app_/server/img/" + props.image_url);
     return (
         <div className="col-12 col-md-4 col-sm-6 iamage_container" >
@@ -16,10 +15,10 @@ export default memo(function Image_component({ props }) {
             <div className="pt-2">
                 <button className="btn btn-dark" onClick={ ()=> {
                     dispatch(edit_image(img));
-                } } >
+                } }>
                     <Link to={"/image/" + props.image_url}>Enlarge picture</Link>
                 </button>
             </div>
         </div>
     )
-})
+});
