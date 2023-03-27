@@ -8,11 +8,9 @@ export const initial_current_user = {
 
 export function current_user_reducer (state = {}, action) {
     if (action.type === "current_user_registration") {
-        let payload = action.pyload
-        console.log(payload , "peyload")
         return  {
             ...state,
-            ...payload
+            ... action.pyload
         };
     }
     else {

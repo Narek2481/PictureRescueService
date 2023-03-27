@@ -13,6 +13,15 @@ const config = {
 };
 const sequelize = new Sequelize(config.development);
 // export default sequelize;
+
+sequelize.authenticate()
+    .then(() => {
+        console.log('Connection to database successful');
+    })
+    .catch((error) => {
+        console.error('Unable to connect to the database:', error);
+    });
+
 const User = sequelize.define('User', {
     // Define the User model attributes
     id: {
@@ -141,5 +150,11 @@ const Public = sequelize.define('Public', {
 
 });
 
-
-export {sequelize ,User,Image ,Announcement}
+sequelize.sync()
+    .then(() => {
+        console.log('Database tables created');
+    })
+    .catch((error) => {
+        console.error('Error creating database tables:', error);
+    });
+export {sequelize}

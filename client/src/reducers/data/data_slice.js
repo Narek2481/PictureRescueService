@@ -6,17 +6,31 @@ export function downlode_data_reducer(state = {}, action) {
             ...state,
             data: action.pyload
         };
-    } else {
+    } else if(action.type === "change_fetching"){
+        console.log()
+        return {
+            ...state,
+            fatching: action.pyload.fatching
+        };
+    }
+    else {
         return state;
     }
 
 }
 export const initial_downlode_data = {
-    data: []
+    data: [],
+    fatching:true
 };
 export function edit_data(pyload) {
     return {
         type: "downlode_data_change",
+        pyload: pyload
+    }
+}
+export function edit_fatching (pyload){
+    return {
+        type: "change_fetching",
         pyload: pyload
     }
 }
