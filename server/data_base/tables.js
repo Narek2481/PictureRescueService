@@ -139,7 +139,7 @@ const Public = sequelize.define('Public', {
 
 });
 sequelize.sync()
-    .then(() => console.log("o crated database"))
+    .then(() => console.log("  crated tables"))
 
 
 export {Public,Image,User,Announcement,Category}

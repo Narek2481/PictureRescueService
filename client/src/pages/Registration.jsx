@@ -98,12 +98,16 @@ const Registration = () => {
             set_password("");
             registration_submit(name, last_name, email, password)
               .then((res) => {
-                if (res.data === "ok") {
+                console.log(res);
+                if (res.status === 200) {
                   dispach(edit_current_user({ name, email, last_name, password, register_or_login: true }));
                 } else {
-                  setValid_err(res.data)
+                  
                 }
               })
+              .catch((eror)=>{
+                setValid_err("Such user exists");
+              });
             setValid_err("");
           } else {
             setValid_err("Err write corect");

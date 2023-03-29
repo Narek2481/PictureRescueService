@@ -1,23 +1,69 @@
 import jwt from "jsonwebtoken";
 import multer from "multer";
 import fs from "fs";
-
+import bcrypt from "bcrypt"
+import { Public, Image, User, Announcement, Category } from "../data_base/tables.js"
+// import { sequelize } from "../data_base/db.js";
 
 // root route -----------------------------------------------------------------------------------
-function root_route(req,res,next) {
-    if(req.originalUrl === "/" && req.method === "GET"){
+function root_route(req, res, next) {
+    if (req.originalUrl === "/" && req.method === "GET") {
         res.send("ok");
         return next();
     }
     return next();
 }
 
+async function add_database_user(body) {
+    const hashedPassword = await bcrypt.hash(body.password, 10);
+    User.findOne({
+        where: {
+            email: body.email
+        }
+    })
+        .then((data) => {
+            console.log(data, "datatatastaassa")
+            User.create({
+                name: body.name,
+                email: body.email,
+                last_name: body.lastname,
+                password: hashedPassword
+            })
+                .then(() => {
+                    return "ok";
+                })
+                .catch(() => {
+                    return "Something went wrong"
+                })
+
+
+            
+        })
+        .catch((e) => {
+            console.log(e)
+            return  "this email or userName exists";
+        })
+
+
+}
 
 // registration_submit route -----------------------------------------------------------------------------------
 const registration_submit = (req, res, next) => {
     if (req.originalUrl === "/registration_submit" && req.method === "POST") {
-        console.log(req.body);
-        res.send("ok");
+        try {
+            const messige = add_database_user(req.body);
+            console.log(messige)
+            if (messige === "ok") {
+                res.status(200)
+                res.end
+            } else {
+                res.status(401).json({ messige: messige })
+                res.end
+            }
+            console.log("ok")
+        } catch (e) {
+            console.log(e)
+        }
     }
     return next();
 }
@@ -160,13 +206,13 @@ const image_category = (req, res, next) => {
 
 
 // all reutes ------------------------------------------------------------------------------------------------
-function route(req,res,next) {
-    root_route(req,res,next);
-    image_category(req,res,next);
-    image_loud(req,res,next);
-    image_push(req,res,next);
-    login_submit(req,res,next);
-    registration_submit(req,res,next);
+function route(req, res, next) {
+    root_route(req, res, next);
+    image_category(req, res, next);
+    image_loud(req, res, next);
+    image_push(req, res, next);
+    login_submit(req, res, next);
+    registration_submit(req, res, next);
 }
 
 export { route }
