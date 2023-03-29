@@ -3,7 +3,7 @@ import Image_component from "../components/Home/image_forme/image_component"
 import { Link } from "react-router-dom"
 import Select_category from "../components/Home/select_category/select_category";
 import { useDispatch, useSelector } from "react-redux";
-import { downloud_data, edit_data, edit_fatching } from "../reducers/data/data_slice";
+import { downloud_data, edit_fatching } from "../reducers/data/data_slice";
 import { downloud_category_get, downloud_category_post } from "../reducers/category/category_slice";
 
 

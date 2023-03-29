@@ -6,7 +6,6 @@ import fs from "fs";
 // root route -----------------------------------------------------------------------------------
 function root_route(req,res,next) {
     if(req.originalUrl === "/" && req.method === "GET"){
-        console.log(req.body);
         res.send("ok");
         return next();
     }
