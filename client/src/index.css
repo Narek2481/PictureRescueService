@@ -5,7 +5,9 @@
 }
 
 body {
-  background-color: whitesmoke;
+  color: #385898;
+  background-color: #dfe3f0;
+  font-family: serif;
 }
 
 
@@ -13,10 +15,11 @@ body {
 
 /*  Nav ----------------------------------------------------------------------------------------- */
 nav {
-  background-color: black;
-  padding: 10px 0 1px 0;
+  background-color: #385898;
+  padding: 10px 0 6px 0;
   font-family: sans-serif;
   font-size: 22px;
+
 }
 
 a:hover {
@@ -86,6 +89,7 @@ nav>ul {
   text-align: center;
   justify-content: space-between;
   flex-wrap: wrap;
+  margin-bottom: 0;
 }
 
 .navigation {
@@ -109,13 +113,13 @@ nav>ul li>a {
 }
 
 nav>ul li {
-  border-bottom: 1px solid black;
+  border-bottom: 3px solid #385898;
   transition: 0.5s;
-  padding-bottom: 3px;
+  padding-bottom: 2px;
 }
 
 nav>ul li:hover {
-  border-bottom: 1px solid white;
+  border-bottom: 2px solid white;
   transition: 0.5s;
 }
 
@@ -141,28 +145,23 @@ nav>ul li:hover {
   width: 10%;
 }
 
-/* .add_price input{
 
-} */
 .add_price button {
   display: flex;
   margin: 0 auto;
   margin-top: 30px;
-  border: none;
+  border: solid 2px #dfe3f0 ;
   color: white;
-  background-color: #000000;
-  width: 160px;
+  background-color: #385898;
   justify-content: center;
-  padding: 10px 20px;
-  border-radius: 20px;
+  padding: 10px 30px;
   cursor: pointer;
   font-size: 20px;
   margin-bottom: 30px;
 }
 
 .add_price button:hover {
-  background-color: green;
-
+  border: solid 2px #385898;
 }
 
 /* Home ----------------------------------------------------------------------------------------------- */
@@ -176,18 +175,20 @@ nav>ul li:hover {
 
 .go_add_image {
   display: inline-block;
-  background-color: #000000;
+  background-color: #385898;
   text-decoration: none;
   color: white;
   padding: 10px 30px;
-  border-radius: 21px;
   margin-top: 50px;
   font-size: 20px;
   cursor: pointer;
+  translate: 0.2s;
+  border: solid 2px #dfe3f0;
 }
 
 .go_add_image:hover {
-  background-color: green;
+  color: white;
+  border: solid 2px  #385898;
 }
 
 .iamage_container {
@@ -283,13 +284,9 @@ nav>ul li:hover {
   text-align: center;
 }
 
-.registration h2 {
-  text-align: center;
-  padding: 35px 0;
-}
 
 .registration h3 {
-  padding-bottom: 35px;
+  padding-bottom: 20px;
   color: red;
 }
 
@@ -302,7 +299,7 @@ nav>ul li:hover {
   width: 250px;
   height: 35px;
   display: inline-block;
-  background-color: rgba(128, 128, 128, 0.089);
+  /* background-color: rgba(128, 128, 128, 0.089); */
 }
 
 .input_lable_component div {
@@ -311,43 +308,64 @@ nav>ul li:hover {
 
 .registration button,
 .sign_in button {
-  display: inline-block;
-  width: 200px;
+  display: inline-flex;
   border: none;
   color: white;
-  background-color: black;
-  padding: 13px 0;
-  margin-bottom: 50px;
+  background-color: #385898;
+  padding: 15px 30px;
+  margin: 50px 0;
   cursor: pointer;
-  border-radius: 30px;
   font-size: 20px;
+  translate: 0.3s;
+  border: solid 2px #dfe3f0;
+  justify-content: center;
+}
+
+
+.registration button:hover,
+.sign_in button:hover {
+  border: solid 2px #385898;
 }
 
 
 /* sign in --------------------------------------------------------------------------------------- */
 .sign_in h2 {
-  margin-bottom: 30px;
+  margin: 30px 0 ;
+  text-align: center;
 }
 
-.sign_in div input {
+/* .sign_in div input {
   width: 250px;
   height: 35px;
   margin-bottom: 30px;
   display: inline-block;
   background-color: rgba(128, 128, 128, 0.089);
-}
+} */
 
-input:focus {
+/* .sign_in form>div {
+  position: relative;
+} */
+
+/* input::placeholder {
+  color: #385898 !important;
+  opacity: 60% !important;
+} */
+
+/* input:focus {
   outline: none !important;
   transition: 0.5s;
+} */
+
+input:focus-visible {
+  border: none;
 }
 
 
 
-.sign_in {
+/* .sign_in {
   padding: 25px 0 0 0;
   text-align: center;
-}
+} */
 
 .sign_in {
   padding-bottom: 35px;
@@ -360,10 +378,9 @@ input:focus {
 }
 
 .about_us p {
-  /* margin-top: 30px; */
   font-size: 25px;
-  /* text-align: left; */
-  /* padding: 25px; */
+  text-align: left;
+  padding: 0 25px;
 }
 
 a:hover {
@@ -372,22 +389,36 @@ a:hover {
 }
 
 .icon_social {
-  width: 30px;
+  width: 30px !important;
   cursor: pointer;
 }
 
 /* add picture---------------------------------------------------------------------- */
 .create_category {
-  width: 250px;
+  width: 260px;
   height: 35px;
   display: inline-block;
-  background-color: rgba(128, 128, 128, 0.089);
 }
+.enlarge_picture{
+  display: inline-block;
+  border: none;
+  color: white;
+  background-color: #385898;
+  padding: 5px 10px;
+  margin-bottom: 50px;
+  cursor: pointer;
+  font-size: 20px;
+  translate: 0.3s;
+  border: solid 2px #dfe3f0;
 
+}
+.enlarge_picture:hover{
+  border: solid 2px #385898;
+}
 
 /* footer ----------------------------------------------------------------------------------------- */
 footer ul {
-  background-color: #000000;
+  background-color: #385898;
   padding: 10px 0 20px;
   color: white;
 }

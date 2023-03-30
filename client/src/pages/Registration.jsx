@@ -5,6 +5,7 @@ import registration_submit from "../action/registr";
 import { useDispatch, useSelector } from "react-redux";
 import { edit_current_user, select_current_user } from "../reducers/user/user_slice";
 import { useMemo } from "react";
+import StickyInputLabel from "../components/sign_in/sign_in_form/StickyInputLabel/StickyInputLabel";
 
 const Registration = () => {
   const state = useSelector(select_current_user);
@@ -29,23 +30,22 @@ const Registration = () => {
 
   return (
     <div className="registration">
-      <h2>Registration</h2>
       <h3>{valid_err}</h3>
       <form >
-        <Input_lable_component
+        <StickyInputLabel
           props={useMemo(() => {
             return (
               {
                 text: "Name",
                 name: "name",
                 type: "text",
-                value: name,
-                setValue: set_name
+                inputValue: name,
+                setInputValue: set_name
               }
             )
           }, [name])}
         />
-        <Input_lable_component
+        <StickyInputLabel
           props={
             useMemo(() => {
               return (
@@ -53,14 +53,14 @@ const Registration = () => {
                   text: "Last Name",
                   name: "Last_name",
                   type: "text",
-                  value: last_name,
-                  setValue: set_last_name
+                  inputValue: last_name,
+                  setInputValue: set_last_name
                 }
               )
             }, [last_name])
           }
         />
-        <Input_lable_component
+        <StickyInputLabel
           props={
             useMemo(() => {
               return (
@@ -68,14 +68,14 @@ const Registration = () => {
                   text: "Email",
                   name: "Email",
                   type: "email",
-                  value: email,
-                  setValue: set_email
+                  inputValue: email,
+                  setInputValue: set_email
                 }
               )
             }, [email])
           }
         />
-        <Input_lable_component
+        <StickyInputLabel
           props={
             useMemo(() => {
               return (
@@ -83,8 +83,8 @@ const Registration = () => {
                   text: "Password",
                   name: "Password",
                   type: "password",
-                  value: password,
-                  setValue: set_password
+                  inputValue: password,
+                  setInputValue: set_password
                 }
               )
             },[password])

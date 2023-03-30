@@ -76,6 +76,7 @@ const Add_picture = () => {
                 </div>
                 <input
                     className="form-control  create_category mt-2 mb-5"
+                    placeholder="New category"
                     type="text"
                     name="create_category"
                     onChange={create_category_change}

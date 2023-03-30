@@ -48,13 +48,14 @@ async function add_database_user(body) {
 }
 
 // registration_submit route -----------------------------------------------------------------------------------
-const registration_submit = (req, res, next) => {
+const  registration_submit = (req, res, next) => {
+    const token = jwt.sign({ userId: 123 }, secretKey);
     if (req.originalUrl === "/registration_submit" && req.method === "POST") {
         try {
             const messige = add_database_user(req.body);
             console.log(messige)
             if (messige === "ok") {
-                res.status(200)
+                res.status(200).
                 res.end
             } else {
                 res.status(401).json({ messige: messige })

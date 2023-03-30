@@ -4,7 +4,7 @@ function About_us() {
   return (
     <div className="about_us">
       <h1>About us</h1>
-      <p className="container text-center mt-5 mb-5">
+      <p className="mt-5 mb-5 ">
         This site for the image here,
         you can post pictures.
         also find beautiful pictures for each.

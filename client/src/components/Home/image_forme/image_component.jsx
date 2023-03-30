@@ -14,7 +14,7 @@ export default memo(function Image_component({ props }) {
             <img className="img-fluid" src={img} alt="" />
             <div className="pt-2">
                 <Link to={"/image/" + props.image_url}>
-                    <button className="btn btn-dark" onClick={() => {
+                    <button className="btn   enlarge_picture "  onClick={() => {
                         dispatch(edit_image(img));
                     }}>
                         Enlarge picture
