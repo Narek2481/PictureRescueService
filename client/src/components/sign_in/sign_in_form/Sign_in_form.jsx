@@ -1,5 +1,5 @@
-import {  useState } from "react";
-import { useDispatch  } from "react-redux";
+import { useCallback, useMemo, useState } from "react";
+import { useDispatch } from "react-redux";
 import login_submit from "../../../action/login";
 import { edit_current_user, select_current_user } from "../../../reducers/user/user_slice";
 import StickyInputLabel from "./StickyInputLabel/StickyInputLabel";
@@ -12,25 +12,29 @@ export default function Sign_in_form() {
     return (
         <div>
             <StickyInputLabel props={
-                {
-                    text:"Username",
-                    name: "Username",
-                    type: "email",
-                    inputValue: login,
-                    setInputValue: setLogin
-                }
+                useMemo(() => {
+                    return {
+                        text: "Username",
+                        name: "Username",
+                        type: "email",
+                        inputValue: login,
+                        setInputValue: setLogin
+                    }
+                },[login])
             } />
             <StickyInputLabel props={
-                {
-                    text:"Password",
-                    name: "Password",
-                    type: "password",
-                    inputValue: password,
-                    setInputValue: setPassword
-                }
+                useMemo(() => {
+                    return {
+                        text: "Password",
+                        name: "Password",
+                        type: "password",
+                        inputValue: password,
+                        setInputValue: setPassword
+                    }
+                },[password])
             } />
             <div className="text-center" >
-                <button type="submit" onClick={(e) => {
+                <button type="submit" onClick={useCallback((e) => {
                     e.preventDefault();
                     console.log(login, password);
                     login_submit(login, password)
@@ -41,7 +45,7 @@ export default function Sign_in_form() {
                             setLogin("");
                             setPassword("");
                         })
-                }}>Submit</button>
+                })}>Submit</button>
             </div>
             {/* <div>
                 <div>

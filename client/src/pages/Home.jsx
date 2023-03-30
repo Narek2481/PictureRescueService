@@ -5,6 +5,8 @@ import Select_category from "../components/Home/select_category/select_category"
 import { useDispatch, useSelector } from "react-redux";
 import { downloud_data, edit_fatching } from "../reducers/data/data_slice";
 import { downloud_category_get, downloud_category_post } from "../reducers/category/category_slice";
+import { ModalContent } from "../components/Home/modal/Modal";
+import { edit_modal } from "../reducers/modal/modal_slice";
 
 
 function Home() {
@@ -15,6 +17,13 @@ function Home() {
     const [select_value, set_select_value] = useState("All")
     const [nesting, set_nesting] = useState(0);
     const dispatch = useDispatch();
+    const modal_data  = useSelector((state) => state.modal);
+    let  style_scroll = {}
+    if(modal_data.modal_data.modal){
+        style_scroll = {overflow: "visible"}
+    }
+    // const {is_open,img} = modal_data
+    // const is_open = useSelector((state) => state.modal_data.modal)
     // requset image download
     useEffect(() => {
         if (fatch_redux) {
@@ -48,7 +57,12 @@ function Home() {
         }
     }, [fatch_redux]);
     return (
-        <div className="home">
+        <div className="home" style={style_scroll}>
+            {modal_data.modal_data.modal && (
+                <ModalContent>
+                    <img className="img-fluid" src={modal_data.modal_data.modal_img} alt="" />
+                </ModalContent>
+            )}
             <div className="add_container">
                 {/* route for adding pictures */}
                 <Link className="go_add_image" to={"/add_image"}>

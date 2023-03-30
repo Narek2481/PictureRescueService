@@ -25,6 +25,6 @@ export function select_current_user(state) {
 export function edit_current_user(pyload) {
     return {
         type:"current_user_registration",
-        pyload :pyload
+        pyload : pyload
     }
 }

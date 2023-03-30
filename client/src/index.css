@@ -264,7 +264,13 @@ nav>ul li:hover {
 .input-file input[type=file]:focus+span {
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
 }
-
+.img_container{
+  position: relative;
+}
+.buttn_image{
+  width: 30px !important;
+  height: 30px !important;
+}
 
 .input-file:hover span {
   background-color: #59be6e;

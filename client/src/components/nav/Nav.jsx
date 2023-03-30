@@ -7,8 +7,6 @@ import Home from "../../pages/Home";
 import Link_component from "./link_component/link_component";
 import Add_picture_page from "../../pages/Add_picture_page";
 import { useSelector } from "react-redux";
-import { select_current_user } from "../../reducers/user/user_slice";
-import Enlarge_picture from "../../pages/enlarge_picture";
 
 
 export default function Nav() {
@@ -17,7 +15,6 @@ export default function Nav() {
     const [icon_1, setIcon_1] = useState("");
     const [none, setnone] = useState("");
     const login_state = useSelector((state)=> state.current_user );
-    const image_data = useSelector((state) => state.image_data.image)
     console.log(login_state)
     const display = (login_state.register_or_login ? "none": "");
     const componenet_not_available = login_state.register_or_login ? [<Home/>,<Home/>] :[<Sign_in />,<Registration />]
@@ -90,7 +87,6 @@ export default function Nav() {
                 <Route path="/registration/*" element={componenet_not_available[1]}></Route>
                 <Route path={"/sign_in/*"} element={componenet_not_available[0]}></Route>
                 <Route path={"/add_image/*"} element={<Add_picture_page/>}></Route>
-                <Route path="/image/*" element={<Enlarge_picture props={image_data}/>}></Route>
             </Routes>
         </>
     );
