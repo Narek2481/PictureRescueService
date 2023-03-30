@@ -1,0 +1,108 @@
+nav {
+  background-color: #385898;
+  padding: 10px 0 6px 0;
+  font-family: sans-serif;
+  font-size: 22px;
+
+}
+
+a:hover {
+  color: white;
+  text-decoration: none;
+}
+
+.manue_icon {
+  cursor: pointer;
+  display: none;
+}
+
+.none_span {
+  display: none !important;
+}
+
+.manue_icon .all_span {
+  display: block;
+  background-color: white;
+  height: 1px;
+  width: 30px;
+  margin: 5px 0 10px 0;
+  transition: 0.6s;
+}
+
+
+
+.manue_close_1 {
+  transform: rotate(50deg);
+  margin: 0 !important;
+  transform: 1s;
+  transition: 0.6s;
+}
+
+.manue_close_2 {
+
+  transform: rotate(-50deg);
+  margin: 0 !important;
+  transform: 1s;
+  transition: 0.6s;
+
+}
+
+.manue_icon {
+  padding-top: 5px;
+}
+
+.logo_manue {
+  /* width: 100%; */
+  width: 20%;
+  display: flex;
+  justify-content: space-between;
+
+}
+
+.manu_block {
+  display: block !important;
+  transition: all 2s linear;
+}
+
+nav>ul {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  color: white;
+  flex: 1;
+  text-align: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 0;
+}
+
+.navigation {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  flex: 1;
+}
+
+nav>ul li {
+  /* display: none; */
+  flex-basis: 100px;
+}
+
+
+
+nav>ul li>a {
+  text-decoration: none;
+  color: white;
+
+}
+
+nav>ul li {
+  border-bottom: 3px solid #385898;
+  transition: 0.5s;
+  padding-bottom: 2px;
+}
+
+nav>ul li:hover {
+  border-bottom: 2px solid white;
+  transition: 0.5s;
+}

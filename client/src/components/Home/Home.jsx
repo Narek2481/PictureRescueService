@@ -1,13 +1,12 @@
 import { useEffect, useState, memo, useCallback } from "react";
-import Image_component from "../components/Home/image_forme/image_component"
+import Image_component from "./image_forme/image_component"
 import { Link } from "react-router-dom"
-import Select_category from "../components/Home/select_category/select_category";
+import Select_category from "./select_category/select_category";
 import { useDispatch, useSelector } from "react-redux";
-import { downloud_data, edit_fatching } from "../reducers/data/data_slice";
-import { downloud_category_get, downloud_category_post } from "../reducers/category/category_slice";
-import { ModalContent } from "../components/Home/modal/Modal";
-import { edit_modal } from "../reducers/modal/modal_slice";
-
+import { downloud_data, edit_fatching } from "../../reducers/data/data_slice";
+import { downloud_category_get, downloud_category_post } from "../../reducers/category/category_slice";
+import { ModalContent } from "./modal/Modal";
+import "./css/home.css"
 
 function Home() {
     const fatch_redux = useSelector((state) => state.downlode_data.fatching);
@@ -103,4 +102,4 @@ function Home() {
     );
 
 }
-export default memo(Home);
+export default Home;

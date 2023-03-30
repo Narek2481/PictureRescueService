@@ -1,13 +1,13 @@
 import { Route, Routes } from "react-router-dom";
 import About_us from "../../pages/About_us"
-import Sign_in from "../../pages/Sign_in"
-import Registration from "../../pages/Registration"
+import Sign_in_page from "../../pages/Sign_in_page"
+import Registration_page from "../../pages/Registration_page"
 import { useState } from "react";
-import Home from "../../pages/Home";
+import Home_page from "../../pages/Home_page";
 import Link_component from "./link_component/link_component";
 import Add_picture_page from "../../pages/Add_picture_page";
 import { useSelector } from "react-redux";
-
+import "./css/nav.css"
 
 export default function Nav() {
     const [manue, setManu] = useState("");
@@ -17,7 +17,7 @@ export default function Nav() {
     const login_state = useSelector((state)=> state.current_user );
     console.log(login_state)
     const display = (login_state.register_or_login ? "none": "");
-    const componenet_not_available = login_state.register_or_login ? [<Home/>,<Home/>] :[<Sign_in />,<Registration />]
+    const componenet_not_available = login_state.register_or_login ? [<Home_page/>,<Home_page/>] :[<Sign_in_page />,<Registration_page />]
     const style = {
         display
     }
@@ -81,8 +81,8 @@ export default function Nav() {
                 </ul>
             </nav>
             <Routes>
-                <Route path="/" element={<Home />}></Route>
-                <Route path="/home" element={<Home />}></Route>
+                <Route path="/" element={<Home_page />}></Route>
+                <Route path="/home" element={<Home_page />}></Route>
                 <Route path="/about_us/*" element={<About_us />}></Route>
                 <Route path="/registration/*" element={componenet_not_available[1]}></Route>
                 <Route path={"/sign_in/*"} element={componenet_not_available[0]}></Route>

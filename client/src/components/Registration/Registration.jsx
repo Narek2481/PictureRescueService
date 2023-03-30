@@ -1,11 +1,11 @@
-import Footer from "../components/footer/Footer";
-import Input_lable_component from "../components/Registration/Input_lable_component/Input_lable_component";
-import { useEffect, useState } from "react";
-import registration_submit from "../action/registr";
+import Footer from "../footer/Footer";
+import Input_lable_component from "./Input_lable_component/Input_lable_component";
+import {  useState } from "react";
+import registration_submit from "../../action/registr";
 import { useDispatch, useSelector } from "react-redux";
-import { edit_current_user, select_current_user } from "../reducers/user/user_slice";
+import { edit_current_user, select_current_user } from "../../reducers/user/user_slice";
 import { useMemo } from "react";
-import StickyInputLabel from "../components/sign_in/sign_in_form/StickyInputLabel/StickyInputLabel";
+import StickyInputLabel from "../sign_in/sign_in_form/StickyInputLabel/StickyInputLabel";
 
 const Registration = () => {
   const state = useSelector(select_current_user);

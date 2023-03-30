@@ -5,6 +5,7 @@ import twitter from "../../img_logo/twitter.png"
 import { Link, Route, Routes } from "react-router-dom";
 import { memo } from "react";
 import Social from "./social/social"
+import "./css/footer.css"
 
 export default memo(function Footer() {
     return (

@@ -1,0 +1,39 @@
+.category_container {
+  /* display: flex;
+    justify-content: center; */
+  justify-content: center;
+  text-align: center;
+  padding: 50px 0 0;
+  gap: 5px;
+}
+
+.add_price {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.add_price img {
+  display: block;
+  margin: 0 auto;
+  margin-top: 30px;
+  width: 10%;
+}
+
+
+.add_price button {
+  display: flex;
+  margin: 0 auto;
+  margin-top: 30px;
+  border: solid 2px #dfe3f0;
+  color: white;
+  background-color: #385898;
+  justify-content: center;
+  padding: 10px 30px;
+  cursor: pointer;
+  font-size: 20px;
+  margin-bottom: 30px;
+}
+
+.add_price button:hover {
+  border: solid 2px #385898;
+}

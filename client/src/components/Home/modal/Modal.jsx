@@ -35,7 +35,7 @@ export const Modal = ({ src, children }) => {
     const dispatch = useDispatch();
     const is_open = useSelector((state) => state.modal.modal_data.modal);
     const paylod = {modal:!is_open,modal_img:src}
-  return <div onClick={()=> {
+  return <div  style={{cursor:"pointer"}} onClick={()=> {
     dispatch(edit_modal(paylod))
   }}> {children}</div>;
 };

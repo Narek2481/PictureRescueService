@@ -5,7 +5,7 @@ import { downloud_category_post } from "../../reducers/category/category_slice";
 import { downloud_category_get } from "../../reducers/category_send/category_send_slice";
 import Footer from "../footer/Footer";
 import Select_category from "../Home/select_category/select_category";
-
+import "./css/add_picture.css"
 
 const Add_picture = () => {
     const [image_url, set_image_url] = useState(null);
