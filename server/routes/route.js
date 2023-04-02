@@ -3,6 +3,7 @@ import multer from "multer";
 import fs from "fs";
 import bcrypt from "bcrypt"
 import { Public, Image, User, Announcement, Category } from "../data_base/tables.js"
+import { STRING } from "sequelize";
 // import { sequelize } from "../data_base/db.js";
 
 // root route -----------------------------------------------------------------------------------
@@ -15,55 +16,54 @@ function root_route(req, res, next) {
 }
 
 async function add_database_user(body) {
-    const hashedPassword = await bcrypt.hash(body.password, 10);
-    User.findOne({
-        where: {
-            email: body.email
+    try {
+        const hashedPassword = await bcrypt.hash(body.password, 10);
+        const attempt_to_register = await User.findOne({
+            where: {
+                email: body.email
+            }
+        });
+
+        if (attempt_to_register) {
+            return { status: "this email or userName exists", data: null }
         }
-    })
-        .then((data) => {
-            console.log(data, "datatatastaassa")
-            User.create({
-                name: body.name,
-                email: body.email,
-                last_name: body.lastname,
-                password: hashedPassword
-            })
-                .then(() => {
-                    return "ok";
-                })
-                .catch(() => {
-                    return "Something went wrong"
-                })
-
-
-            
-        })
-        .catch((e) => {
-            console.log(e)
-            return  "this email or userName exists";
-        })
-
-
+        return { status: "ok", data: hashedPassword };
+    } catch (e) {
+        console.log(e)
+        return `err ${e}`;
+    }
 }
 
+
+async function token_creater(id) {
+    const token = await jwt.sign({ id }, "YOUR_SECRET_KEY");
+    return token;
+}
 // registration_submit route -----------------------------------------------------------------------------------
-const  registration_submit = (req, res, next) => {
-    const token = jwt.sign({ userId: 123 }, secretKey);
+const registration_submit = async (req, res, next) => {
     if (req.originalUrl === "/registration_submit" && req.method === "POST") {
-        try {
-            const messige = add_database_user(req.body);
-            console.log(messige)
-            if (messige === "ok") {
-                res.status(200).
-                res.end
-            } else {
-                res.status(401).json({ messige: messige })
-                res.end
+        // console.log(add_database_user(req.body), "------------------------")
+        const status = await add_database_user(req.body)
+        if (status.status == "ok") {
+            try {
+                const new_user = {
+                    name: req.body.name,
+                    email: req.body.email,
+                    password: status.data,
+                    last_name: req.body.lastname
+                }
+                console.log(1, "------------------------------------------------")
+                const user_data = await User.create(new_user)
+                console.log(user_data, "--------------------------------------")
+                let token = await token_creater(user_data.id)
+                res.send({
+                        user: user_data,
+                        token:token
+                    });
+            } catch(e){
+                console.log(STRING(e))
             }
-            console.log("ok")
-        } catch (e) {
-            console.log(e)
+            return next();
         }
     }
     return next();

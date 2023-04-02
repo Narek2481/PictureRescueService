@@ -7,22 +7,16 @@ import cookieParser from "cookie-parser";
 import { sequelize } from "./data_base/db.js";
 import { Public, Image, User, Announcement, Category } from "./data_base/tables.js";
 
-User.findOne({
-    where: {
-        id: 1 // Replace with the user ID you want to retrieve
-    }
-})
-    .then(user => {
-        console.log(user,"-----------------------------------------------------------------"); // Print the user object to the console
-    })
-    .catch(error => {
-        console.error(error); // Handle any errors that occur during the query
-    });
-
-
 
 sequelize.authenticate()
     .then(() => console.log("all ok"));
+
+// const attempt_to_register = await User.findOne({
+//     where: {
+//         id: 2
+//     }
+// });
+// console.log(attempt_to_register,"---------------------------------------------------------")
 const app = express();
 
 app.use(cookieParser());

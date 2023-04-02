@@ -37,3 +37,6 @@
 .add_price button:hover {
   border: solid 2px #385898;
 }
+#inputGroupFile01{
+  border: none ;
+}

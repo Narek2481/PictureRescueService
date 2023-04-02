@@ -1,4 +1,4 @@
-import { useEffect, useState, memo, useCallback } from "react";
+import React, { useEffect, useState, memo, useCallback } from "react";
 import Image_component from "./image_forme/image_component"
 import { Link } from "react-router-dom"
 import Select_category from "./select_category/select_category";
@@ -16,14 +16,13 @@ function Home() {
     const [select_value, set_select_value] = useState("All")
     const [nesting, set_nesting] = useState(0);
     const dispatch = useDispatch();
-    const modal_data  = useSelector((state) => state.modal);
-    let  style_scroll = {}
-    if(modal_data.modal_data.modal){
-        style_scroll = {overflow: "visible"}
+    const modal_data = useSelector((state) => state.modal);
+    if (modal_data.modal_data.modal) {
+        document.body.style.overflowY="hidden" 
+    }else{
+        document.body.style.overflowY="scroll"
     }
-    // const {is_open,img} = modal_data
-    // const is_open = useSelector((state) => state.modal_data.modal)
-    // requset image download
+    
     useEffect(() => {
         if (fatch_redux) {
             dispatch(downloud_data(past_data));
@@ -55,11 +54,14 @@ function Home() {
             dispatch(edit_fatching({ fatching: true }));
         }
     }, [fatch_redux]);
+    console.log(fatch_redux)
     return (
-        <div className="home" style={style_scroll}>
+        <div className="home">
             {modal_data.modal_data.modal && (
                 <ModalContent>
-                    <img className="img-fluid" src={modal_data.modal_data.modal_img} alt="" />
+                    <div className="modal_center">
+                        <img className="img-fluid" src={modal_data.modal_data.modal_img} alt="" />
+                    </div>
                 </ModalContent>
             )}
             <div className="add_container">

@@ -1,41 +1,45 @@
 nav {
   background-color: #385898;
   padding: 10px 0 6px 0;
-  font-family: sans-serif;
   font-size: 22px;
 
-}
-
-a:hover {
-  color: white;
-  text-decoration: none;
 }
 
 .manue_icon {
   cursor: pointer;
   display: none;
+
 }
 
 .none_span {
-  display: none !important;
+  visibility: hidden;
 }
 
 .manue_icon .all_span {
   display: block;
   background-color: white;
   height: 1px;
-  width: 30px;
+  width: 35px;
   margin: 5px 0 10px 0;
+  transform: 1s;
   transition: 0.6s;
+  animation-duration: 3s;
+  height: 2px;
 }
 
-
+.manue_icon .all_span:last-child {
+  transform: 0s;
+  transition: 0s;
+  animation-duration: 0s;
+}
 
 .manue_close_1 {
   transform: rotate(50deg);
   margin: 0 !important;
   transform: 1s;
   transition: 0.6s;
+  position: relative;
+  top: 20%;
 }
 
 .manue_close_2 {
@@ -44,7 +48,8 @@ a:hover {
   margin: 0 !important;
   transform: 1s;
   transition: 0.6s;
-
+  position: relative;
+  top: 20%;
 }
 
 .manue_icon {
@@ -52,24 +57,24 @@ a:hover {
 }
 
 .logo_manue {
-  /* width: 100%; */
   width: 20%;
   display: flex;
   justify-content: space-between;
 
 }
 
-.manu_block {
-  display: block !important;
-  transition: all 2s linear;
+.logo_manue>div:first-child {
+  padding-bottom: 10px;
 }
+
+
 
 nav>ul {
   display: flex;
   flex-wrap: wrap;
   list-style: none;
   color: white;
-  flex: 1;
+  /* flex: 1; */
   text-align: center;
   justify-content: space-between;
   flex-wrap: wrap;
@@ -79,8 +84,11 @@ nav>ul {
 .navigation {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: space-around;
   flex: 1;
+  transform: 1s;
+  transition: 0.6s;
+
 }
 
 nav>ul li {
@@ -105,4 +113,65 @@ nav>ul li {
 nav>ul li:hover {
   border-bottom: 2px solid white;
   transition: 0.5s;
+}
+
+@media only screen and (max-width: 1000px) {
+  .manue_icon {
+    display: block;
+  }
+
+  .navigation {
+    display: none;
+    transition: 0.5s;
+
+  }
+
+  .manu_block {
+    opacity: 100%;
+    display: block !important;
+    transition: all .3s ease;
+    -webkit-transition: all .3s ease;
+    transition: all 2s linear;
+    justify-content: flex-end;
+    translate: 1s;
+    z-index: 10;
+    transform: 1s;
+    transition: 0.6s;
+    position: absolute;
+    background-color: #385898;
+    width: 50%;
+    top: 60px;
+    left: 50%;
+
+  }
+
+  .manu_block li {
+    text-align: left;
+    padding: 10px;
+  }
+
+  nav>ul li:hover {
+    border: none !important;
+  }
+
+  nav>ul li {
+    border: none !important;
+  }
+
+  .logo_manue {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .manu_block {
+    width: 50%;
+    left: 50%;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .manu_block {
+    font-size: 20px;
+  }
 }

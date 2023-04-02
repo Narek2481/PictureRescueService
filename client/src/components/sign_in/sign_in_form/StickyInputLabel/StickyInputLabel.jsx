@@ -4,7 +4,7 @@ function StickyInputLabel({props}) {
   // const [inputValue, setInputValue] = useState('');
 
   return (
-    <div className="input-container mt-5">
+    <div className={"input-container mt-5 "+props.class}>
       <label  htmlFor={props.name} className={props.inputValue ? 'sticky-label' : 'lable_position '}>{props.text}</label>
       <input
         id={props.name}

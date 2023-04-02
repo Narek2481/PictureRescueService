@@ -7,9 +7,18 @@
 body {
   color: #385898;
   background-color: #dfe3f0;
-  font-family: serif;
+  font-family: 'Alkatra', cursive;
+}
+.body_scroll{
+  overflow-y: hidden;
+} 
+body a {
+  font-family: 'Alkatra', cursive;
 }
 
+.body_scroll{
+ overflow-y:hidden !important;
+}
 /* registration ------------------------------------------------------------------------------------------- */
 .registration {
   padding: 25px 0 0 0;
@@ -31,7 +40,6 @@ body {
   width: 250px;
   height: 35px;
   display: inline-block;
-  /* background-color: rgba(128, 128, 128, 0.089); */
 }
 
 .input_lable_component div {

@@ -1,10 +1,11 @@
-import { memo, useCallback, useEffect, useState } from "react";
+import {  useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import image_push from "../../action/add_image";
 import { downloud_category_post } from "../../reducers/category/category_slice";
 import { downloud_category_get } from "../../reducers/category_send/category_send_slice";
 import Footer from "../footer/Footer";
 import Select_category from "../Home/select_category/select_category";
+import StickyInputLabel from "../sign_in/sign_in_form/StickyInputLabel/StickyInputLabel";
 import "./css/add_picture.css"
 
 const Add_picture = () => {
@@ -68,21 +69,24 @@ const Add_picture = () => {
                     return <Select_category props={{ elem, set_select_value, set_nesting }} key={index} />
                 })
             }
-            <div className="mt-5 text-center">
-                <div>
-                    <label htmlFor="create_category">
-                        create a category, and which parent: {parent()}
-                    </label>
-                </div>
-                <input
-                    className="form-control  create_category mt-2 mb-5"
-                    placeholder="New category"
-                    type="text"
-                    name="create_category"
-                    onChange={create_category_change}
-                />
-            </div>
+            <StickyInputLabel 
+                props={
+                    useMemo(() => {
+                      return (
+                        {
+                          text: "New category",
+                          name: "category",
+                          type: "text",
+                          inputValue: create_category,
+                          setInputValue:set_create_category ,
+                          class :"mb-5"
+                        }
+                      )
+                    },[create_category])
+                }
+            />
             <img
+                
                 alt="preview image" src={image_url}
                 style={img_styles(image_url)}
                 accept="image/*"

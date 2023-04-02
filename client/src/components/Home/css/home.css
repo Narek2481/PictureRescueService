@@ -118,3 +118,6 @@
 .input-file input[type=file]:disabled+span {
     background-color: #eee;
 }
+.modal_center{
+    margin: 0 auto;
+}

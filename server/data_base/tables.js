@@ -6,7 +6,7 @@ import { sequelize } from './db.js';
 const User = sequelize.define('User', {
     // Define the User model attributes
     id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         primaryKey: true,
         autoIncrement: true
     },
@@ -40,7 +40,7 @@ const User = sequelize.define('User', {
 const Image = sequelize.define('Image', {
     // Define the Image model attributes
     id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         primaryKey: true,
         autoIncrement: true
     },
@@ -71,7 +71,7 @@ const Image = sequelize.define('Image', {
 const Announcement = sequelize.define('Announcement', {
     // Define the Image model attributes
     id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         primaryKey: true,
         autoIncrement: true
     },
@@ -101,7 +101,7 @@ const Announcement = sequelize.define('Announcement', {
 const Category = sequelize.define('Category', {
     // Define the Image model attributes
     id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         primaryKey: true,
         autoIncrement: true
     },
@@ -121,7 +121,7 @@ const Category = sequelize.define('Category', {
 const Public = sequelize.define('Public', {
     // Define the Image model attributes
     id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         primaryKey: true,
         autoIncrement: true
     },

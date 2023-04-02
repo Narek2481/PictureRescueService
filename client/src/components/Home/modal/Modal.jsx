@@ -32,23 +32,25 @@ const modalContent = {
 };
 
 export const Modal = ({ src, children }) => {
-    const dispatch = useDispatch();
-    const is_open = useSelector((state) => state.modal.modal_data.modal);
-    const paylod = {modal:!is_open,modal_img:src}
-  return <div  style={{cursor:"pointer"}} onClick={()=> {
+  const dispatch = useDispatch();
+  const is_open = useSelector((state) => state.modal.modal_data.modal);
+  const paylod = { modal: !is_open, modal_img: src }
+  return <div style={{ cursor: "pointer" }} onClick={() => {
     dispatch(edit_modal(paylod))
   }}> {children}</div>;
 };
 
 export const ModalContent = ({ children }) => {
-    const is_open = useSelector((state) => state.modal.modal_data);
-    const dispatch = useDispatch();
+  const is_open = useSelector((state) => state.modal.modal_data);
+  const dispatch = useDispatch();
   return (
+
     <div style={modal}>
-      <span style={close} onClick={() => dispatch(edit_modal({modal:!is_open.modal,modal_img:is_open.modal_img}))}>
+      <span style={close} onClick={() => dispatch(edit_modal({ modal: !is_open.modal, modal_img: is_open.modal_img }))}>
         &times;
       </span>
       <div style={modalContent}>{children}</div>
     </div>
+
   );
 };
