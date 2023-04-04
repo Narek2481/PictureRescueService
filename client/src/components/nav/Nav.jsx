@@ -9,6 +9,7 @@ import Add_picture_page from "../../pages/Add_picture_page";
 import { useSelector } from "react-redux";
 import "./css/nav.css"
 import logo from "../../img_logo/logo12.jpg"
+import Not_found_page from "../../pages/not_found_page";
 
 export default function Nav() {
     const [manue, setManu] = useState("");
@@ -108,11 +109,12 @@ export default function Nav() {
             </nav>
             <Routes>
                 <Route path="/" element={<Home_page />}></Route>
-                <Route path="/home" element={<Home_page />}></Route>
+                <Route path="/home/*" element={<Home_page />}></Route>
                 <Route path="/about_us/*" element={<About_us />}></Route>
                 <Route path="/registration/*" element={componenet_not_available[1]}></Route>
                 <Route path={"/sign_in/*"} element={componenet_not_available[0]}></Route>
                 <Route path={"/add_image/*"} element={<Add_picture_page />}></Route>
+                <Route path="/*" element={<Not_found_page/>} />
             </Routes>
         </>
     );

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, memo, useCallback } from "react";
+import React, { useEffect, useState, memo, useCallback, useRef } from "react";
 import Image_component from "./image_forme/image_component"
 import { Link } from "react-router-dom"
 import Select_category from "./select_category/select_category";
@@ -17,25 +17,21 @@ function Home() {
     const [nesting, set_nesting] = useState(0);
     const dispatch = useDispatch();
     const modal_data = useSelector((state) => state.modal);
+    const loaderRef = useRef(null);
+
     if (modal_data.modal_data.modal) {
-        document.body.style.overflowY="hidden" 
-    }else{
-        document.body.style.overflowY="scroll"
+        document.body.style.overflowY = "hidden"
+    } else {
+        document.body.style.overflowY = "scroll"
     }
-    
+
     useEffect(() => {
         if (fatch_redux) {
-            dispatch(downloud_data(past_data));
-            dispatch(edit_fatching({ fatching: false }))
+            setTimeout(()=>{
+                dispatch(downloud_data(past_data, edit_fatching({ fatching: false })));
+            },2000)
         }
     }, [fatch_redux]);
-    // requset image download
-    useEffect(() => {
-        document.addEventListener("scroll", scroll_hendler);
-        return () => {
-            document.removeEventListener("scroll", scroll_hendler)
-        }
-    }, []);
     // requset category
     useEffect(() => {
         // requset category first 
@@ -48,13 +44,31 @@ function Home() {
         }
     }, [nesting, fetching_category]);
     // function scroll event 
-    const scroll_hendler = useCallback((e) => {
-        if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100) {
-            console.log("scroll");
+    useEffect(() => {
+        const options = {
+            root: null,
+            rootMargin: "20px",
+            threshold: 1.0
+        };
+        const observer = new IntersectionObserver(handleObserver, options);
+        if (loaderRef.current) {
+            observer.observe(loaderRef.current);
+        }
+        // Remove the observer when the component unmounts
+        return () => {
+            if (loaderRef.current) {
+                dispatch(edit_fatching({ fatching: true }));
+            }
+        };
+    }, []);
+
+    function handleObserver(entries) {
+        const target = entries[0];
+        if (target.isIntersecting) {
             dispatch(edit_fatching({ fatching: true }));
         }
-    }, [fatch_redux]);
-    console.log(fatch_redux)
+    }
+
     return (
         <div className="home">
             {modal_data.modal_data.modal && (
@@ -94,11 +108,8 @@ function Home() {
                     })
                 }
             </div>
-            <div className=" text-center" style={{ height: "150px" }}>
-                {
-                    // backend request for images upload
-                    fatch_redux ? "Loading..." : ""
-                }
+            <div className={"text-center "} style={{ height: "200px" }} ref={loaderRef}>
+               <div className={fatch_redux ? "loader" : ""}></div>
             </div>
         </div>
     );

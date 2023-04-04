@@ -7,7 +7,6 @@ export function downlode_data_reducer(state = {}, action) {
             data: action.pyload
         };
     } else if(action.type === "change_fetching"){
-        console.log()
         return {
             ...state,
             fatching: action.pyload.fatching
@@ -34,13 +33,15 @@ export function edit_fatching (pyload){
         pyload: pyload
     }
 }
-export function downloud_data(past_data) {
+export function downloud_data(past_data,fetch_change) {
     return (dispatch, get_state) => {
         
         return (
             loude_data()
                 .then((req) => {
+                    
                     dispatch(edit_data([...past_data, ...req.data]));
+                    dispatch(fetch_change)
                 })
         );
     }
