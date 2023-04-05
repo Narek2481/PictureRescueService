@@ -1,4 +1,4 @@
-import React, { useEffect, useState, memo, useCallback, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Image_component from "./image_forme/image_component"
 import { Link } from "react-router-dom"
 import Select_category from "./select_category/select_category";
@@ -7,6 +7,7 @@ import { downloud_data, edit_fatching } from "../../reducers/data/data_slice";
 import { downloud_category_get, downloud_category_post } from "../../reducers/category/category_slice";
 import { ModalContent } from "./modal/Modal";
 import "./css/home.css"
+import Cookies from "js-cookie";
 
 function Home() {
     const fatch_redux = useSelector((state) => state.downlode_data.fatching);
@@ -18,18 +19,18 @@ function Home() {
     const dispatch = useDispatch();
     const modal_data = useSelector((state) => state.modal);
     const loaderRef = useRef(null);
-
-    if (modal_data.modal_data.modal) {
-        document.body.style.overflowY = "hidden"
-    } else {
-        document.body.style.overflowY = "scroll"
-    }
+    const myCookie = Cookies.get('auth');
+    console.log(myCookie,"cookie");
+    // ba es pahy vonc anem  vor opshi scroll-y anjatvi 
+    // if (modal_data.modal_data.modal) {
+    //     document.body.style.overflowY = "hidden"
+    // } else {
+    //     document.body.style.overflowY = "scroll"
+    // }
 
     useEffect(() => {
         if (fatch_redux) {
-            setTimeout(()=>{
-                dispatch(downloud_data(past_data, edit_fatching({ fatching: false })));
-            },2000)
+            dispatch(downloud_data(past_data, edit_fatching({ fatching: false })));
         }
     }, [fatch_redux]);
     // requset category
@@ -50,7 +51,7 @@ function Home() {
             rootMargin: "20px",
             threshold: 1.0
         };
-        const observer = new IntersectionObserver(handleObserver, options);
+        const observer = new IntersectionObserver(handle_observer, options);
         if (loaderRef.current) {
             observer.observe(loaderRef.current);
         }
@@ -62,7 +63,7 @@ function Home() {
         };
     }, []);
 
-    function handleObserver(entries) {
+    function handle_observer(entries) {
         const target = entries[0];
         if (target.isIntersecting) {
             dispatch(edit_fatching({ fatching: true }));
@@ -109,7 +110,7 @@ function Home() {
                 }
             </div>
             <div className={"text-center "} style={{ height: "200px" }} ref={loaderRef}>
-               <div className={fatch_redux ? "loader" : ""}></div>
+                <div className={fatch_redux ? "loader" : ""}></div>
             </div>
         </div>
     );

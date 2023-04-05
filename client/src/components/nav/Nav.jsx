@@ -1,8 +1,8 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes ,Navigate} from "react-router-dom";
 import About_us from "../../pages/About_us"
 import Sign_in_page from "../../pages/Sign_in_page"
 import Registration_page from "../../pages/Registration_page"
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import Home_page from "../../pages/Home_page";
 import Link_component from "./link_component/link_component";
 import Add_picture_page from "../../pages/Add_picture_page";
@@ -19,7 +19,8 @@ export default function Nav() {
     const login_state = useSelector((state) => state.current_user);
     console.log(login_state)
     const display = (login_state.register_or_login ? "none" : "");
-    const componenet_not_available = login_state.register_or_login ? [<Home_page />, <Home_page />] : [<Sign_in_page />, <Registration_page />]
+    // const componenet_not_available = login_state.register_or_login ? [<Home_page />, <Home_page />] : [<Sign_in_page />, <Registration_page />]
+    
     const style = {
         display
     }
@@ -108,12 +109,12 @@ export default function Nav() {
                 </ul>
             </nav>
             <Routes>
-                <Route path="/" element={<Home_page />}></Route>
-                <Route path="/home/*" element={<Home_page />}></Route>
-                <Route path="/about_us/*" element={<About_us />}></Route>
-                <Route path="/registration/*" element={componenet_not_available[1]}></Route>
-                <Route path={"/sign_in/*"} element={componenet_not_available[0]}></Route>
-                <Route path={"/add_image/*"} element={<Add_picture_page />}></Route>
+                <Route path={"/"} element={<Navigate to="/home" replace/>}/>
+                <Route path={"/home"} element={<Home_page />}/>
+                <Route path="/about_us/*" element={<About_us />}/>
+                {login_state.register_or_login?"":<Route path="/registration/*" element={<Registration_page />}/>}
+                {login_state.register_or_login?"": <Route path={"/sign_in/*"} element={<Sign_in_page />}/>}
+                <Route path={"/add_image/*"} element={<Add_picture_page />}/>
                 <Route path="/*" element={<Not_found_page/>} />
             </Routes>
         </>

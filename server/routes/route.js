@@ -3,15 +3,19 @@ import multer from "multer";
 import fs from "fs";
 import bcrypt from "bcrypt"
 import { Public, Image, User, Announcement, Category } from "../data_base/tables.js"
-import { STRING } from "sequelize";
-// import { sequelize } from "../data_base/db.js";
+import express from "express";
+
+const router = express.Router()
+
+
 
 // root route -----------------------------------------------------------------------------------
-function root_route(req, res, next) {
+router.get("/", (req, res) => {
     res.send("ok");
-    next();
-}
+})
 
+
+// registration_submit route -----------------------------------------------------------------------------------
 async function add_database_user(body) {
     try {
         const hashedPassword = await bcrypt.hash(body.password, 10);
@@ -32,7 +36,7 @@ async function add_database_user(body) {
 }
 
 
-async function generateVerificationToken(userId) {
+async function generate_verification_token(userId) {
     const payload = {
         client_id: userId,
     };
@@ -43,44 +47,52 @@ async function generateVerificationToken(userId) {
     console.log(token);
     return token
 }
-// registration_submit route -----------------------------------------------------------------------------------
-const registration_submit = async (req, res, next) => {
-    const status = await add_database_user(req.body)
+const preparation_registration_submit = async (body) => {
+    const status = await add_database_user(body);
     if (status.status == "ok") {
         try {
             const new_user = {
-                name: req.body.name,
-                email: req.body.email,
+                name: body.name,
+                email: body.email,
                 password: status.data,
-                last_name: req.body.lastname
+                last_name: body.lastname
             }
-            console.log(1, "------------------------------------------------");
             const user_data = await User.create(new_user);
-            console.log(user_data, "--------------------------------------");
-            const token = await generateVerificationToken(user_data.id)
-            console.log(token,"token ----------------------------------------------------")
-            console.log(res)
+            const token = await generate_verification_token(user_data.id)
+            console.log(token, "token ----------------------------------------------------")
+            return (
+                {
+                    token: token
+                }
+            )
         } catch (e) {
-            console.log(STRING(e));
+            return String(e)
         }
     }
-
-    next();
 }
+router.post("/registration_submit", async (req, res) => {
+    const data = await preparation_registration_submit(req.body);
+    console.log(data, "-data========================================================================")
+    res.setHeader('Content-Type', 'application/json');
+    res.cookie('mycookie', 'myvalue');
+    res.status(200)
+    res.send(data)
+});
+
 
 
 // login submit route -----------------------------------------------------------------------------------
-const login_submit = (req, res, next) => {
-    console.log(req.body);
-    res.send("ok");
-    next();
-}
 
+router.post("/login_submit", (req, res) => {
+    console.log(req.body);
+    res.cookie("auth",1525);
+    res.send("ok");
+})
 
 
 // image push route -----------------------------------------------------------------------------------
 const upload = multer({ dest: 'server/img' });
-const image_push = (req, res, next) => {
+const image_push = (req, res) => {
     console.log(req.body)
     fs.readFile(req.file.path, (err, data) => {
         if (err) {
@@ -107,15 +119,14 @@ const image_push = (req, res, next) => {
             });
         }
     });
-    next();
 }
 
-
+router.post("/image_push",upload.single('image'),image_push)
 
 
 
 // image loud route -----------------------------------------------------------------------------------
-function image_loud(req, res, next) {
+router.get("/image_loud", (req, res) => {
     const images = [
         {
             image_url: "1559455754_1.jpg"
@@ -137,16 +148,11 @@ function image_loud(req, res, next) {
         }
     ];
     console.log(req.body);
-    res.send(images);
-
-
-    next();
-}
-
-
+    res.send(images)
+})
 
 // image category route -----------------------------------------------------------------------------------
-const image_category = (req, res, next) => {
+router.post("/image_category", (req, res) => {
     const select = [
         {
             value: "poxos"
@@ -164,37 +170,13 @@ const image_category = (req, res, next) => {
             value: "errrr"
         },
     ];
-
     console.log(req.body)
     res.send([select]);
-    next();
-}
+})
 
 
 
 
-// all reutes ------------------------------------------------------------------------------------------------
-function route(req, res, next) {
-    if (req.originalUrl === "/image_category" && req.method === "POST") {
-        image_category(req, res, next);
-    }
-    else if (req.originalUrl === "/" && req.method === "GET") {
-        root_route(req, res, next);
-    } else if (req.originalUrl === "/image_loud" && req.method === "GET") {
-        image_loud(req, res, next);
-    } else if (req.originalUrl === "/image_push" && req.method === "POST") {
-        image_push(req, res, next);
-    } else if (req.originalUrl === "/login_submit" && req.method === "POST") {
-        login_submit(req, res, next);
-    } else if (req.originalUrl === "/registration_submit" && req.method === "POST") {
-        registration_submit(req, res, next);
-    }
 
-    next()
-
-
-
-}
-
-export { route }
+export { router }
 

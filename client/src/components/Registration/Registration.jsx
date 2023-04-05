@@ -7,6 +7,7 @@ import { edit_current_user, select_current_user } from "../../reducers/user/user
 import { useMemo } from "react";
 import StickyInputLabel from "../sign_in/sign_in_form/StickyInputLabel/StickyInputLabel";
 import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 
 const Registration = () => {
   const state = useSelector(select_current_user);
@@ -16,7 +17,10 @@ const Registration = () => {
   const [password, set_password] = useState("");
   const [valid_err, setValid_err] = useState('');
   const dispach = useDispatch();
-
+  const navigate = useNavigate();
+  const go_to_home = () => {
+    navigate('/home');
+  }
   function contains_valid_name(input) {
     return input.length >= 3 && /[A-Z]/.test(input) && /[a-z]/.test(input);
   }
@@ -28,11 +32,6 @@ const Registration = () => {
     }
     return true;
   }
-  useEffect(() => {
-    const myCookieValue = Cookies.get('access_token')
-    console.log(myCookieValue)
-
-  }, [])
   return (
     <div className="registration">
       <h3>{valid_err}</h3>
@@ -103,9 +102,10 @@ const Registration = () => {
             set_password("");
             registration_submit(name, last_name, email, password)
               .then((res) => {
-                console.log(res);
+                // console.log(res.data.token);
                 if (res.status === 200) {
                   dispach(edit_current_user({ name, email, last_name, password, register_or_login: true }));
+                  go_to_home()
                 } else {
                   setValid_err("Something went wrong, Try again");
                 }
