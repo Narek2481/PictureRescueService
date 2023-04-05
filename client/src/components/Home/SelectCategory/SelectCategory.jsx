@@ -1,6 +1,6 @@
 import { memo, useCallback } from "react";
 
-const Select_category =  ({ props }) => {
+const SelectCategory =  ({ props }) => {
     return (
         <div className="category_container container " >
             <label className="mb-4" htmlFor="category">Choose a category</label>
@@ -10,8 +10,8 @@ const Select_category =  ({ props }) => {
                 defaultValue={'All'}
                 onChange={
                     useCallback((e) => {
-                        props.set_select_value(e.target.value);
-                        props.set_nesting((state) => ++state);
+                        props.setSelectValue(e.target.value);
+                        props.setNesting((state) => ++state);
                     }, [])}
             >
                 <option value={"All"}>All</option>
@@ -23,4 +23,4 @@ const Select_category =  ({ props }) => {
     )
 };
 
-export default memo(Select_category,() => true);
+export default memo(SelectCategory,() => true);

@@ -1,15 +1,15 @@
-export const initial_modal = {
-    modal_data: {
+export const initialModal = {
+    modalData: {
         modal: false,
-        modal_img: null
+        modalImg: null
     },
 };
 
-export function current_modal_reduser(state = {}, action) {
+export function currentModalReduser(state = {}, action) {
     if (action.type === "current_modal_cgange") {
         return ({
             ...state,
-            modal_data:action.pyload
+            modalData:action.pyload
         });
     }
     else {
@@ -17,7 +17,7 @@ export function current_modal_reduser(state = {}, action) {
     }
 }
 
-export function edit_modal(pyload) {
+export function editModal(pyload) {
     return {
         type: "current_modal_cgange",
         pyload: pyload

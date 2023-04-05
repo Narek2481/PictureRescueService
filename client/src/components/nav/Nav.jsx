@@ -1,25 +1,25 @@
 import { Route, Routes ,Navigate} from "react-router-dom";
-import About_us from "../../pages/About_us"
-import Sign_in_page from "../../pages/Sign_in_page"
-import Registration_page from "../../pages/Registration_page"
+import AboutUsPage from "../../pages/AboutUsPage"
+import SignInPage from "../../pages/SignInPage"
+import RegistrationPage from "../../pages/RegistrationPage"
 import { useState } from "react";
-import Home_page from "../../pages/Home_page";
-import Link_component from "./link_component/link_component";
-import Add_picture_page from "../../pages/Add_picture_page";
+import HomePage from "../../pages/HomePage";
+import LinkComponent from "./linkComponent/linkComponent";
+import AddPicturePage from "../../pages/AddPicturePage";
 import { useSelector } from "react-redux";
 import "./css/nav.css"
 import logo from "../../img_logo/logo12.jpg"
-import Not_found_page from "../../pages/not_found_page";
+import NotFoundPage from "../../pages/NotFoundPage";
 
 export default function Nav() {
     const [manue, setManu] = useState("");
     const [icon_2, setIcon_2] = useState("");
     const [icon_1, setIcon_1] = useState("");
     const [none, setnone] = useState("");
-    const login_state = useSelector((state) => state.current_user);
+    const login_state = useSelector((state) => state.currentUser);
     console.log(login_state)
     const display = (login_state.register_or_login ? "none" : "");
-    // const componenet_not_available = login_state.register_or_login ? [<Home_page />, <Home_page />] : [<Sign_in_page />, <Registration_page />]
+    // const componenet_not_available = login_state.register_or_login ? [<HomePage />, <HomePage />] : [<SignInPage />, <RegistrationPage />]
     
     const style = {
         display
@@ -71,14 +71,14 @@ export default function Nav() {
                         </div>
                     </div>
                     <div className={"navigation " + manue}>
-                        <Link_component props={
+                        <LinkComponent props={
                             {
                                 path: "home",
                                 text: "Home",
                                 click: click_manue
                             }}
                         />
-                        <Link_component props={
+                        <LinkComponent props={
                             {
                                 path: "about_us",
                                 text: "About us",
@@ -86,7 +86,7 @@ export default function Nav() {
                             }}
                         />
 
-                        <Link_component props={
+                        <LinkComponent props={
                             {
                                 path: "sign_in",
                                 text: "Sign in",
@@ -95,7 +95,7 @@ export default function Nav() {
                             }}
                         />
 
-                        <Link_component props={
+                        <LinkComponent props={
                             {
                                 path: "registration",
                                 text: "Registration",
@@ -110,12 +110,12 @@ export default function Nav() {
             </nav>
             <Routes>
                 <Route path={"/"} element={<Navigate to="/home" replace/>}/>
-                <Route path={"/home"} element={<Home_page />}/>
-                <Route path="/about_us/*" element={<About_us />}/>
-                {login_state.register_or_login?"":<Route path="/registration/*" element={<Registration_page />}/>}
-                {login_state.register_or_login?"": <Route path={"/sign_in/*"} element={<Sign_in_page />}/>}
-                <Route path={"/add_image/*"} element={<Add_picture_page />}/>
-                <Route path="/*" element={<Not_found_page/>} />
+                <Route path={"/home"} element={<HomePage />}/>
+                <Route path="/about_us/*" element={<AboutUsPage />}/>
+                {login_state.register_or_login?"":<Route path="/registration/*" element={<RegistrationPage />}/>}
+                {login_state.register_or_login?"": <Route path={"/sign_in/*"} element={<SignInPage />}/>}
+                <Route path={"/add_image/*"} element={<AddPicturePage />}/>
+                <Route path="/*" element={<NotFoundPage/>} />
             </Routes>
         </>
     );

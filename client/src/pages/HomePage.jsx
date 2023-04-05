@@ -1,8 +1,8 @@
 import Home from "../components/Home/Home";
 
-function Home_page() {
+function HomePage() {
     
     return <Home/>
 
 }
-export default Home_page;
+export default HomePage;

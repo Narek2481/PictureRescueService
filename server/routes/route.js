@@ -15,7 +15,7 @@ router.get("/", (req, res) => {
 })
 
 
-// registration_submit route -----------------------------------------------------------------------------------
+// registrationSubmit route -----------------------------------------------------------------------------------
 async function add_database_user(body) {
     try {
         const hashedPassword = await bcrypt.hash(body.password, 10);
@@ -70,7 +70,7 @@ const preparation_registration_submit = async (body) => {
         }
     }
 }
-router.post("/registration_submit", async (req, res) => {
+router.post("/registrationSubmit", async (req, res) => {
     const data = await preparation_registration_submit(req.body);
     console.log(data, "-data========================================================================")
     res.setHeader('Content-Type', 'application/json');
@@ -83,16 +83,16 @@ router.post("/registration_submit", async (req, res) => {
 
 // login submit route -----------------------------------------------------------------------------------
 
-router.post("/login_submit", (req, res) => {
+router.post("/registrationSubmit", (req, res) => {
     console.log(req.body);
-    res.cookie("auth",1525);
+    res.cookie("auth","Narek");
     res.send("ok");
 })
 
 
 // image push route -----------------------------------------------------------------------------------
 const upload = multer({ dest: 'server/img' });
-const image_push = (req, res) => {
+const imagePush = (req, res) => {
     console.log(req.body)
     fs.readFile(req.file.path, (err, data) => {
         if (err) {
@@ -121,7 +121,7 @@ const image_push = (req, res) => {
     });
 }
 
-router.post("/image_push",upload.single('image'),image_push)
+router.post("/imagePush",upload.single('image'),imagePush)
 
 
 

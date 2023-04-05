@@ -1,4 +1,4 @@
-export const initial_current_user = {
+export const initialCurrentUser = {
     register_or_login: false,
     email: "",
     name: "",
@@ -6,7 +6,7 @@ export const initial_current_user = {
     password: ""
 };
 
-export function current_user_reducer (state = {}, action) {
+export function currentUserReducer (state = {}, action) {
     if (action.type === "current_user_registration") {
         return  {
             ...state,
@@ -18,11 +18,11 @@ export function current_user_reducer (state = {}, action) {
     }
 }
 
-export function select_current_user(state) {
+export function selectCurrentUser(state) {
     return state.current_user
 }
 
-export function edit_current_user(pyload) {
+export function editCurrentUser(pyload) {
     return {
         type:"current_user_registration",
         pyload : pyload

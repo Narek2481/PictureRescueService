@@ -1,8 +1,8 @@
-import { image_category_get, image_category_post } from "./category_send_api";
+import { imageCategoryGet, imageCategoryPost } from "./categoryApi";
 
 
-export function category_send_reducer(state = null, action) {
-    if (action.type === "category_send_change") {
+export function categorySearchReducer(state = null, action) {
+    if (action.type === "category_search_change") {
         return {
             ...state,
             category: action.pyload
@@ -11,35 +11,36 @@ export function category_send_reducer(state = null, action) {
     return state;
 }
 
-export const initial_category_send = {
+export const initialCategorySearch = {
     category: null
 };
 
-export function edit_category_send(pyload) {
+export function editCategorySearch(pyload) {
     return {
         type: "category_search_change",
         pyload: pyload
     }
 }
-export function downloud_category_get() {
+export function downloudCategoryGet() {
+    
     return (dispatch, get_state) => {
-        return image_category_get()
+        return imageCategoryGet()
             .then((res) => {
-                return dispatch(edit_category_send([...res.data]));
+                return dispatch(editCategorySearch([...res.data]));
             })
             .catch((e) => {
                 return e;
             });
     }
 }
-export function downloud_category_post(past_data,value) {
+export function downloudCategoryPost(past_data,value) {
     console.log(past_data)
     return (dispatch, get_state) => {
         return (
-            image_category_post(value)
+            imageCategoryPost(value)
                 .then((res) => {
                     console.log([...past_data, ...res.data], "post data ")
-                    dispatch(edit_category_send([...past_data, ...res.data]));
+                    dispatch(editCategorySearch([...past_data, ...res.data]));
                 })
                 .catch((e) => {
                     return e;

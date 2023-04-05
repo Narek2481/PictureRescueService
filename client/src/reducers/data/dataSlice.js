@@ -1,6 +1,6 @@
-import { loude_data } from "./data_api";
+import { loudeData } from "./dataApi";
 
-export function downlode_data_reducer(state = {}, action) {
+export function downlodeDataReducer(state = {}, action) {
     if (action.type === "downlode_data_change") {
         return {
             ...state,
@@ -17,30 +17,30 @@ export function downlode_data_reducer(state = {}, action) {
     }
 
 }
-export const initial_downlode_data = {
+export const initialDownlodeData = {
     data: [],
     fatching:true
 };
-export function edit_data(pyload) {
+export function editData(pyload) {
     return {
         type: "downlode_data_change",
         pyload: pyload
     }
 }
-export function edit_fatching (pyload){
+export function editFatching (pyload){
     return {
         type: "change_fetching",
         pyload: pyload
     }
 }
-export function downloud_data(past_data,fetch_change) {
+export function downloudData(past_data,fetch_change) {
     return (dispatch, get_state) => {
         
         return (
-            loude_data()
+            loudeData()
                 .then((req) => {
                     
-                    dispatch(edit_data([...past_data, ...req.data]));
+                    dispatch(editData([...past_data, ...req.data]));
                     dispatch(fetch_change)
                 })
         );

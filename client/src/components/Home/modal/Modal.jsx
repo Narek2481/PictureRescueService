@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { edit_modal } from "../../../reducers/modal/modal_slice";
+import { editModal } from "../../../reducers/modal/modalSlice";
 
 const modal = {
   position: "fixed",
@@ -33,20 +33,20 @@ const modalContent = {
 
 export const Modal = ({ src, children }) => {
   const dispatch = useDispatch();
-  const is_open = useSelector((state) => state.modal.modal_data.modal);
-  const paylod = { modal: !is_open, modal_img: src }
+  const isOpen = useSelector((state) => state.modal.modalData.modal);
+  const paylod = { modal: !isOpen, modalImg: src }
   return <div style={{ cursor: "pointer" }} onClick={() => {
-    dispatch(edit_modal(paylod))
+    dispatch(editModal(paylod))
   }}> {children}</div>;
 };
 
 export const ModalContent = ({ children }) => {
-  const is_open = useSelector((state) => state.modal.modal_data);
+  const isOpen = useSelector((state) => state.modal.modalData);
   const dispatch = useDispatch();
   return (
 
     <div style={modal}>
-      <span style={close} onClick={() => dispatch(edit_modal({ modal: !is_open.modal, modal_img: is_open.modal_img }))}>
+      <span style={close} onClick={() => dispatch(editModal({ modal: !isOpen.modal, modalImg: isOpen.modalImg }))}>
         &times;
       </span>
       <div style={modalContent}>{children}</div>

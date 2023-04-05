@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const Link_component = ({ props }) => {
+const LinkComponent = ({ props }) => {
     return (
         <li style={props.style}>
             <Link to={props.path} onClick={props.click}>
@@ -16,4 +16,4 @@ const Link_component = ({ props }) => {
 
 
 
-export default Link_component;
+export default LinkComponent;

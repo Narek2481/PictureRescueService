@@ -1,27 +1,30 @@
 import React, { useEffect, useState, useRef } from "react";
-import Image_component from "./image_forme/image_component"
+import ImageComponent from "./images/ImageComponent"
 import { Link } from "react-router-dom"
-import Select_category from "./select_category/select_category";
+import SelectCategory from "./SelectCategory/SelectCategory";
 import { useDispatch, useSelector } from "react-redux";
-import { downloud_data, edit_fatching } from "../../reducers/data/data_slice";
-import { downloud_category_get, downloud_category_post } from "../../reducers/category/category_slice";
+import { downloudData, editFatching } from "../../reducers/data/dataSlice";
+import { downloudCategoryGet, downloudCategoryPost } from "../../reducers/category/categorySlice";
 import { ModalContent } from "./modal/Modal";
 import "./css/home.css"
-import Cookies from "js-cookie";
+import { useCookies } from "react-cookie";
+
+
 
 function Home() {
-    const fatch_redux = useSelector((state) => state.downlode_data.fatching);
-    const past_data = useSelector((state) => state.downlode_data.data);
-    const requset_category_redux = useSelector(state => state.category_search.category);
-    const fetching_category = true;
-    const [select_value, set_select_value] = useState("All")
-    const [nesting, set_nesting] = useState(0);
+    const fatchDataRedux = useSelector((state) => state.downlodeData.fatching);
+    const nowData = useSelector((state) => state.downlodeData.data);
+    const requsetCategoryRedux = useSelector(state => state.categorySearch.category);
+    const fetchingCategory = true;
+    const [selectValue, setSelectValue] = useState("All")
+    const [nesting, setNesting] = useState(0);
     const dispatch = useDispatch();
-    const modal_data = useSelector((state) => state.modal);
+    const modalData = useSelector((state) => state.modal);
     const loaderRef = useRef(null);
-    const myCookie = Cookies.get('auth');
-    console.log(myCookie,"cookie");
-    // ba es pahy vonc anem  vor opshi scroll-y anjatvi 
+    const [cookies, setCookie] = useCookies(['auth']);
+    console.log(cookies)
+      // const myCookie = ;
+    // console.log(myCookie,"cookie");
     // if (modal_data.modal_data.modal) {
     //     document.body.style.overflowY = "hidden"
     // } else {
@@ -29,21 +32,21 @@ function Home() {
     // }
 
     useEffect(() => {
-        if (fatch_redux) {
-            dispatch(downloud_data(past_data, edit_fatching({ fatching: false })));
+        if (fatchDataRedux) {
+            dispatch(downloudData(nowData, editFatching({ fatching: false })));
         }
-    }, [fatch_redux]);
+    }, [fatchDataRedux]);
     // requset category
     useEffect(() => {
         // requset category first 
-        if (fetching_category && nesting <= 0) {
-            dispatch(downloud_category_get());
+        if (fetchingCategory && nesting <= 0) {
+            dispatch(downloudCategoryGet());
         }
         // requset category in  category
         if (nesting > 0) {
-            dispatch(downloud_category_post(requset_category_redux, select_value));
+            dispatch(downloudCategoryPost(requsetCategoryRedux, selectValue));
         }
-    }, [nesting, fetching_category]);
+    }, [nesting, fetchingCategory]);
     // function scroll event 
     useEffect(() => {
         const options = {
@@ -58,7 +61,7 @@ function Home() {
         // Remove the observer when the component unmounts
         return () => {
             if (loaderRef.current) {
-                dispatch(edit_fatching({ fatching: true }));
+                dispatch(editFatching({ fatching: true }));
             }
         };
     }, []);
@@ -66,16 +69,16 @@ function Home() {
     function handle_observer(entries) {
         const target = entries[0];
         if (target.isIntersecting) {
-            dispatch(edit_fatching({ fatching: true }));
+            dispatch(editFatching({ fatching: true }));
         }
     }
 
     return (
         <div className="home">
-            {modal_data.modal_data.modal && (
+            {modalData.modalData.modal && (
                 <ModalContent>
                     <div className="modal_center">
-                        <img className="img-fluid" src={modal_data.modal_data.modal_img} alt="" />
+                        <img className="img-fluid" src={modalData.modalData.modalImg} alt="" />
                     </div>
                 </ModalContent>
             )}
@@ -87,8 +90,8 @@ function Home() {
             </div>
             {/* category for pictures */}
             {
-                requset_category_redux?.map((elem, index) => {
-                    return <Select_category props={{ elem, set_select_value, set_nesting }} key={index} />
+                requsetCategoryRedux?.map((elem, index) => {
+                    return <SelectCategory props={{ elem, setSelectValue, setNesting }} key={index} />
                 })
             }
             <div style={
@@ -101,16 +104,16 @@ function Home() {
             </div>
             <div className="row">
                 {
-                    // an array from the backend that is being rendered for component Image_component
-                    past_data.map((elem) => {
+                    // an array from the backend that is being rendered for component ImageComponent
+                    nowData.map((elem) => {
                         return (
-                            <Image_component props={elem} key={Math.random() * 100} />
+                            <ImageComponent props={elem} key={Math.random() * 100} />
                         )
                     })
                 }
             </div>
             <div className={"text-center "} style={{ height: "200px" }} ref={loaderRef}>
-                <div className={fatch_redux ? "loader" : ""}></div>
+                <div className={fatchDataRedux ? "loader" : ""}></div>
             </div>
         </div>
     );

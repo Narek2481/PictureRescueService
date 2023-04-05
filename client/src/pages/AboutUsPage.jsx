@@ -1,6 +1,6 @@
-import Our_contacts from "../components/about_us/our_contacts/Our_contacts";
+import OurContacts from "../components/about_us/our_contacts/OurContacts";
 
-function About_us() {
+function AboutUsPage() {
   return (
     <div className="about_us">
       <h1>About us</h1>
@@ -20,9 +20,9 @@ function About_us() {
         Quisquam exercitationem nobis fugiat excepturi magnam ipsa recusandae culpa nisi repellat error vero quis maxime, facere earum distinctio, molestias esse eos, velit quae aliquam dolores aperiam quidem iusto autem. At?
         Maxime quia numquam veritatis laboriosam alias vitae libero dolor exercitationem, debitis nesciunt voluptatum voluptatem iusto, voluptate sit saepe tempora beatae hic quas laudantium sed facilis pariatur esse non obcaecati! Quos?
       </p>
-      <Our_contacts />
+      <OurContacts />
     </div>
   );
 };
 
-export default About_us;
+export default AboutUsPage;

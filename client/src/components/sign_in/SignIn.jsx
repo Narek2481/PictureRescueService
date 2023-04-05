@@ -1,16 +1,16 @@
 import Footer from "../footer/Footer";
-import Sign_in_form from "./sign_in_form/Sign_in_form";
+import SignInForm from "./signInForm/SignInForm";
 
-const Sign_in = () => {
+const SignIn = () => {
   return (
     <>
       <div className="sign_in">
         <h2>Sign in</h2>
-        <Sign_in_form />
+        <SignInForm />
       </div>
       <Footer/>
     </>
   );
 };
 
-export default Sign_in;
+export default SignIn;

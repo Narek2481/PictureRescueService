@@ -1,12 +1,12 @@
 import axios from "axios";
 
-export default async function image_push(image_data) {
+export default async function imagePush(image_data) {
     // image_data.create
     const new_category = image_data.image_data.create_category || "null"
     const formData = new FormData();
     formData.append('image', image_data.image_data);
     console.log(formData);
-    axios.post('http://localhost:4000/image_push', formData, {
+    axios.post('http://localhost:4000/imagePush', formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
         },

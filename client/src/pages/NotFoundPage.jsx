@@ -1,7 +1,7 @@
 import Footer from "../components/footer/Footer";
 
 
-const Not_found_page = () => {
+const NotFoundPage = () => {
     return (
         <div className="text-danger">
             <div className="text-center p-5">
@@ -12,4 +12,4 @@ const Not_found_page = () => {
         </div>
     )
 }
-export default Not_found_page;
+export default NotFoundPage;

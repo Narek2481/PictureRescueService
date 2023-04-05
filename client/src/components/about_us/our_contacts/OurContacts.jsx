@@ -3,7 +3,7 @@ import instagram from "../../../img_logo/instagram (1).png"
 import gmail from "../../../img_logo/gmail.png"
 import twitter from "../../../img_logo/twitter.png"
 
-export default function Our_contacts() {
+export default function OurContacts() {
     const style = { hover: { color: "#007bff;" } }
     return (
         <>
