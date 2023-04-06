@@ -6,17 +6,18 @@ import { Public, Image, User, Announcement, Category } from "../data_base/tables
 import express from "express";
 
 const router = express.Router()
-
+const secret = "Narek2481"
 
 
 // root route -----------------------------------------------------------------------------------
 router.get("/", (req, res) => {
+
     res.send("ok");
-})
+});
 
 
 // registrationSubmit route -----------------------------------------------------------------------------------
-async function add_database_user(body) {
+const addDatabaseUser = async body => {
     try {
         const hashedPassword = await bcrypt.hash(body.password, 10);
         const attempt_to_register = await User.findOne({
@@ -36,19 +37,18 @@ async function add_database_user(body) {
 }
 
 
-async function generate_verification_token(userId) {
+const generateVerificationToken = async (userId) => {
     const payload = {
         client_id: userId,
     };
     const options = {
         expiresIn: '1h', // Set the expiration time for the token
     };
-    const token = await jwt.sign(payload, 'your_secret_key_here', options);
-    console.log(token);
+    const token = await jwt.sign(payload, secret, options);
     return token
 }
-const preparation_registration_submit = async (body) => {
-    const status = await add_database_user(body);
+const preparationRegistrationSubmit = async (body) => {
+    const status = await addDatabaseUser(body);
     if (status.status == "ok") {
         try {
             const new_user = {
@@ -58,8 +58,7 @@ const preparation_registration_submit = async (body) => {
                 last_name: body.lastname
             }
             const user_data = await User.create(new_user);
-            const token = await generate_verification_token(user_data.id)
-            console.log(token, "token ----------------------------------------------------")
+            const token = await generateVerificationToken(user_data.id);
             return (
                 {
                     token: token
@@ -71,10 +70,8 @@ const preparation_registration_submit = async (body) => {
     }
 }
 router.post("/registrationSubmit", async (req, res) => {
-    const data = await preparation_registration_submit(req.body);
-    console.log(data, "-data========================================================================")
+    const data = await preparationRegistrationSubmit(req.body);
     res.setHeader('Content-Type', 'application/json');
-    res.cookie('mycookie', 'myvalue');
     res.status(200)
     res.send(data)
 });
@@ -82,11 +79,37 @@ router.post("/registrationSubmit", async (req, res) => {
 
 
 // login submit route -----------------------------------------------------------------------------------
+const checkDatabaseUser = async body => {
+    try {
+        const user = await User.findOne({
+            where: {
+                email: body.login
+            }
+        });
+        if (user) {
+            const compare =  await bcrypt.compare(body.password, user.password)
+            
+            return compare ? user.id : "password is not correct"
+        }
+    } catch (e) {
+        return  "Something went wrong"
+    }
 
-router.post("/registrationSubmit", (req, res) => {
-    console.log(req.body);
-    res.cookie("auth","Narek");
-    res.send("ok");
+};
+
+
+router.post("/loginSubmit", async (req, res) => {
+    console.log(req.body)
+    const result = await checkDatabaseUser(req.body);
+    if(result === "password is not correct"){
+        res.status(400).json("password is not correct")
+    }else if(result === "Something went wrong"){
+        res.status(400).json("Something went wrong")
+    }else{
+        const token = await generateVerificationToken(result)
+        res.status(200).json({token})
+    }
+    res.end
 })
 
 
@@ -121,7 +144,7 @@ const imagePush = (req, res) => {
     });
 }
 
-router.post("/imagePush",upload.single('image'),imagePush)
+router.post("/imagePush", upload.single('image'), imagePush)
 
 
 
@@ -147,6 +170,7 @@ router.get("/image_loud", (req, res) => {
             image_url: "kartinka_motivatsiya_tsitata_9.jpg"
         }
     ];
+
     console.log(req.body);
     res.send(images)
 })

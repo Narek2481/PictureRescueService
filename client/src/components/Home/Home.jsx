@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { downloudData, editFatching } from "../../reducers/data/dataSlice";
 import { downloudCategoryGet, downloudCategoryPost } from "../../reducers/category/categorySlice";
 import { ModalContent } from "./modal/Modal";
-import "./css/home.css"
+import "./css/home.scss"
 import { useCookies } from "react-cookie";
 
 
@@ -21,20 +21,15 @@ function Home() {
     const dispatch = useDispatch();
     const modalData = useSelector((state) => state.modal);
     const loaderRef = useRef(null);
-    const [cookies, setCookie] = useCookies(['auth']);
-    console.log(cookies)
-      // const myCookie = ;
-    // console.log(myCookie,"cookie");
-    // if (modal_data.modal_data.modal) {
-    //     document.body.style.overflowY = "hidden"
-    // } else {
-    //     document.body.style.overflowY = "scroll"
-    // }
+    const [cookie, setCookie, removeCookie] = useCookies(["auth"]);
+    console.log(cookie);
+    
 
     useEffect(() => {
         if (fatchDataRedux) {
             dispatch(downloudData(nowData, editFatching({ fatching: false })));
         }
+        // removeCookie(["auth"])
     }, [fatchDataRedux]);
     // requset category
     useEffect(() => {
@@ -108,7 +103,7 @@ function Home() {
                     nowData.map((elem) => {
                         return (
                             <ImageComponent props={elem} key={Math.random() * 100} />
-                        )
+                        );
                     })
                 }
             </div>

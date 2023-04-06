@@ -2,44 +2,59 @@ import { Route, Routes ,Navigate} from "react-router-dom";
 import AboutUsPage from "../../pages/AboutUsPage"
 import SignInPage from "../../pages/SignInPage"
 import RegistrationPage from "../../pages/RegistrationPage"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import HomePage from "../../pages/HomePage";
 import LinkComponent from "./linkComponent/linkComponent";
 import AddPicturePage from "../../pages/AddPicturePage";
-import { useSelector } from "react-redux";
-import "./css/nav.css"
+import { useDispatch, useSelector } from "react-redux";
+import "./css/nav.scss"
 import logo from "../../img_logo/logo12.jpg"
 import NotFoundPage from "../../pages/NotFoundPage";
+import { useCookies } from "react-cookie";
+import { editCurrentUser } from "../../reducers/user/userSlice";
 
 export default function Nav() {
+    // hamburger manue state
     const [manue, setManu] = useState("");
+    // manue components open or close 
     const [icon_2, setIcon_2] = useState("");
     const [icon_1, setIcon_1] = useState("");
     const [none, setnone] = useState("");
-    const login_state = useSelector((state) => state.currentUser);
-    console.log(login_state)
-    const display = (login_state.register_or_login ? "none" : "");
-    // const componenet_not_available = login_state.register_or_login ? [<HomePage />, <HomePage />] : [<SignInPage />, <RegistrationPage />]
-    
+    // register or login state 
+    const loginState = useSelector((state) => state.currentUser);
+    const dispatch = useDispatch();
+    // register or login styles 
+    const display = (loginState.register_or_login ? "none" : "");
+    // register or login examination
+    const [cookie, setCookie, removeCookie] = useCookies(["auth"]);
+
+    // useEffect(() => {
+    //     console.log(typeof(cookie.auth) === "object")
+    //     if(!loginState.register_or_login && cookie.auth){
+    //         console.log(1111111)
+    //         dispatch(editCurrentUser({register_or_login:true}))
+    //     }
+    // },[])
+    console.log(cookie,"nav");
     const style = {
         display
     }
+
     const click_manue = () => {
         if (manue === '') {
             setIcon_1("manue_close_1");
             setIcon_2("manue_close_2");
             setnone("none_span");
             setManu('manu_block');
-    
         } else {
             setIcon_1("");
             setIcon_2("");
             setnone("");
             setManu('');
-            
         }
 
     }
+
     return (
         <>
             <nav>
@@ -56,8 +71,6 @@ export default function Nav() {
                                 setIcon_2("manue_close_2");
                                 setnone("none_span");
                                 setManu('manu_block');
-                               
-
                             } else {
                                 setIcon_1("");
                                 setIcon_2("");
@@ -112,8 +125,8 @@ export default function Nav() {
                 <Route path={"/"} element={<Navigate to="/home" replace/>}/>
                 <Route path={"/home"} element={<HomePage />}/>
                 <Route path="/about_us/*" element={<AboutUsPage />}/>
-                {login_state.register_or_login?"":<Route path="/registration/*" element={<RegistrationPage />}/>}
-                {login_state.register_or_login?"": <Route path={"/sign_in/*"} element={<SignInPage />}/>}
+                {loginState.register_or_login?"":<Route path="/registration/*" element={<RegistrationPage />}/>}
+                {loginState.register_or_login?"": <Route path={"/sign_in/*"} element={<SignInPage />}/>}
                 <Route path={"/add_image/*"} element={<AddPicturePage />}/>
                 <Route path="/*" element={<NotFoundPage/>} />
             </Routes>

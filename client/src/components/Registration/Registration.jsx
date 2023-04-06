@@ -1,11 +1,12 @@
 import Footer from "../footer/Footer";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import registrationSubmit from "../../action/registr";
-import { useDispatch, useSelector } from "react-redux";
-import { editCurrentUser, selectCurrentUser } from "../../reducers/user/userSlice";
+import { useDispatch,  } from "react-redux";
+import { editCurrentUser } from "../../reducers/user/userSlice";
 import { useMemo } from "react";
 import StickyInputLabel from "../sign_in/signInForm/StickyInputLabel/StickyInputLabel";
 import { useNavigate } from 'react-router-dom';
+import { useCookies } from "react-cookie";
 
 const Registration = () => {
   const [email, setEmail] = useState("");
@@ -13,16 +14,19 @@ const Registration = () => {
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [validErr, setValidErr] = useState('');
+  const [cookies, setCookie, removeCookie] = useCookies(['auth']);
   const dispach = useDispatch();
   const navigate = useNavigate();
+
   const goToHome = () => {
     navigate('/home');
   }
-  function containsValidName(input) {
+
+  const containsValidName = input => {
     return input.length >= 3 && /[A-Z]/.test(input) && /[a-z]/.test(input);
   }
 
-  function validatePassword(password) {
+  const validatePassword = password => {
     if (password.length < 8) {
       console.log("Password must be at least 8 characters long.");
       return false
@@ -101,8 +105,10 @@ const Registration = () => {
               .then((res) => {
                 // console.log(res.data.token);
                 if (res.status === 200) {
+                  console.log(res.data)
                   dispach(editCurrentUser({ name, email, lastName, password, register_or_login: true }));
-                  goToHome()
+                  setCookie('auth', res.data, { maxAge: 3600, path: '/' });
+                  goToHome();
                 } else {
                   setValidErr("Something went wrong, Try again");
                 }

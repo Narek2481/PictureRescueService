@@ -6,7 +6,7 @@ import { downloudCategoryGet } from "../../reducers/categorySend/categorySendSli
 import Footer from "../footer/Footer";
 import SelectCategory from "../Home/SelectCategory/SelectCategory";
 import StickyInputLabel from "../sign_in/signInForm/StickyInputLabel/StickyInputLabel";
-import "./css/add_picture.css"
+import "./css/add_picture.scss"
 
 const AddPicture = () => {
     const [imageUrl, setImageUrl] = useState(null);
