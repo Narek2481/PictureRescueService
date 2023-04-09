@@ -1,7 +1,7 @@
 import Footer from "../footer/Footer";
-import {  useState } from "react";
+import { useState } from "react";
 import registrationSubmit from "../../action/registr";
-import { useDispatch,  } from "react-redux";
+import { useDispatch, } from "react-redux";
 import { editCurrentUser } from "../../reducers/user/userSlice";
 import { useMemo } from "react";
 import StickyInputLabel from "../sign_in/signInForm/StickyInputLabel/StickyInputLabel";
@@ -17,25 +17,87 @@ const Registration = () => {
   const [cookies, setCookie, removeCookie] = useCookies(['auth']);
   const dispach = useDispatch();
   const navigate = useNavigate();
-
+  const [inputValidStyle, setInputValidStyle] = useState({ name: {}, lastName: {}, email: {}, password: {} });
   const goToHome = () => {
     navigate('/home');
   }
 
-  const containsValidName = input => {
-    return input.length >= 3 && /[A-Z]/.test(input) && /[a-z]/.test(input);
+  const containsValidNameOrLastName = input => {
+    return input.length >= 2 && /[A-Z]/.test(input) && /[a-z]/.test(input);
   }
-
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  };
   const validatePassword = password => {
     if (password.length < 8) {
       console.log("Password must be at least 8 characters long.");
-      return false
+      return "Password must be at least 8 characters long."
     }
-    return true;
+    return "ok";
+  }
+  const submitThen = res => {
+    if (res.status === 200) {
+      console.log(res.data)
+      dispach(editCurrentUser({ name, email, lastName, password, register_or_login: true }));
+      setCookie('auth', res.data, { maxAge: 3600, path: '/' });
+      goToHome();
+    } else {
+      setValidErr("Something went wrong, Try again");
+    }
+  }
+  const submitData = e => {
+    e.preventDefault();
+    if (
+      containsValidNameOrLastName(name) &&
+      validatePassword(password) === "ok" &&
+      containsValidNameOrLastName(lastName) &&
+      validateEmail(email)
+    ) {
+      registrationSubmit(name, lastName, email, password)
+        .then(res => {
+          setInputValidStyle({ name: {}, lastName: {}, email: {}, password: {} });
+          submitThen(res)
+        })
+        .catch((eror) => {
+          console.log(eror)
+          setValidErr(eror.response.data);
+        });
+      setEmail("");
+      setName("");
+      setLastName("");
+      setPassword("");
+      setValidErr("");
+    } else {
+      if (!containsValidNameOrLastName(name)) {
+        setInputValidStyle(
+          { name: { borderBottom: "1px solid red" }, lastName: {}, email: {}, password: {} }
+        );
+        setValidErr("In the name, the bit is 1 capital letter and no less than 2 characters");
+      }
+      else if (validatePassword(password) !== "ok") {
+        setInputValidStyle(
+          { name: {}, lastName: {}, email: {}, password: { borderBottom: "1px solid red" } }
+        );
+        setValidErr("Err write corect");
+      } else if (!containsValidNameOrLastName(lastName)) {
+        setInputValidStyle(
+          { name: {}, lastName: { borderBottom: "1px solid red" }, email: {}, password: {} }
+        );
+        setValidErr("In the lastName, the bit is 1 capital letter and no less than 2 characters");
+      } else if (!validateEmail(email)) {
+        setInputValidStyle(
+          { name: {}, lastName: {}, email: { borderBottom: "1px solid red" }, password: {} }
+        );
+        setValidErr(`The email address must not contain spaces, contain the "@" symbol,
+        contain "." symbol,"." must be followed by at least one character.`);
+      }
+    }
+
   }
   return (
     <div className="registration">
-      <h3>{validErr}</h3>
+      <h3 className="container">{validErr}</h3>
       <form >
         <StickyInputLabel
           props={useMemo(() => {
@@ -45,10 +107,11 @@ const Registration = () => {
                 name: "name",
                 type: "text",
                 inputValue: name,
-                setInputValue: setName
+                setInputValue: setName,
+                style: inputValidStyle.name
               }
             )
-          }, [name])}
+          }, [name, inputValidStyle])}
         />
         <StickyInputLabel
           props={
@@ -59,10 +122,11 @@ const Registration = () => {
                   name: "Last_name",
                   type: "text",
                   inputValue: lastName,
-                  setInputValue: setLastName
+                  setInputValue: setLastName,
+                  style: inputValidStyle.lastName
                 }
               )
-            }, [lastName])
+            }, [lastName, inputValidStyle])
           }
         />
         <StickyInputLabel
@@ -74,10 +138,11 @@ const Registration = () => {
                   name: "Email",
                   type: "email",
                   inputValue: email,
-                  setInputValue: setEmail
+                  setInputValue: setEmail,
+                  style: inputValidStyle.email
                 }
               )
-            }, [email])
+            }, [email, inputValidStyle])
           }
         />
         <StickyInputLabel
@@ -89,41 +154,13 @@ const Registration = () => {
                   name: "Password",
                   type: "password",
                   inputValue: password,
-                  setInputValue: setPassword
+                  setInputValue: setPassword,
+                  style: inputValidStyle.password
                 }
               )
-            }, [password])
+            }, [password, inputValidStyle])
           } />
-        <button type="submit" onClick={(e) => {
-          e.preventDefault();
-          if (containsValidName(name) && validatePassword(password)) {
-            setEmail("");
-            setName("");
-            setLastName("");
-            setPassword("");
-            registrationSubmit(name, lastName, email, password)
-              .then((res) => {
-                // console.log(res.data.token);
-                if (res.status === 200) {
-                  console.log(res.data)
-                  dispach(editCurrentUser({ name, email, lastName, password, register_or_login: true }));
-                  setCookie('auth', res.data, { maxAge: 3600, path: '/' });
-                  goToHome();
-                } else {
-                  setValidErr("Something went wrong, Try again");
-                }
-              })
-              .catch((eror) => {
-                console.log(eror)
-                setValidErr("Such user exists");
-              });
-            setValidErr("");
-          } else {
-            setValidErr("Err write corect");
-            console.log("err write corect");
-          }
-        }
-        } >Submit</button>
+        <button type="submit" onClick={submitData} >Submit</button>
         <Footer></Footer>
       </form>
     </div>

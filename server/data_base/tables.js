@@ -3,39 +3,44 @@ import { sequelize } from './db.js';
 
 
 
-const User = sequelize.define('User', {
-    // Define the User model attributes
-    id: {
-        type: DataTypes.BIGINT,
-        primaryKey: true,
-        autoIncrement: true
-    },
-    name: {
-        type: DataTypes.STRING(255),
-        allowNull: false
-    },
-    email: {
-        type: DataTypes.STRING(255),
-        allowNull: false,
-        unique: true
-    },
-    password: {
-        type: DataTypes.STRING(255),
-        allowNull: false
-    },
-    last_name: {
-        type: DataTypes.STRING(255),
-        allowNull: false
-    },
-    profile_image: {
-        type: DataTypes.INTEGER,
-        references: {
-            model: 'Image', // The name of the referenced table
-            key: 'id' // The primary key of the referenced table
+const User = sequelize.define('User',
+    {
+        // Define the User model attributes
+        id: {
+            type: DataTypes.BIGINT,
+            primaryKey: true,
+            autoIncrement: true,
         },
-        allowNull: true
+        name: {
+            type: DataTypes.STRING(255),
+            allowNull: false
+        },
+        email: {
+            type: DataTypes.STRING(255),
+            allowNull: false,
+            unique: true
+        },
+        password: {
+            type: DataTypes.STRING(255),
+            allowNull: false
+        },
+        last_name: {
+            type: DataTypes.STRING(255),
+            allowNull: false
+        },
+        profile_image: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: 'Image', // The name of the referenced table
+                key: 'id' // The primary key of the referenced table
+            },
+            allowNull: true
+        }
+    },
+    {
+        tableName: "User"
     }
-});
+);
 
 const Image = sequelize.define('Image', {
     // Define the Image model attributes
@@ -57,15 +62,20 @@ const Image = sequelize.define('Image', {
         references: {
             model: 'Category', // The name of the referenced table
             key: 'id' // The primary key of the referenced table
-        }
+        },
+        allowNull: true
     },
     public_or_private: {
         type: DataTypes.INTEGER,
         references: {
             model: 'Public', // The name of the referenced table
             key: 'id' // The primary key of the referenced table
-        }
+        },
+        allowNull: true
     }
+
+}, {
+    tableName: "Image"
 });
 
 const Announcement = sequelize.define('Announcement', {
@@ -88,14 +98,18 @@ const Announcement = sequelize.define('Announcement', {
             model: 'User', // The name of the referenced table
             key: 'id' // The primary key of the referenced table
         }
+
     },
     image_ref: {
         type: DataTypes.INTEGER,
         references: {
             model: 'Image', // The name of the referenced table
             key: 'id' // The primary key of the referenced table
-        }
+        },
+        allowNull: true
     }
+}, {
+    tableName: "Announcement"
 });
 
 const Category = sequelize.define('Category', {
@@ -114,9 +128,12 @@ const Category = sequelize.define('Category', {
         references: {
             model: 'Category', // The name of the referenced table
             key: 'id' // The primary key of the referenced table
-        }
+        },
+        allowNull: true
     }
 
+}, {
+    tableName: 'Category'
 });
 const Public = sequelize.define('Public', {
     // Define the Image model attributes
@@ -137,11 +154,13 @@ const Public = sequelize.define('Public', {
         }
     }
 
+}, {
+    tableName: "Public"
 });
 sequelize.sync()
     .then(() => console.log("  crated tables"))
 
 
-export {Public,Image,User,Announcement,Category}
+export { Public, Image, User, Announcement, Category }
 
 

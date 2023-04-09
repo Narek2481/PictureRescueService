@@ -2,7 +2,6 @@ import { memo } from "react";
 
 function StickyInputLabel({props}) {
   // const [inputValue, setInputValue] = useState('');
-
   return (
     <div className={"input-container mt-5 "+props.class}>
       <label  htmlFor={props.name} className={props.inputValue ? 'sticky-label' : 'lable_position '}>{props.text}</label>
@@ -11,6 +10,7 @@ function StickyInputLabel({props}) {
         type={props.type}
         value={props.inputValue}
         onChange={(e) => props.setInputValue(e.target.value)}
+        style={props.style}
       />
     </div>
   );

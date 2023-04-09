@@ -1,18 +1,21 @@
 import axios from "axios";
 
-export default async function imagePush(image_data) {
-    // image_data.create
-    const new_category = image_data.image_data.create_category || "null"
+export default async function imagePush(imageData, selectValue, createCategory,publicImage,userToken) {
+
     const formData = new FormData();
-    formData.append('image', image_data.image_data);
+    formData.append('image', imageData);
+    // const categorys = {
+    //     selectValue : selectValue,
+    //     newCategory :createCategory
+    // };
+    formData.append("selectValue",selectValue);
+    formData.append("newCategory",createCategory);
+    formData.append("publicImage",publicImage);
+    formData.append("userToken",userToken);
     console.log(formData);
     axios.post('http://localhost:4000/imagePush', formData, {
         headers: {
-            'Content-Type': 'multipart/form-data'
-        },
-        data: {
-            select_value : image_data.select_value,
-            new_category
+            'Content-Type': 'multipart/form-data',
         }
     })
         .then(response => {

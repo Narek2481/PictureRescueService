@@ -26,7 +26,7 @@ export default function Nav() {
     // register or login styles 
     const display = (loginState.register_or_login ? "none" : "");
     // register or login examination
-    const [cookie, setCookie, removeCookie] = useCookies(["auth"]);
+    // const [cookie, setCookie, removeCookie] = useCookies(["auth"]);
 
     // useEffect(() => {
     //     console.log(typeof(cookie.auth) === "object")
@@ -35,7 +35,7 @@ export default function Nav() {
     //         dispatch(editCurrentUser({register_or_login:true}))
     //     }
     // },[])
-    console.log(cookie,"nav");
+    // console.log(cookie,"nav");
     const style = {
         display
     }

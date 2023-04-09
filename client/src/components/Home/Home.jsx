@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
 import ImageComponent from "./images/ImageComponent"
 import { Link } from "react-router-dom"
 import SelectCategory from "./SelectCategory/SelectCategory";
@@ -22,17 +22,17 @@ function Home() {
     const modalData = useSelector((state) => state.modal);
     const loaderRef = useRef(null);
     const [cookie, setCookie, removeCookie] = useCookies(["auth"]);
-    console.log(cookie);
     
-
     useEffect(() => {
         if (fatchDataRedux) {
             dispatch(downloudData(nowData, editFatching({ fatching: false })));
         }
         // removeCookie(["auth"])
     }, [fatchDataRedux]);
+
     // requset category
     useEffect(() => {
+
         // requset category first 
         if (fetchingCategory && nesting <= 0) {
             dispatch(downloudCategoryGet());
@@ -42,6 +42,14 @@ function Home() {
             dispatch(downloudCategoryPost(requsetCategoryRedux, selectValue));
         }
     }, [nesting, fetchingCategory]);
+
+    const handle_observer = entries => {
+        const target = entries[0];
+        if (target.isIntersecting) {
+            dispatch(editFatching({ fatching: true }));
+        }
+    };
+
     // function scroll event 
     useEffect(() => {
         const options = {
@@ -49,10 +57,12 @@ function Home() {
             rootMargin: "20px",
             threshold: 1.0
         };
+
         const observer = new IntersectionObserver(handle_observer, options);
         if (loaderRef.current) {
             observer.observe(loaderRef.current);
         }
+
         // Remove the observer when the component unmounts
         return () => {
             if (loaderRef.current) {
@@ -61,12 +71,7 @@ function Home() {
         };
     }, []);
 
-    function handle_observer(entries) {
-        const target = entries[0];
-        if (target.isIntersecting) {
-            dispatch(editFatching({ fatching: true }));
-        }
-    }
+
 
     return (
         <div className="home">
@@ -85,9 +90,11 @@ function Home() {
             </div>
             {/* category for pictures */}
             {
-                requsetCategoryRedux?.map((elem, index) => {
-                    return <SelectCategory props={{ elem, setSelectValue, setNesting }} key={index} />
-                })
+                useMemo(() => {
+                    return requsetCategoryRedux?.map((elem, index) => {
+                        return <SelectCategory props={{ elem, setSelectValue, setNesting }} key={index} />
+                    })
+                }, [requsetCategoryRedux])
             }
             <div style={
                 {
@@ -100,11 +107,14 @@ function Home() {
             <div className="row">
                 {
                     // an array from the backend that is being rendered for component ImageComponent
-                    nowData.map((elem) => {
-                        return (
-                            <ImageComponent props={elem} key={Math.random() * 100} />
-                        );
-                    })
+                    useMemo(() => {
+                        return nowData?.map((elem, index) => {
+                            return <ImageComponent
+                                props={elem}
+                                key={Math.random() * 100}
+                            />
+                        })
+                    }, [nowData])
                 }
             </div>
             <div className={"text-center "} style={{ height: "200px" }} ref={loaderRef}>

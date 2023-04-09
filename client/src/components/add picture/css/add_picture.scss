@@ -19,7 +19,12 @@
   width: 10%;
 }
 
-
+.check_private{
+    margin: 0 auto;
+    max-width: 300px;
+    position: relative;
+    text-align: left;
+}
 .add_price button {
   display: flex;
   margin: 0 auto;
@@ -38,5 +43,7 @@
   border: solid 2px #385898;
 }
 #inputGroupFile01{
+  position: relative;
   border: none ;
+  left: 1%;
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { editModal } from "../../../reducers/modal/modalSlice";
-
+import { RemoveScroll } from 'react-remove-scroll';
 const modal = {
   position: "fixed",
   zIndex: 1,
@@ -45,12 +45,14 @@ export const ModalContent = ({ children }) => {
   const dispatch = useDispatch();
   return (
 
-    <div style={modal}>
-      <span style={close} onClick={() => dispatch(editModal({ modal: !isOpen.modal, modalImg: isOpen.modalImg }))}>
-        &times;
-      </span>
-      <div style={modalContent}>{children}</div>
-    </div>
+    <RemoveScroll>
+      <div style={modal}>
+        <span style={close} onClick={() => dispatch(editModal({ modal: !isOpen.modal, modalImg: isOpen.modalImg }))}>
+          &times;
+        </span>
+        <div style={modalContent}>{children}</div>
+      </div>
+    </RemoveScroll>
 
   );
 };

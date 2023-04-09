@@ -9,9 +9,7 @@ body {
   background-color: #dfe3f0;
   font-family: 'Alkatra', cursive;
 }
-.body_scroll{
-  overflow-y: hidden;
-} 
+
 body a {
   font-family: 'Alkatra', cursive;
 }
@@ -122,7 +120,10 @@ a:hover {
   translate: 0.3s;
   border: solid 2px #dfe3f0;
 }
-
+.select_control {
+  margin: 0 auto;
+  max-width: 300px;
+}
 
 
 
@@ -152,6 +153,10 @@ a:hover {
   }
 
   .select_control {
-    width: 100% !important;
+    margin: 0 auto;
+    max-width: 300px;
+  }
+  #inputGroupFile01{
+    padding: 0;
   }
 }

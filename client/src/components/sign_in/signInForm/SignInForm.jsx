@@ -12,15 +12,69 @@ export default function SignInForm() {
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
     const [cookies, setCookie, removeCookie] = useCookies(['auth']);
-
+    const [validErr, setValidErr] = useState("")
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [styleValidEror, setStyleValidEror] = useState({ login: {}, password: {} });
+
     const goToHome = () => {
         navigate('/home');
     }
 
+    const validateEmail = (email) => {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+    }
+
+    const validatePassword =  password => {
+        if (password.length < 8) {
+            console.log("Password must be at least 8 characters long.");
+            return "Password must be at least 8 characters long."
+        }
+        return "ok";
+    }
+
+    const signInSubmitThen = res => {
+        console.log(res.data)
+        if (res.status === 200) {
+            dispatch(editCurrentUser(
+                {
+                    register_or_login: true
+                }
+            ));
+            removeCookie(["auth"])
+            setCookie(res.data);
+            goToHome();
+        }
+        setLogin("");
+        setPassword("");
+    };
+
+    const signInSubmit = useCallback(e => {
+        e.preventDefault();
+        if (validatePassword(password) === "ok" && validateEmail(login) === "ok") {
+            loginSubmit(login, password)
+                .then(res => {
+                    signInSubmitThen(res);
+                    setStyleValidEror({login:{},password:{}});
+                })
+                .catch(e => setValidErr(e));
+        } else {
+            if (validatePassword(password) !== "ok") {
+                console.log(validatePassword(password));
+                setStyleValidEror({ login: {}, password: { borderBottom: "1px solid red" } });
+                setValidErr(validatePassword(password));
+            } else if (validateEmail(login) !== "ok") {
+                setStyleValidEror({ login: { borderBottom: "1px solid red" }, password: {} });
+                setValidErr(`The email address must not contain spaces, contain the "@" symbol,
+                contain "." symbol,"." must be followed by at least one character.`);
+            }
+        }
+    }, []);
+
     return (
         <div>
+            <h3 className="container text-danger">{validErr}</h3>
             <StickyInputLabel props={
                 useMemo(() => {
                     return {
@@ -28,9 +82,10 @@ export default function SignInForm() {
                         name: "Username",
                         type: "email",
                         inputValue: login,
-                        setInputValue: setLogin
+                        setInputValue: setLogin,
+                        style: styleValidEror.login
                     }
-                }, [login])
+                }, [login,styleValidEror])
             } />
             <StickyInputLabel props={
                 useMemo(() => {
@@ -39,32 +94,13 @@ export default function SignInForm() {
                         name: "Password",
                         type: "password",
                         inputValue: password,
-                        setInputValue: setPassword
+                        setInputValue: setPassword,
+                        style: styleValidEror.password
                     }
-                }, [password])
+                }, [password,styleValidEror])
             } />
             <div className="text-center" >
-                <button type="submit" onClick={useCallback((e) => {
-                    e.preventDefault();
-                    console.log(login, password);
-                    loginSubmit(login, password)
-                        .then((res) => {
-                            console.log(res.data,"datatatatatat")
-                            if (res.status === 200) {
-                                dispatch(editCurrentUser(
-                                    {
-                                        email: login, password,
-                                        register_or_login: true
-                                    }
-                                ));
-                                removeCookie(["auth"])
-                                setCookie(res.data);
-                                goToHome();
-                            }
-                            setLogin("");
-                            setPassword("");
-                        })
-                })}>Submit</button>
+                <button type="submit" onClick={signInSubmit}>Submit</button>
             </div>
         </div>
     );
