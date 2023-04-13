@@ -16,7 +16,7 @@ const SelectCategory =  ({ props }) => {
             >
                 <option value={"All"}>All</option>
                 {
-                    props.elem.map((elem, i) => <option value={elem.value} key={i}>{elem.value}</option>)
+                    props.elem.map((elem) => <option value={elem.name} key={elem.id}>{elem.name}</option>)
                 }
             </select>
         </div>

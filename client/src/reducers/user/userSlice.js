@@ -1,5 +1,6 @@
 export const initialCurrentUser = {
     register_or_login: false,
+    name:""
 };
 
 export function currentUserReducer (state = {}, action) {

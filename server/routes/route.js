@@ -6,13 +6,13 @@ import { Public, Image, User, Announcement, Category } from "../data_base/tables
 import express from "express";
 import sharp from "sharp"
 
-const router = express.Router()
-const secret = "Narek2481"
+const router = express.Router();
+const secret = "Narek2481";
 
 
 // root route -----------------------------------------------------------------------------------
 router.get("/", (req, res) => {
-
+    console.log(res.cookie())
     res.send("ok");
 });
 
@@ -66,7 +66,8 @@ const preparationRegistrationSubmit = async (body) => {
             const token = await generateVerificationToken(userData.id);
             return (
                 {
-                    token: token
+                    token: token,
+                    name: userData.name
                 }
             )
         } catch (e) {
@@ -80,7 +81,7 @@ const preparationRegistrationSubmit = async (body) => {
 
 router.post("/registrationSubmit", async (req, res) => {
     const data = await preparationRegistrationSubmit(req.body);
-    console.log(data,"--------------------------")
+    console.log(data, "--------------------------")
     if (typeof data === "object") {
         res.status(200)
         res.send(data)
@@ -103,8 +104,9 @@ const checkDatabaseUser = async body => {
         });
         if (user) {
             const compare = await bcrypt.compare(body.password, user.password)
-
-            return compare ? user.id : "password is not correct"
+            const compareResult = compare ? { id: user.id, name: user.name } : "password is not correct"
+            console.log(compareResult, 11212222222222)
+            return compareResult
         }
     } catch (e) {
         return "Something went wrong"
@@ -121,8 +123,9 @@ router.post("/loginSubmit", async (req, res) => {
     } else if (result === "Something went wrong") {
         res.status(400).json("Something went wrong");
     } else {
-        const token = await generateVerificationToken(result)
-        res.status(200).json({ token });
+        console.log(result, "result")
+        const token = await generateVerificationToken(result.id)
+        res.status(200).json({ token, name: result.name });
     }
     res.end
 })
@@ -130,19 +133,21 @@ router.post("/loginSubmit", async (req, res) => {
 
 // image push route -----------------------------------------------------------------------------------
 const publicOrPrivateCreater = async (publicImage, userToken) => {
-    try{
+    try {
+        console.log(publicImage, 4444444)
+        console.log(userToken, "-------------------")
         const decodedToken = await jwt.verify(userToken, secret);
-        const userId = decodedToken.id;
-        return  await Public.create({
-            public:publicImage,
-            author:userId
+        const userId = decodedToken.client_id;
+        console.log(userId, 55555555555555555555555555555555555)
+        const publicTable = await Public.create({
+            public: publicImage,
+            author: userId
         });
-    }catch(e){
-        return "Something went wrong"
+        return publicTable
+    } catch (e) {
+        console.log(e, 888888888888888888888888888888888888888888888888888888)
+        return "eror Something went wrong"
     }
-}
-const erorCreater = (e) =>{
-    return console.error(e);
 }
 
 const addImageDataInDataBase = async (
@@ -150,28 +155,32 @@ const addImageDataInDataBase = async (
 ) => {
     try {
         const publicOrPrivateInDataBase = await publicOrPrivateCreater(publicImage, userToken);
-
+        console.log(publicOrPrivateInDataBase)
         const parentCategory = await Category.findOne({
             where: {
                 name: categoryData.selectValue
             }
         });
-        
+
+        const CategoryIsEmpty = categoryData.newCategory ? await Category.findOne({
+            where: {
+                name: categoryData.newCategory
+            }
+        }) : false;
+
         const newCategory = {
             name: categoryData.newCategory ? categoryData.newCategory : categoryData.selectValue,
             parent: parentCategory ? parentCategory.id : null
         };
 
-        const newCategoryInDataBase = await Category.create(newCategory);
-        const dataStatus =  (
-            typeof publicOrPrivateInDataBase === "object" ? publicOrPrivateInDataBase.id : erorCreater("publicOrPrivateInDataBase eror")
-        ); 
+        const newCategoryInDataBase =  CategoryIsEmpty ? false :  await Category.create(newCategory);
 
+        console.log(publicOrPrivateInDataBase, 22222211111)
         const newImage = {
             ref_or_path: imageData.name,
             width_heght: imageData.imageSizeForDataBase,
-            category: newCategoryInDataBase.id,
-            public_or_private: dataStatus
+            category: newCategoryInDataBase ? newCategoryInDataBase.id : CategoryIsEmpty.id,
+            public_or_private: publicOrPrivateInDataBase.id
         };
 
         await Image.create(newImage);
@@ -197,31 +206,37 @@ const imagePush = async (req, res) => {
         selectValue: req.body.selectValue,
         newCategory: req.body.newCategory
     };
-    
+    console.log(req.body.publicImage, req.body.userToken, "---------------")
+    console.log(req.file.path, 88888888888888888888)
     fs.readFile(req.file.path, (err, data) => {
         if (err) {
             console.error(err);
             res.status(500).send('Error saving image file');
         } else {
             // Write the image file to disk
-            const originalName = req.file.originalname;
-            console.log(req.file.size.width, "widt")
-            console.log(req.file.originalname, "originalName")
-            console.log(req)
+            const pathInEeq = req.file.path.split("/").map((elem, i, arr) => {
+                if (i + 1 !== arr.length) {
+                    return elem + "/"
+                } else {
+                    return req.file.originalname
+                }
+            });
+
+            const originalName = pathInEeq.join("");
             fs.writeFile(originalName, data, async (err) => {
                 if (err) {
                     console.error(err);
                     res.status(500).send('Error saving image file');
                 } else {
                     const dataBaseStatus = await addImageDataInDataBase(
-                        { 
-                            name: req.file.originalname, 
+                        {
+                            name: req.file.originalname,
                             imageSizeForDataBase,
-                            publicImage:req.body.publicImage
-                         }
+                            publicImage: req.body.publicImage
+                        }
                         , categoryData
                         , req.body.publicImage
-                        ,req.body.userToken
+                        , req.body.userToken
                     );
                     const statusRespons = dataBaseStatus === "ok" ? 200 : 500
                     res.status(statusRespons)
@@ -234,23 +249,16 @@ const imagePush = async (req, res) => {
     });
 }
 
-router.post("/imagePush", upload.single('image', "selectvalue", 'newCategory'), imagePush)
+router.post(
+    "/imagePush", upload.single('image'), imagePush
+)
 
 
 
 // image loud route -----------------------------------------------------------------------------------
-const seachDatabaseImage = async currentCategory => {
-    try {
-        const requiredCategories = await Category.findAll({
-            where: {
-                parent: currentCategory
-            }
-        });
 
-    } catch (e) {
 
-    }
-}
+
 
 router.get("/image_loud", (req, res) => {
     const images = [
@@ -279,28 +287,49 @@ router.get("/image_loud", (req, res) => {
 })
 
 // image category route -----------------------------------------------------------------------------------
-router.post("/image_category", (req, res) => {
-    const select = [
-        {
-            value: "poxos"
-        },
-        {
-            value: "hopar"
-        },
-        {
-            value: "chgitem"
-        },
-        {
-            value: "anhayt"
-        },
-        {
-            value: "errrr"
-        },
-    ];
+const imageCategorySearchInDataBase = async () => {
+    try {
+        const categoryInDataBase = await Category.findAll({
+            where: {
+                parent: null
+            }
+        });
+        const newDataInaCategory = categoryInDataBase.map(elem => {
+            return { id: elem.id, name: elem.name }
+        });
+        console.log(newDataInaCategory, 1111111111111111111)
+        return newDataInaCategory;
+    } catch (e) {
+        console.log(e)
+        return "eror Something went wrong"
+    }
+}
+const imageCategorySearchInDataBaseNesting = category => {
+
+}
+
+router.post("/image_category", async (req, res) => {
+
+    if (req.body.category) {
+        console.log(5555);
+    } else {
+        const categoryDataSend = await imageCategorySearchInDataBase()
+        res.send([categoryDataSend]);
+    }
+    console.log(await imageCategorySearchInDataBase(), 12222222222);
+
     console.log(req.body)
-    res.send([select]);
+
 })
 
+router.post("/tokenExamination", async (req, res) => {
+    try {
+        const decodedToken = await jwt.verify(req.body.cookie.token, secret);
+        res.send("ok")
+    } catch (e) {
+        res.send("token not valid");
+    }
+});
 
 
 

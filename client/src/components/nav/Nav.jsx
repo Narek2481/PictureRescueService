@@ -1,8 +1,8 @@
-import { Route, Routes ,Navigate} from "react-router-dom";
+import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
 import AboutUsPage from "../../pages/AboutUsPage"
 import SignInPage from "../../pages/SignInPage"
 import RegistrationPage from "../../pages/RegistrationPage"
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import HomePage from "../../pages/HomePage";
 import LinkComponent from "./linkComponent/linkComponent";
 import AddPicturePage from "../../pages/AddPicturePage";
@@ -12,6 +12,9 @@ import logo from "../../img_logo/logo12.jpg"
 import NotFoundPage from "../../pages/NotFoundPage";
 import { useCookies } from "react-cookie";
 import { editCurrentUser } from "../../reducers/user/userSlice";
+import ImageProfile from "./imageProfile/imageProfile";
+import axios from "axios";
+
 
 export default function Nav() {
     // hamburger manue state
@@ -25,20 +28,34 @@ export default function Nav() {
     const dispatch = useDispatch();
     // register or login styles 
     const display = (loginState.register_or_login ? "none" : "");
+    const displayInImageProfile = loginState.register_or_login ? "" : "none"
     // register or login examination
-    // const [cookie, setCookie, removeCookie] = useCookies(["auth"]);
-
-    // useEffect(() => {
-    //     console.log(typeof(cookie.auth) === "object")
-    //     if(!loginState.register_or_login && cookie.auth){
-    //         console.log(1111111)
-    //         dispatch(editCurrentUser({register_or_login:true}))
-    //     }
-    // },[])
-    // console.log(cookie,"nav");
-    const style = {
+    const [cookie, setCookie, removeCookie] = useCookies();
+    const navigate = useNavigate();
+    const styleInLinkComponent = {
         display
     }
+    const styleInImageProfile = { display: displayInImageProfile };
+    useEffect(() => {
+        const data = {
+            cookie: cookie["login"]
+        }
+        axios.post("http://localhost:4000/tokenExamination",data )
+            .then((res) => { 
+                if (
+                    !loginState.register_or_login && cookie["login"] && res.data !== "token not valid"
+                ) {
+                    dispatch(editCurrentUser({ register_or_login: true, name: cookie.name }));
+                }else{
+                    removeCookie(["login"]);
+                    navigate("/sign_in");
+                }
+            })
+            .catch((e) => {
+                removeCookie(["login"]);
+                navigate("/sign_in");
+            })
+    }, []);
 
     const click_manue = () => {
         if (manue === '') {
@@ -61,9 +78,9 @@ export default function Nav() {
                 <ul className="container-fluid">
                     <div className="logo_manue">
                         <div>
-                            <img className="img-fluid" 
-                            src={logo} alt="" 
-                            style={{width:"50px",height:"40px", borderRadius:"50px"}} />
+                            <img className="img-fluid"
+                                src={logo} alt=""
+                                style={{ width: "50px", height: "40px", borderRadius: "50px" }} />
                         </div>
                         <div className="manue_icon" onClick={() => {
                             if (manue === '') {
@@ -85,50 +102,69 @@ export default function Nav() {
                     </div>
                     <div className={"navigation " + manue}>
                         <LinkComponent props={
-                            {
-                                path: "home",
-                                text: "Home",
-                                click: click_manue
-                            }}
+                            useMemo(() => {
+                                return {
+                                    path: "home",
+                                    text: "Home",
+                                    click: click_manue
+                                }
+                            }, [loginState])
+                        }
                         />
                         <LinkComponent props={
-                            {
-                                path: "about_us",
-                                text: "About us",
-                                click: click_manue
-                            }}
+                            useMemo(() => {
+                                return {
+                                    path: "about_us",
+                                    text: "About us",
+                                    click: click_manue
+                                }
+                            }, [loginState])
+                        }
                         />
 
                         <LinkComponent props={
-                            {
-                                path: "sign_in",
-                                text: "Sign in",
-                                style,
-                                click: click_manue
-                            }}
+                            useMemo(() => {
+                                return {
+                                    path: "sign_in",
+                                    text: "Sign in",
+                                    style: styleInLinkComponent,
+                                    click: click_manue
+                                }
+                            }, [loginState])
+                        }
                         />
 
                         <LinkComponent props={
-                            {
-                                path: "registration",
-                                text: "Registration",
-                                style,
-                                click: click_manue
-                            }}
+                            useMemo(() => {
+                                return {
+                                    path: "registration",
+                                    text: "Registration",
+                                    style: styleInLinkComponent,
+                                    click: click_manue
+                                }
+                            }, [loginState])
+                        }
                         />
-
+                        <ImageProfile props={
+                            useMemo(() => {
+                                return {
+                                    style: styleInImageProfile
+                                }
+                            }, [loginState])
+                        }
+                        />
                     </div>
 
                 </ul>
             </nav>
             <Routes>
-                <Route path={"/"} element={<Navigate to="/home" replace/>}/>
-                <Route path={"/home"} element={<HomePage />}/>
-                <Route path="/about_us/*" element={<AboutUsPage />}/>
-                {loginState.register_or_login?"":<Route path="/registration/*" element={<RegistrationPage />}/>}
-                {loginState.register_or_login?"": <Route path={"/sign_in/*"} element={<SignInPage />}/>}
-                <Route path={"/add_image/*"} element={<AddPicturePage />}/>
-                <Route path="/*" element={<NotFoundPage/>} />
+                <Route path={"/"} element={<Navigate to="/home" replace />} />
+                <Route path={"/home"} element={<HomePage />} />
+                <Route path="/about_us/*" element={<AboutUsPage />} />
+                {loginState.register_or_login ? "" : <Route path="/registration/*" element={<RegistrationPage />} />}
+                {loginState.register_or_login ? "" : <Route path={"/sign_in/*"} element={<SignInPage />} />}
+                <Route path={"/add_image/*"} element={<AddPicturePage />} />
+                <Route path="/*" element={<NotFoundPage />} />
             </Routes>
         </>
     );

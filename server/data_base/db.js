@@ -6,7 +6,7 @@ const config = {
     development: {
         username: 'postgres',
         password: '123',
-        database: 'image_project',
+        database: 'imageProject',
         host: 'localhost',
         dialect: 'postgres',
         port: 5432

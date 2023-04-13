@@ -22,7 +22,7 @@ function Home() {
     const modalData = useSelector((state) => state.modal);
     const loaderRef = useRef(null);
     const [cookie, setCookie, removeCookie] = useCookies(["auth"]);
-    
+
     useEffect(() => {
         if (fatchDataRedux) {
             dispatch(downloudData(nowData, editFatching({ fatching: false })));
@@ -71,10 +71,13 @@ function Home() {
         };
     }, []);
 
-
+    console.log(requsetCategoryRedux)
 
     return (
         <div className="home">
+            <h1 className="text-center mt-5">
+                Recommended pictures {selectValue === "All" ? "" : `search category: "${selectValue}"`}
+            </h1>
             {modalData.modalData.modal && (
                 <ModalContent>
                     <div className="modal_center">

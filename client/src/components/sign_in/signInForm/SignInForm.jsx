@@ -1,7 +1,7 @@
-import { useCallback, useMemo, useState } from "react";
+import {  useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import loginSubmit from "../../../action/login";
-import { editCurrentUser, selectCurrentUser } from "../../../reducers/user/userSlice";
+import { editCurrentUser } from "../../../reducers/user/userSlice";
 import StickyInputLabel from "./StickyInputLabel/StickyInputLabel";
 import "../signIn.scss"
 import { useNavigate } from 'react-router-dom';
@@ -11,7 +11,7 @@ import { useCookies } from "react-cookie";
 export default function SignInForm() {
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
-    const [cookies, setCookie, removeCookie] = useCookies(['auth']);
+    const [cookies, setCookie, removeCookie] = useCookies();
     const [validErr, setValidErr] = useState("")
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -26,13 +26,13 @@ export default function SignInForm() {
         return re.test(email);
     }
 
-    const validatePassword =  password => {
+    const validatePassword = password => {
         if (password.length < 8) {
-            console.log("Password must be at least 8 characters long.");
-            return "Password must be at least 8 characters long."
+          console.log("Password must be at least 8 characters long.");
+          return "Password must be at least 8 characters long."
         }
         return "ok";
-    }
+      }
 
     const signInSubmitThen = res => {
         console.log(res.data)
@@ -42,17 +42,19 @@ export default function SignInForm() {
                     register_or_login: true
                 }
             ));
-            removeCookie(["auth"])
-            setCookie(res.data);
+            // removeCookie(["auth"])
+            console.log(res.data)
+            setCookie('login', res.data, { path: '/' });;
             goToHome();
         }
         setLogin("");
         setPassword("");
     };
 
-    const signInSubmit = useCallback(e => {
+    const signInSubmit = e => {
         e.preventDefault();
-        if (validatePassword(password) === "ok" && validateEmail(login) === "ok") {
+        
+        if (validatePassword(password) === "ok" && validateEmail(login)) {
             loginSubmit(login, password)
                 .then(res => {
                     signInSubmitThen(res);
@@ -70,7 +72,7 @@ export default function SignInForm() {
                 contain "." symbol,"." must be followed by at least one character.`);
             }
         }
-    }, []);
+    };
 
     return (
         <div>

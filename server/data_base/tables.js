@@ -3,13 +3,14 @@ import { sequelize } from './db.js';
 
 
 
-const User = sequelize.define('User',
+const User = sequelize.define('Users',
     {
-        // Define the User model attributes
+        // Define the Users model attributes
         id: {
-            type: DataTypes.BIGINT,
+            type: DataTypes.INTEGER,
+            allowNull: false,
             primaryKey: true,
-            autoIncrement: true,
+            autoIncrement: true
         },
         name: {
             type: DataTypes.STRING(255),
@@ -38,7 +39,7 @@ const User = sequelize.define('User',
         }
     },
     {
-        tableName: "User"
+        tableName: "Users"
     }
 );
 
@@ -88,14 +89,14 @@ const Announcement = sequelize.define('Announcement', {
     user_ref: {
         type: DataTypes.INTEGER,
         references: {
-            model: 'User', // The name of the referenced table
+            model: 'Users', // The name of the referenced table
             key: 'id' // The primary key of the referenced table
         }
     },
     author_id: {
         type: DataTypes.INTEGER,
         references: {
-            model: 'User', // The name of the referenced table
+            model: 'Users', // The name of the referenced table
             key: 'id' // The primary key of the referenced table
         }
 
@@ -149,13 +150,19 @@ const Public = sequelize.define('Public', {
     author: {
         type: DataTypes.INTEGER,
         references: {
-            model: 'User', // The name of the referenced table
+            model: 'Users', // The name of the referenced table
             key: 'id' // The primary key of the referenced table
         }
     }
 
 }, {
     tableName: "Public"
+});
+Category.hasMany(Image, {
+    foreignKey: 'category'
+});
+Image.belongsTo(Category, {
+    foreignKey: 'category'
 });
 sequelize.sync()
     .then(() => console.log("  crated tables"))

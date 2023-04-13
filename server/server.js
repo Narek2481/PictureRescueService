@@ -5,7 +5,7 @@ import path from "path";
 import cors from "cors";
 import cookie_parser from "cookie-parser";
 import { sequelize } from "./data_base/db.js";
-import multer from "multer";
+import  jwt  from "jsonwebtoken";
 // import { Public, Image, User, Announcement, Category } from "./data_base/tables.js";
 
 

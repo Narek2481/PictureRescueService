@@ -1,5 +1,5 @@
 import axios from "axios";
-async function imageCategoryGet(state) {
+async function imageCategoryGet() {
     return await axios.post("http://localhost:4000/image_category");
 }
 

@@ -15,6 +15,20 @@ nav {
   visibility: hidden;
 }
 
+.profileImage {
+  margin-bottom: 10px;
+
+  img {
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+  }
+}
+
+.profileImage:hover {
+  border-bottom: 1px solid #385898 !important;
+}
+
 .manue_icon .all_span {
   display: block;
   background-color: white;
@@ -71,19 +85,19 @@ nav {
 
 nav>ul {
   display: flex;
-  flex-wrap: wrap;
   list-style: none;
   color: white;
   /* flex: 1; */
   text-align: center;
   justify-content: space-between;
-  flex-wrap: wrap;
+  flex-wrap: wrap-reverse;
   margin-bottom: 0;
 }
 
 .navigation {
+
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: wrap-reverse;
   justify-content: space-around;
   flex: 1;
   transform: 1s;
@@ -115,6 +129,25 @@ nav>ul li:hover {
   transition: 0.5s;
 }
 
+.profileImage {
+  display: flex;
+  justify-content: space-between;
+  width: 20%;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #385898 !important;
+
+  img {
+    width: 35px;
+    height: 33px;
+    border-radius: 25px;
+
+  }
+}
+
+.profileImage:hover {
+  border-bottom: 1px solid #385898 !important;
+}
+
 @media only screen and (max-width: 1000px) {
   .manue_icon {
     display: block;
@@ -123,16 +156,13 @@ nav>ul li:hover {
   .navigation {
     display: none;
     transition: 0.5s;
-
   }
 
   .manu_block {
     opacity: 100%;
-    display: block !important;
     transition: all .3s ease;
     -webkit-transition: all .3s ease;
     transition: all 2s linear;
-    justify-content: flex-end;
     translate: 1s;
     z-index: 10;
     transform: 1s;
@@ -142,13 +172,17 @@ nav>ul li:hover {
     width: 50%;
     top: 60px;
     left: 50%;
-
+    display: flex;
+    flex-flow: column-reverse;
+    li {
+      flex: 1 ;
+      width: 100%;
+      text-align: left;
+      padding: 10px;
+    }
   }
 
-  .manu_block li {
-    text-align: left;
-    padding: 10px;
-  }
+
 
   nav>ul li:hover {
     border: none !important;

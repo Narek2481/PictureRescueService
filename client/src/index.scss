@@ -14,9 +14,13 @@ body a {
   font-family: 'Alkatra', cursive;
 }
 
-.body_scroll{
- overflow-y:hidden !important;
+.body_scroll {
+  overflow-y: hidden !important;
 }
+
+
+
+
 /* registration ------------------------------------------------------------------------------------------- */
 .registration {
   padding: 25px 0 0 0;
@@ -68,7 +72,7 @@ body a {
 
 /* sign in --------------------------------------------------------------------------------------- */
 .sign_in h2 {
-  margin: 30px 0 ;
+  margin: 30px 0;
   text-align: center;
 }
 
@@ -108,7 +112,8 @@ a:hover {
   height: 35px;
   display: inline-block;
 }
-.enlarge_picture{
+
+.enlarge_picture {
   display: inline-block;
   border: none;
   color: white;
@@ -120,6 +125,7 @@ a:hover {
   translate: 0.3s;
   border: solid 2px #dfe3f0;
 }
+
 .select_control {
   margin: 0 auto;
   max-width: 300px;
@@ -156,7 +162,8 @@ a:hover {
     margin: 0 auto;
     max-width: 300px;
   }
-  #inputGroupFile01{
+
+  #inputGroupFile01 {
     padding: 0;
   }
 }
