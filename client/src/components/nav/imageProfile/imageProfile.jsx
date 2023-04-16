@@ -8,7 +8,7 @@ const ImageProfile = ({props}) => {
     const [cookie] = useCookies();
      const [name,setName]=useState("")
     
-    useEffect( () => {
+    useEffect(() => {
         try{
             if(cookie.login.name){
                 setName(cookie.login.name)
@@ -17,7 +17,8 @@ const ImageProfile = ({props}) => {
 
         }
        
-    },[])
+    },[cookie]);
+    
     return(
         <li style={props.style} className="profileImage">
             <> {name}</>

@@ -33,7 +33,8 @@ export function downloudCategoryGet() {
     }
 }
 export function downloudCategoryPost(past_data,value) {
-    console.log(past_data)
+    
+
     return (dispatch) => {
         return (
             imageCategoryPost(value)

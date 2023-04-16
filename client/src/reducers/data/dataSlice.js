@@ -33,11 +33,11 @@ export function editFatching (pyload){
         pyload: pyload
     }
 }
-export function downloudData(past_data,fetch_change) {
+export function downloudData(past_data,offset,fetch_change) {
     return (dispatch, get_state) => {
         
         return (
-            loudeData()
+            loudeData(offset)
                 .then((req) => {
                     
                     dispatch(editData([...past_data, ...req.data]));

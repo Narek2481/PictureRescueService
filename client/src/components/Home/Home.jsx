@@ -8,6 +8,8 @@ import { downloudCategoryGet, downloudCategoryPost } from "../../reducers/catego
 import { ModalContent } from "./modal/Modal";
 import "./css/home.scss"
 import { useCookies } from "react-cookie";
+import { DotSpinner } from '@uiball/loaders'
+
 
 
 
@@ -20,19 +22,19 @@ function Home() {
     const [nesting, setNesting] = useState(0);
     const dispatch = useDispatch();
     const modalData = useSelector((state) => state.modal);
+    const offset = useRef(0);
     const loaderRef = useRef(null);
-    const [cookie, setCookie, removeCookie] = useCookies(["auth"]);
 
     useEffect(() => {
         if (fatchDataRedux) {
-            dispatch(downloudData(nowData, editFatching({ fatching: false })));
+            dispatch(downloudData(nowData, offset.current, editFatching({ fatching: false })));
+            offset.current++
         }
-        // removeCookie(["auth"])
     }, [fatchDataRedux]);
 
     // requset category
     useEffect(() => {
-
+        
         // requset category first 
         if (fetchingCategory && nesting <= 0) {
             dispatch(downloudCategoryGet());
@@ -46,7 +48,7 @@ function Home() {
     const handle_observer = entries => {
         const target = entries[0];
         if (target.isIntersecting) {
-            dispatch(editFatching({ fatching: true }));
+            return dispatch(editFatching({ fatching: true }));
         }
     };
 
@@ -71,7 +73,6 @@ function Home() {
         };
     }, []);
 
-    console.log(requsetCategoryRedux)
 
     return (
         <div className="home">
@@ -120,8 +121,13 @@ function Home() {
                     }, [nowData])
                 }
             </div>
-            <div className={"text-center "} style={{ height: "200px" }} ref={loaderRef}>
-                <div className={fatchDataRedux ? "loader" : ""}></div>
+            <div className="d-flex justify-content-center" style={{ height: "200px" }} ref={loaderRef}>
+                <DotSpinner
+                    size={60}
+                    speed={1.75}
+                    color="#385898"
+                    lineWeight={3.5}
+                />
             </div>
         </div>
     );

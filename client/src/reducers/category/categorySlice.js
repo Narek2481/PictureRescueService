@@ -39,8 +39,10 @@ export function downloudCategoryPost(past_data,value) {
         return (
             imageCategoryPost(value)
                 .then((res) => {
+                    
                     console.log([...past_data, ...res.data], "post data ")
                     dispatch(editCategorySearch([...past_data, ...res.data]));
+
                 })
                 .catch((e) => {
                     return e;

@@ -37,6 +37,7 @@ export default function SignInForm() {
     const signInSubmitThen = res => {
         console.log(res.data)
         if (res.status === 200) {
+            console.log(55555)
             dispatch(editCurrentUser(
                 {
                     register_or_login: true
@@ -44,7 +45,10 @@ export default function SignInForm() {
             ));
             // removeCookie(["auth"])
             console.log(res.data)
-            setCookie('login', res.data, { path: '/' });;
+            if(cookies["login"]){
+                removeCookie(["login"])
+            }
+            setCookie('login', res.data, { path: '/' });
             goToHome();
         }
         setLogin("");
@@ -53,8 +57,8 @@ export default function SignInForm() {
 
     const signInSubmit = e => {
         e.preventDefault();
-        
         if (validatePassword(password) === "ok" && validateEmail(login)) {
+            console.log(111111)
             loginSubmit(login, password)
                 .then(res => {
                     signInSubmitThen(res);
