@@ -14,7 +14,7 @@ import { useCookies } from "react-cookie";
 import { editCurrentUser } from "../../reducers/user/userSlice";
 import ImageProfile from "./imageProfile/imageProfile";
 import axios from "axios";
-
+import Cookies from 'js-cookie';
 
 export default function Nav() {
     // hamburger manue state
@@ -30,34 +30,36 @@ export default function Nav() {
     const display = (loginState.register_or_login ? "none" : "");
     const displayInImageProfile = loginState.register_or_login ? "" : "none"
     // register or login examination
-    const [cookie, setCookie, removeCookie] = useCookies();
+    const [cookie, setCookie, removeCookie] = useCookies(["cookieName"]);
+
+
     const navigate = useNavigate();
     const styleInLinkComponent = {
         display
     }
     const styleInImageProfile = { display: displayInImageProfile };
-    useEffect(() => {
-        const data = {
-            cookie: cookie["login"]
-        }
-        axios.post("http://localhost:4000/tokenExamination",data )
-            .then((res) => { 
-                if (
-                    !loginState.register_or_login && cookie["login"] && res.data !== "token not valid"
-                ) {
-                    dispatch(editCurrentUser({ register_or_login: true, name: cookie.name }));
-                }else{
-                    removeCookie(["login"]);
-                    navigate("/sign_in");
-                }
-            })
-            .catch((e) => {
-                removeCookie(["login"]);
-                navigate("/sign_in");
-            })
-    }, []);
+    // useEffect(() => {
+    //     const data = {
+    //         cookie: cookie["login"]
+    //     }
+    //     axios.post("http://localhost:4000/tokenExamination", data)
+    //         .then((res) => {
+    //             if (
+    //                 !loginState.register_or_login && cookie["login"] && res.data !== "token not valid"
+    //             ) {
+    //                 dispatch(editCurrentUser({ register_or_login: true, name: cookie.name }));
+    //             } else {
+    //                 removeCookie(["login"]);
+    //                 navigate("/sign_in");
+    //             }
+    //         })
+    //         .catch((e) => {
+    //             removeCookie(["login"]);
+    //             navigate("/sign_in");
+    //         })
+    // }, []);
 
-    const click_manue = () => {
+    const clickManue = () => {
         if (manue === '') {
             setIcon_1("manue_close_1");
             setIcon_2("manue_close_2");
@@ -71,6 +73,17 @@ export default function Nav() {
         }
 
     }
+
+    useEffect(() => {
+        const cookie = Cookies.get("login");
+        console.log(cookie)
+
+        if (!loginState.register_or_login && cookie) {
+            dispatch(editCurrentUser({ register_or_login: true, name: cookie.name }));
+        } else {
+            navigate("/sign_in");
+        }
+    }, []);
 
     return (
         <>
@@ -106,7 +119,7 @@ export default function Nav() {
                                 return {
                                     path: "home",
                                     text: "Home",
-                                    click: click_manue
+                                    click: clickManue
                                 }
                             }, [loginState])
                         }
@@ -116,7 +129,7 @@ export default function Nav() {
                                 return {
                                     path: "about_us",
                                     text: "About us",
-                                    click: click_manue
+                                    click: clickManue
                                 }
                             }, [loginState])
                         }
@@ -128,7 +141,7 @@ export default function Nav() {
                                     path: "sign_in",
                                     text: "Sign in",
                                     style: styleInLinkComponent,
-                                    click: click_manue
+                                    click: clickManue
                                 }
                             }, [loginState])
                         }
@@ -140,7 +153,7 @@ export default function Nav() {
                                     path: "registration",
                                     text: "Registration",
                                     style: styleInLinkComponent,
-                                    click: click_manue
+                                    click: clickManue
                                 }
                             }, [loginState])
                         }

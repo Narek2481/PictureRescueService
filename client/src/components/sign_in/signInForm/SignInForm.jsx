@@ -35,7 +35,7 @@ export default function SignInForm() {
       }
 
     const signInSubmitThen = res => {
-        console.log(res.data)
+        console.log(res)
         if (res.status === 200) {
             console.log(55555)
             dispatch(editCurrentUser(
@@ -45,10 +45,10 @@ export default function SignInForm() {
             ));
             // removeCookie(["auth"])
             console.log(res.data)
-            if(cookies["login"]){
-                removeCookie(["login"])
-            }
-            setCookie('login', res.data, { path: '/' });
+            // if(cookies["login"]){
+            //     removeCookie(["login"])
+            // }
+            // setCookie('login', res.data, { path: '/' });
             goToHome();
         }
         setLogin("");
@@ -61,6 +61,7 @@ export default function SignInForm() {
             console.log(111111)
             loginSubmit(login, password)
                 .then(res => {
+                    console.log(res);
                     signInSubmitThen(res);
                     setStyleValidEror({login:{},password:{}});
                 })
