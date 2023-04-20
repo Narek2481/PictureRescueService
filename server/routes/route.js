@@ -1,11 +1,8 @@
 import multer from "multer";
-import fs from "fs";
-import bcrypt from "bcrypt";
 import { Public, Image, User, Announcement, Category } from "../data_base/tables.js";
 import express from "express";
-import sharp from "sharp";
-import { Op } from 'sequelize';
-import { generateVerificationToken,tokenVerify } from "./tokenCreater.js";
+
+import { generateVerificationToken, tokenVerify } from "./tokenCreater.js";
 import { preparationRegistrationSubmit } from "./functionsForRoutes/preparationRegistrationSubmit.js";
 import { checkDatabaseUser, imageLoudeForDataBase } from "../data_base/queryInDataBase.js";
 import { imagePush } from "./functionsForRoutes/preparationImagePush.js";
@@ -14,7 +11,7 @@ import { imagePush } from "./functionsForRoutes/preparationImagePush.js";
 const router = express.Router();
 // root route -----------------------------------------------------------------------------------
 router.get("/", (req, res) => {
-    console.log(res.cookie())
+
     res.send("ok");
 });
 
@@ -29,15 +26,11 @@ router.post("/registrationSubmit", async (req, res) => {
         res.status(400);
         res.send(data)
     }
-
 });
 
 
 
 // login submit route -----------------------------------------------------------------------------------
-
-
-
 router.post("/loginSubmit", async (req, res) => {
     console.log(req.body)
     const result = await checkDatabaseUser(req.body);
@@ -48,6 +41,7 @@ router.post("/loginSubmit", async (req, res) => {
     } else {
         console.log(result.id, "result")
         const token = await generateVerificationToken(result.id)
+        res.cookie('login', { token, name: result.name }, { maxAge: 900000,  path: '/' });
         res.status(200).json({ token, name: result.name });
     }
     res.end
@@ -55,76 +49,18 @@ router.post("/loginSubmit", async (req, res) => {
 
 
 // image push route -----------------------------------------------------------------------------------
-const publicOrPrivateCreater = async (publicImage, userToken) => {
-    try {
-        console.log(publicImage, 4444444)
-        console.log(userToken, "-------------------")
-        const decodedToken = await tokenVerify(userToken, secret);
-        const userId = decodedToken.clientId;
-        console.log(userId, 55555555555555555555555555555555555)
-        const publicTable = await Public.create({
-            public: publicImage,
-            author: userId
-        });
-        return publicTable
-    } catch (e) {
-        console.log(e, 888888888888888888888888888888888888888888888888888888)
-        return "eror Something went wrong"
-    }
-}
-
-const addImageDataInDataBase = async (
-    imageData, categoryData, publicImage, userToken
-) => {
-    try {
-        const publicOrPrivateInDataBase = await publicOrPrivateCreater(publicImage, userToken);
-        console.log(publicOrPrivateInDataBase)
-        const parentCategory = await Category.findOne({
-            where: {
-                name: categoryData.selectValue
-            }
-        });
-
-        const CategoryIsEmpty = categoryData.newCategory ? await Category.findOne({
-            where: {
-                name: categoryData.newCategory
-            }
-        }) : false;
-
-        const newCategory = {
-            name: categoryData.newCategory ? categoryData.newCategory : categoryData.selectValue,
-            parent: parentCategory ? parentCategory.id : null
-        };
-
-        const newCategoryInDataBase = CategoryIsEmpty ? false : await Category.create(newCategory);
-
-        console.log(publicOrPrivateInDataBase, 22222211111)
-        const newImage = {
-            ref_or_path: imageData.name,
-            width_heght: imageData.imageSizeForDataBase,
-            category: newCategoryInDataBase ? newCategoryInDataBase.id : CategoryIsEmpty.id,
-            public_or_private: publicOrPrivateInDataBase.id
-        };
-
-        await Image.create(newImage);
-
-        return "ok"
-    } catch (e) {
-        return "eror"
-    }
-}
-
-const upload = multer({ dest: 'server/img' });
+const upload = multer({ dest: './img' });
 
 router.post(
     "/imagePush", upload.single('image'), imagePush
 );
 // image loud route -----------------------------------------------------------------------------------
 router.post("/image_loud", async (req, res) => {
-    const  imageObjArr = await imageLoudeForDataBase(req)
+    const imageObjArr = await imageLoudeForDataBase(req)
     console.log(imageObjArr)
     res.send(imageObjArr)
 });
+
 
 // image category route -----------------------------------------------------------------------------------
 const imageCategorySearchInDataBase = async () => {
@@ -163,7 +99,7 @@ const imageCategorySearchInDataBaseNesting = async category => {
     console.log(currentCategory, 1111)
     console.log(categoryInDataBase, 2222)
     console.log(imageDataInDb, 3333)
-    const categoryForSend =  categoryInDataBase.map((elem) => {
+    const categoryForSend = categoryInDataBase.map((elem) => {
         return { id: elem.id, name: elem.name };
     })
     return categoryForSend
