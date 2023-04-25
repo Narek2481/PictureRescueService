@@ -1,17 +1,21 @@
 import multer from "multer";
 import { Public, Image, User, Announcement, Category } from "../data_base/tables.js";
 import express from "express";
-
 import { generateVerificationToken, tokenVerify } from "./tokenCreater.js";
 import { preparationRegistrationSubmit } from "./functionsForRoutes/preparationRegistrationSubmit.js";
 import { checkDatabaseUser, imageLoudeForDataBase } from "../data_base/queryInDataBase.js";
 import { imagePush } from "./functionsForRoutes/preparationImagePush.js";
 
 
+//  {
+//     domain: 'http://localhost:3000',
+//     path: '/'
+//     // expires: new Date(Date.now() + 900000)
+// }
 const router = express.Router();
 // root route -----------------------------------------------------------------------------------
 router.get("/", (req, res) => {
-
+    res.cookie('cookieName', 'cookieValue', { maxAge: 360000, httpOnly: true, path: '/' });
     res.send("ok");
 });
 
@@ -40,12 +44,19 @@ router.post("/loginSubmit", async (req, res) => {
         res.status(400).json("Something went wrong");
     } else {
         console.log(result.id, "result")
-        const token = await generateVerificationToken(result.id)
-        res.cookie('login', { token, name: result.name }, { maxAge: 900000,  path: '/' });
+        const token = await generateVerificationToken(result.id);
+        // res.cookie('login', { token, name: result.name }, { maxAge: 900000, path: '/' });
+        const cookieValue = { token, name: result.name }
+        res.cookie(
+            'login',
+            cookieValue,
+            { maxAge: 3600 * 1000, httpOnly:true , path: '/' }
+        );
         res.status(200).json({ token, name: result.name });
     }
-    res.end
-})
+
+    // res.end
+});
 
 
 // image push route -----------------------------------------------------------------------------------
@@ -99,6 +110,7 @@ const imageCategorySearchInDataBaseNesting = async category => {
     console.log(currentCategory, 1111)
     console.log(categoryInDataBase, 2222)
     console.log(imageDataInDb, 3333)
+    
     const categoryForSend = categoryInDataBase.map((elem) => {
         return { id: elem.id, name: elem.name };
     })
@@ -106,6 +118,7 @@ const imageCategorySearchInDataBaseNesting = async category => {
 }
 
 router.post("/image_category", async (req, res) => {
+    console.log(req.cookies,1122);
     if (req.body.category) {
         const categoryDataSend = await imageCategorySearchInDataBaseNesting(req.body.category);
         res.send([categoryDataSend])
@@ -113,6 +126,7 @@ router.post("/image_category", async (req, res) => {
         const categoryDataSend = await imageCategorySearchInDataBase()
         res.send([categoryDataSend]);
     }
+
 });
 
 

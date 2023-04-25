@@ -10,7 +10,6 @@ import { useDispatch, useSelector } from "react-redux";
 import "./css/nav.scss"
 import logo from "../../img_logo/logo12.jpg"
 import NotFoundPage from "../../pages/NotFoundPage";
-import { useCookies } from "react-cookie";
 import { editCurrentUser } from "../../reducers/user/userSlice";
 import ImageProfile from "./imageProfile/imageProfile";
 import axios from "axios";
@@ -30,7 +29,6 @@ export default function Nav() {
     const display = (loginState.register_or_login ? "none" : "");
     const displayInImageProfile = loginState.register_or_login ? "" : "none"
     // register or login examination
-    const [cookie, setCookie, removeCookie] = useCookies(["cookieName"]);
 
 
     const navigate = useNavigate();
@@ -76,7 +74,8 @@ export default function Nav() {
 
     useEffect(() => {
         const cookie = Cookies.get("login");
-        console.log(cookie)
+        const cookie2 = Cookies.get("55");
+        console.log(cookie2,"222222")
 
         if (!loginState.register_or_login && cookie) {
             dispatch(editCurrentUser({ register_or_login: true, name: cookie.name }));

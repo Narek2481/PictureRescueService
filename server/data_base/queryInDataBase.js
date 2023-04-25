@@ -46,7 +46,7 @@ const publicOrPrivateCreater = async (publicImage, userToken) => {
     try {
         console.log(publicImage, 4444444)
         console.log(userToken, "-------------------")
-        const decodedToken = await tokenVerify(userToken, secret);
+        const decodedToken = await tokenVerify(userToken);
         const userId = decodedToken.clientId;
         console.log(userId, 55555555555555555555555555555555555)
         const publicTable = await Public.create({
@@ -103,6 +103,7 @@ const addImageDataInDataBase = async (
 
 const imageLoudeForDataBase = async (req) => {
     try{
+        
         const offset = req.body.offset * 12
         let imagesInDb = await Image.findAll({
             order: [['id']],

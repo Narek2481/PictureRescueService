@@ -35,7 +35,7 @@ export const Modal = ({ src, children }) => {
   const dispatch = useDispatch();
   const isOpen = useSelector((state) => state.modal.modalData.modal);
   const paylod = { modal: !isOpen, modalImg: src }
-  return <div style={{ cursor: "pointer" }} onClick={() => {
+  return <div className="text-center" style={{ cursor: "pointer" }} onClick={() => {
     dispatch(editModal(paylod))
   }}> {children}</div>;
 };

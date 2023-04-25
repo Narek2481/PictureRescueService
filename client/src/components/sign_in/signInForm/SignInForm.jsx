@@ -1,17 +1,16 @@
-import {  useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import loginSubmit from "../../../action/login";
 import { editCurrentUser } from "../../../reducers/user/userSlice";
 import StickyInputLabel from "./StickyInputLabel/StickyInputLabel";
 import "../signIn.scss"
 import { useNavigate } from 'react-router-dom';
-import { useCookies } from "react-cookie";
+
 
 
 export default function SignInForm() {
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
-    const [cookies, setCookie, removeCookie] = useCookies();
     const [validErr, setValidErr] = useState("")
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -28,11 +27,11 @@ export default function SignInForm() {
 
     const validatePassword = password => {
         if (password.length < 8) {
-          console.log("Password must be at least 8 characters long.");
-          return "Password must be at least 8 characters long."
+            console.log("Password must be at least 8 characters long.");
+            return "Password must be at least 8 characters long."
         }
         return "ok";
-      }
+    }
 
     const signInSubmitThen = res => {
         console.log(res)
@@ -44,7 +43,7 @@ export default function SignInForm() {
                 }
             ));
             // removeCookie(["auth"])
-            console.log(res.data)
+            console.log(res)
             // if(cookies["login"]){
             //     removeCookie(["login"])
             // }
@@ -61,11 +60,16 @@ export default function SignInForm() {
             console.log(111111)
             loginSubmit(login, password)
                 .then(res => {
+                    console.log(222)
+
                     console.log(res);
                     signInSubmitThen(res);
-                    setStyleValidEror({login:{},password:{}});
+                    setStyleValidEror({ login: {}, password: {} });
                 })
-                .catch(e => setValidErr(e));
+                .catch(e => {
+                    console.log(e)
+                    setValidErr(String(e))
+                });
         } else {
             if (validatePassword(password) !== "ok") {
                 console.log(validatePassword(password));
@@ -81,7 +85,7 @@ export default function SignInForm() {
 
     return (
         <div>
-            <h3 className="container text-danger">{validErr}</h3>
+            <h3 className="container text-center text-danger ">{validErr}</h3>
             <StickyInputLabel props={
                 useMemo(() => {
                     return {
@@ -92,7 +96,7 @@ export default function SignInForm() {
                         setInputValue: setLogin,
                         style: styleValidEror.login
                     }
-                }, [login,styleValidEror])
+                }, [login, styleValidEror])
             } />
             <StickyInputLabel props={
                 useMemo(() => {
@@ -104,7 +108,7 @@ export default function SignInForm() {
                         setInputValue: setPassword,
                         style: styleValidEror.password
                     }
-                }, [password,styleValidEror])
+                }, [password, styleValidEror])
             } />
             <div className="text-center" >
                 <button type="submit" onClick={signInSubmit}>Submit</button>

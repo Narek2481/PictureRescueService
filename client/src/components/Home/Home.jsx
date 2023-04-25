@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useMemo } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import ImageComponent from "./images/ImageComponent"
 import { Link } from "react-router-dom"
 import SelectCategory from "./SelectCategory/SelectCategory";
@@ -7,8 +7,10 @@ import { downloudData, editFatching } from "../../reducers/data/dataSlice";
 import { downloudCategoryGet, downloudCategoryPost } from "../../reducers/category/categorySlice";
 import { ModalContent } from "./modal/Modal";
 import "./css/home.scss"
-import { useCookies } from "react-cookie";
 import { DotSpinner } from '@uiball/loaders'
+import UploadAvatar from "./UploadAvatar/UploadAvatar";
+import Modal from 'react-modal';
+import { RemoveScroll } from "react-remove-scroll";
 
 
 
@@ -24,7 +26,7 @@ function Home() {
     const modalData = useSelector((state) => state.modal);
     const offset = useRef(0);
     const loaderRef = useRef(null);
-
+    const [modalIsOpen, setIsOpen] = useState(false);
     useEffect(() => {
         if (fatchDataRedux) {
             dispatch(downloudData(nowData, offset.current, editFatching({ fatching: false })));
@@ -34,7 +36,7 @@ function Home() {
 
     // requset category
     useEffect(() => {
-        
+
         // requset category first 
         if (fetchingCategory && nesting <= 0) {
             dispatch(downloudCategoryGet());
@@ -72,13 +74,44 @@ function Home() {
             }
         };
     }, []);
+    const customStyles = {
+        content: {
+            top: '50%',
+            left: '50%',
+            right: 'auto',
+            bottom: 'auto',
+            marginRight: '-50%',
+            transform: 'translate(-50%, -50%)',
+        },
+    };
 
-
+    const  openModal = () => {
+        setIsOpen(true);
+    }
+    const closeModal = () => {
+        setIsOpen(false);
+    }
+    Modal.setAppElement("#root");
     return (
         <div className="home">
             <h1 className="text-center mt-5">
                 Recommended pictures {selectValue === "All" ? "" : `search category: "${selectValue}"`}
             </h1>
+            <div className="add_container">
+                <button className="go_add_image" onClick={openModal}>Create Avatar</button>
+            </div>
+            <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={closeModal}
+                style={customStyles}
+                
+            >
+                <RemoveScroll>
+                    <UploadAvatar />
+                </RemoveScroll>
+
+            </Modal>
+
             {modalData.modalData.modal && (
                 <ModalContent>
                     <div className="modal_center">

@@ -7,7 +7,7 @@ import Footer from "../footer/Footer";
 import SelectCategory from "../Home/SelectCategory/SelectCategory";
 import StickyInputLabel from "../sign_in/signInForm/StickyInputLabel/StickyInputLabel";
 import "./css/add_picture.scss"
-import { useCookies } from "react-cookie";
+import Cookies from "js-cookie";
 
 const AddPicture = () => {
     const [imageUrl, setImageUrl] = useState(null);
@@ -19,7 +19,7 @@ const AddPicture = () => {
     const dispatch = useDispatch();
     const [createCategory, setCreateCategory] = useState("");
     const [publicImage, setPublicImage] = useState(true);
-    const [userToken, setUserToken, removeUserToken] = useCookies(["auth"]);
+    const [userToken,setUserToken] = useState("");
     
     useEffect(() => {
         if (!imageData) {
@@ -41,7 +41,6 @@ const AddPicture = () => {
             setImageData(event.target.files[0]);
             setImageUrl(URL.createObjectURL(event.target.files[0]));
         }
-
     }, []);
     const img_styles = imageUrl => {
         if (!imageUrl) {
@@ -50,6 +49,9 @@ const AddPicture = () => {
         return {}
 
     };
+    useEffect(()=>{
+        setUserToken(Cookies.get("login"));
+    },[])
     return (
         <div className="add_price">
             <input
@@ -105,6 +107,7 @@ const AddPicture = () => {
                 className="mb-5"
                 style={img_styles(imageUrl)}
                 onClick={() => {
+                    
                     return imagePush(
                         imageData, selectValue, createCategory, publicImage, userToken
                     );
