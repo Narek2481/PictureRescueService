@@ -73,15 +73,22 @@ export default function Nav() {
     }
 
     useEffect(() => {
-        const cookie = Cookies.get("login");
-        const cookie2 = Cookies.get("55");
-        console.log(cookie2,"222222")
-
-        if (!loginState.register_or_login && cookie) {
-            dispatch(editCurrentUser({ register_or_login: true, name: cookie.name }));
-        } else {
+        console.log(localStorage.auth=== "true")
+        
+        const data = localStorage.data ? JSON.parse(localStorage.data) : ""
+        if(localStorage.auth === "true" && data) {
+            
+            console.log(data)
+            dispatch(editCurrentUser({ register_or_login: true, name: data.name }));
+        }else {
             navigate("/sign_in");
         }
+
+        // if (!loginState.register_or_login && cookie) {
+        //     dispatch(editCurrentUser({ register_or_login: true, name: cookie.name }));
+        // } else {
+        //     navigate("/sign_in");
+        // }
     }, []);
 
     return (

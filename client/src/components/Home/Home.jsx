@@ -85,7 +85,7 @@ function Home() {
         },
     };
 
-    const  openModal = () => {
+    const openModal = () => {
         setIsOpen(true);
     }
     const closeModal = () => {
@@ -104,7 +104,7 @@ function Home() {
                 isOpen={modalIsOpen}
                 onRequestClose={closeModal}
                 style={customStyles}
-                
+
             >
                 <RemoveScroll>
                     <UploadAvatar />
@@ -127,11 +127,11 @@ function Home() {
             </div>
             {/* category for pictures */}
             {
-                useMemo(() => {
-                    return requsetCategoryRedux?.map((elem, index) => {
-                        return <SelectCategory props={{ elem, setSelectValue, setNesting }} key={index} />
-                    })
-                }, [requsetCategoryRedux])
+
+                requsetCategoryRedux?.map((elem, index) => {
+                    return <SelectCategory props={{ elem, setSelectValue, setNesting }} key={index} />
+                })
+
             }
             <div style={
                 {

@@ -12,11 +12,11 @@ export default async function imagePush(imageData, selectValue, createCategory,p
     formData.append("publicImage",publicImage);
     formData.append("userToken",userToken.login.token);
     console.log(formData);
-    axios.post('http://localhost:4000/imagePush', formData, {
+    axios.post('/imagePush', formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
         }
-    })
+    },{withCredentials:true})
         .then(response => {
             console.log(response.data);
         })

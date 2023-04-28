@@ -22,7 +22,7 @@ export function editCategorySearch(pyload) {
     }
 }
 export function downloudCategoryGet() {
-    
+
     return (dispatch, get_state) => {
         return imageCategoryGet()
             .then((res) => {
@@ -33,20 +33,47 @@ export function downloudCategoryGet() {
             });
     }
 }
-export function downloudCategoryPost(past_data,value) {
-    console.log(past_data)
-    return (dispatch, get_state) => {
-        return (
-            imageCategoryPost(value)
-                .then((res) => {
-                    
-                    console.log([...past_data, ...res.data], "post data ")
-                    dispatch(editCategorySearch([...past_data, ...res.data]));
 
-                })
-                .catch((e) => {
-                    return e;
-                })
-        );
+function parentCategoryChange(pastData, value) {
+    let indexParent = false;
+    pastData.forEach((element, i) => {
+        element.forEach(e => {
+            if (e.name === value) {
+                indexParent = i
+            }
+        })
+    });
+    console.log(indexParent, "index")
+
+    let newData = pastData.filter((data, index) => {
+        return index <= indexParent;
+    });
+
+    console.log(newData, "new")
+    return indexParent === false ? pastData : newData
+}
+
+export function downloudCategoryPost(pastData, value) {
+    console.log(pastData)
+    pastData = parentCategoryChange(pastData, value)
+    if (value === "All") {
+        return (dispatch, get_state) => {
+            dispatch(editCategorySearch([...pastData]))
+        }
+    } else {
+        console.log(pastData)
+        return (dispatch, get_state) => {
+            return (
+                imageCategoryPost(value, pastData)
+                    .then((res) => {
+                        console.log([...pastData, ...res.data], "post data ")
+                        dispatch(editCategorySearch([...pastData, ...res.data]));
+                    })
+                    .catch((e) => {
+                        return e;
+                    })
+            );
+        }
     }
+
 }

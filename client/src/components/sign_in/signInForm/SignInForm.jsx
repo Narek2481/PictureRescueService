@@ -39,15 +39,11 @@ export default function SignInForm() {
             console.log(55555)
             dispatch(editCurrentUser(
                 {
-                    register_or_login: true
+                    register_or_login: true,
+                    name :res.data.name
                 }
             ));
-            // removeCookie(["auth"])
             console.log(res)
-            // if(cookies["login"]){
-            //     removeCookie(["login"])
-            // }
-            // setCookie('login', res.data, { path: '/' });
             goToHome();
         }
         setLogin("");
@@ -61,7 +57,8 @@ export default function SignInForm() {
             loginSubmit(login, password)
                 .then(res => {
                     console.log(222)
-
+                    localStorage.setItem("data",JSON.stringify(res.data))
+                    localStorage.setItem("auth",true)
                     console.log(res);
                     signInSubmitThen(res);
                     setStyleValidEror({ login: {}, password: {} });

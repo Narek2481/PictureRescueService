@@ -5,10 +5,10 @@ export const initialCurrentUser = {
 
 export function currentUserReducer (state = {}, action) {
     if (action.type === "current_user_registration") {
-        return  {
-            ...state,
-            ... action.pyload
-        };
+        return {
+            register_or_login:action.pyload.register_or_login,
+            name:action.pyload.name
+        }
     }
     else {
         return state;

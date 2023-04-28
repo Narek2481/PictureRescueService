@@ -5,20 +5,31 @@ import  dotenv  from "dotenv"
 import cookieParser from 'cookie-parser';
 import { sequelize } from "./data_base/db.js";
 import { router } from "./routes/route.js";
-
+import session from "express-session";
 // import { Public, Image, User, Announcement, Category } from "./data_base/tables.js";
 
 try {
     sequelize.authenticate();
     const app = express();
     dotenv.config();
+    app.use(session({
+        resave:false,
+        saveUninitialized:false,
+        secret:process.env.SECRET,
+        cookie:{
+            maxAge:1000*60*60,
+            sameSite:"lax",
+            secure:false
+        }
+    }))
+    app.set("trust proxy",1)
     app.use(cookieParser());
-    app.use(express.static(path.resolve("./server/img")));
+    app.use('/img', express.static("./server/img"));
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
     app.use(cors({
         credentials:true,
-        origin:"http://localhost:3000"
+        origin:"http://cookiefront.heraukapp.com"
     }));
     app.use(router);
     console.log(process.env.SECRET,777)

@@ -1,10 +1,11 @@
 import axios from "axios";
-async function imageCategoryGet(state) {
-    return await axios.post("http://localhost:4000/image_category");
+async function imageCategoryGet() {
+    return await axios.post("/imageCategory",{withCredentials:true});
 }
 
-async function imageCategoryPost(state) {
-    return await axios.post("http://localhost:4000/image_category", {category:state})
+async function imageCategoryPost(state,pastData) {
+    console.log(5555555)
+    return await axios.post("/imageCategory", {category:state,pastData},{withCredentials:true})
 }
 
 export { imageCategoryGet, imageCategoryPost } 

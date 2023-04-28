@@ -1,23 +1,10 @@
-import { useEffect, useState } from "react"
 import img from "../../../img_logo/istockphoto-1130884625-612x612.jpg"
-import { useCookies } from "react-cookie";
+import { useSelector } from "react-redux";
 
 
 
 const ImageProfile = ({props}) => {
-    const [cookie] = useCookies();
-     const [name,setName]=useState("")
-    
-    useEffect(() => {
-        try{
-            if(cookie.login.name){
-                setName(cookie.login.name)
-            } 
-        }catch(e){
-
-        }
-       
-    },[cookie]);
+    const name = useSelector((state) => state.currentUser.name)
     
     return(
         <li style={props.style} className="profileImage">

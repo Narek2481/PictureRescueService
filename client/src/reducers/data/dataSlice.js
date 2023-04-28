@@ -39,8 +39,10 @@ export function downloudData(past_data,offset,fetch_change) {
         return (
             loudeData(offset)
                 .then((req) => {
-                    
-                    dispatch(editData([...past_data, ...req.data]));
+                    console.log(req.data[1])
+                    localStorage.removeItem("auth")
+                    localStorage.setItem("auth",typeof req.data[1] === "object" ? false : req.data[1] )
+                    dispatch(editData([...past_data, ...req.data[0]]));
                     dispatch(fetch_change)
                 })
         );
