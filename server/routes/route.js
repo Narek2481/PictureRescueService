@@ -1,12 +1,22 @@
 import multer from "multer";
-import { Public, Image, User, Announcement, Category } from "../data_base/tables.js";
 import express from "express";
-import { generateVerificationToken, tokenVerify } from "../tokenWork/tokenCreater.js";
-import { preparationRegistrationSubmit } from "./functionsForRoutes/preparationRegistrationSubmit.js";
-import { checkDatabaseUser, imageLoudeForDataBase } from "../data_base/queryInDataBase.js";
-import { imagePush } from "./functionsForRoutes/preparationImagePush.js";
 import session, { Session } from "express-session";
 import cookieParser from "cookie-parser";
+
+import { Public, Image, User, Announcement, Category }
+    from "../data_base/tables.js";
+import { generateVerificationToken, tokenVerify }
+    from "../tokenWork/tokenCreater.js";
+import { preparationRegistrationSubmit }
+    from
+    "./functionsForRoutes/preparationRegistrationSubmit.js";
+import { checkDatabaseUser, imageLoudeForDataBase }
+    from "../data_base/queryInDataBase.js";
+import { imagePush } from "./functionsForRoutes/preparationImagePush.js";
+import { containsValidNameOrLastName, validateEmail, validatePassword }
+    from "../validatry/validatry.js";
+
+
 
 const tokenExamination = async cookies => {
     try {
@@ -39,14 +49,29 @@ router.get("/", async (req, res) => {
 
 // registrationSubmit route -----------------------------------------------------------------------------------
 router.post("/registrationSubmit", async (req, res) => {
-    const data = await preparationRegistrationSubmit(req.body);
-    console.log(data, "--------------------------")
-    if (typeof data === "object") {
-        res.status(200)
-        res.send(data)
-    } else {
-        res.status(400);
-        res.send(data)
+    try {
+        const validation = (
+            containsValidNameOrLastName(req.body.name, req.body.lastname) &&
+            containsValidNameOrLastName(req.body.lastname) &&
+            validateEmail(req.body.email) && validatePassword(req.body.password) === "ok"
+        );
+        if (validation) {
+            const data = await preparationRegistrationSubmit(req.body);
+            console.log(data, "--------------------------")
+            if (typeof data === "object") {
+                res.status(200)
+                res.send(data);
+            } else {
+                res.status(400);
+                res.send(data);
+            }
+        } else {
+            res.status(400);
+            res.send("validation failed");
+        }
+    }
+    catch (e) {
+        res.send(String(e));
     }
 });
 
@@ -54,20 +79,26 @@ router.post("/registrationSubmit", async (req, res) => {
 
 // login submit route -----------------------------------------------------------------------------------
 router.post("/loginSubmit", async (req, res) => {
-    console.log(req.body)
-    const result = await checkDatabaseUser(req.body);
-    if (result === "password is not correct") {
-        res.status(400).json("password is not correct");
-    } else if (result === "Something went wrong") {
-        res.status(400).json("Something went wrong");
-    } else {
-        console.log(result.id, "result")
-        const token = await generateVerificationToken(result.id);
-        // res.session.cookie('login', { token, name: result.name }, { maxAge: 900000, path: '/' });
-        const cookieValue = { token, name: result.name }
+    try {
+        const validation = validateEmail(req.body.login) && validatePassword(req.body.password) === "ok";
+        validation ? "" : res.status(400).send("validation failed");
+        console.log(req.body)
+        const result = await checkDatabaseUser(req.body);
+        if (result === "password is not correct") {
+            res.status(400).json("password is not correct");
+        } else if (result === "Something went wrong") {
+            res.status(400).json("Something went wrong");
+        } else {
+            console.log(result.id, "result")
+            const token = await generateVerificationToken(result.id);
+            // res.session.cookie('login', { token, name: result.name }, { maxAge: 900000, path: '/' });
+            const cookieValue = { token, name: result.name }
 
-        req.session.login = cookieValue
-        res.status(200).json({ token, name: result.name });
+            req.session.login = cookieValue
+            res.status(200).json({ token, name: result.name });
+        }
+    } catch (e) {
+        res.send(String(e));
     }
 
     // res.end
@@ -82,13 +113,17 @@ router.post(
 );
 // image loud route -----------------------------------------------------------------------------------
 router.post("/image_loud", async (req, res) => {
-    cookieParser.signedCookie(req.cookies['connect.sid'], process.env.SECRET)
-    console.log(cookieParser.signedCookie(req.cookies['connect.sid'], process.env.SECRET),5252);
-    const Examination = await tokenExamination(req.cookies);
+    try {
+        cookieParser.signedCookie(req.cookies['connect.sid'], process.env.SECRET)
+        console.log(cookieParser.signedCookie(req.cookies['connect.sid'], process.env.SECRET), 5252);
+        const Examination = await tokenExamination(req.cookies);
 
-    const imageObjArr = await imageLoudeForDataBase(req)
-    console.log(imageObjArr, "Examination")
-    res.send([imageObjArr, Examination])
+        const imageObjArr = await imageLoudeForDataBase(req)
+        console.log(imageObjArr, "Examination")
+        res.send([imageObjArr, Examination])
+    } catch (e) {
+        res.send(String(e))
+    }
 });
 
 // avatarPush route -----------------------------------------------------------------------------------

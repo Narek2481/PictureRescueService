@@ -11,6 +11,7 @@ import { DotSpinner } from '@uiball/loaders'
 import UploadAvatar from "./UploadAvatar/UploadAvatar";
 import Modal from 'react-modal';
 import { RemoveScroll } from "react-remove-scroll";
+import { selectCurrentUser } from "../../reducers/user/userSlice";
 
 
 
@@ -24,6 +25,7 @@ function Home() {
     const [nesting, setNesting] = useState(0);
     const dispatch = useDispatch();
     const modalData = useSelector((state) => state.modal);
+    const loginState = useSelector(selectCurrentUser).register_or_login
     const offset = useRef(0);
     const loaderRef = useRef(null);
     const [modalIsOpen, setIsOpen] = useState(false);
@@ -97,21 +99,31 @@ function Home() {
             <h1 className="text-center mt-5">
                 Recommended pictures {selectValue === "All" ? "" : `search category: "${selectValue}"`}
             </h1>
-            <div className="add_container">
-                <button className="go_add_image" onClick={openModal}>Create Avatar</button>
-            </div>
-            <Modal
-                isOpen={modalIsOpen}
-                onRequestClose={closeModal}
-                style={customStyles}
 
-            >
-                <RemoveScroll>
-                    <UploadAvatar />
-                </RemoveScroll>
+            {
+                loginState ? <div className="login_component">
+                    <div className="add_container">
+                        <button className="go_add_image" onClick={openModal}>Create Avatar</button>
+                    </div>
+                    <Modal
+                        isOpen={modalIsOpen}
+                        onRequestClose={closeModal}
+                        style={customStyles}
 
-            </Modal>
+                    >
+                        <RemoveScroll>
+                            <UploadAvatar />
+                        </RemoveScroll>
+                    </Modal>
 
+                    <div className="add_container">
+                        {/* route for adding pictures */}
+                        <Link className="go_add_image" to={"/add_image"}>
+                            Add Image
+                        </Link>
+                    </div>
+                </div>
+                    : ""}
             {modalData.modalData.modal && (
                 <ModalContent>
                     <div className="modal_center">
@@ -119,12 +131,6 @@ function Home() {
                     </div>
                 </ModalContent>
             )}
-            <div className="add_container">
-                {/* route for adding pictures */}
-                <Link className="go_add_image" to={"/add_image"}>
-                    Add Image
-                </Link>
-            </div>
             {/* category for pictures */}
             {
 

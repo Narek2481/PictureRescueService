@@ -16,7 +16,7 @@ export function currentUserReducer (state = {}, action) {
 }
 
 export function selectCurrentUser(state) {
-    return state.current_user
+    return state.currentUser
 }
 
 export function editCurrentUser(pyload) {

@@ -12,8 +12,7 @@ import logo from "../../img_logo/logo12.jpg"
 import NotFoundPage from "../../pages/NotFoundPage";
 import { editCurrentUser } from "../../reducers/user/userSlice";
 import ImageProfile from "./imageProfile/imageProfile";
-import axios from "axios";
-import Cookies from 'js-cookie';
+
 
 export default function Nav() {
     // hamburger manue state
@@ -29,33 +28,29 @@ export default function Nav() {
     const display = (loginState.register_or_login ? "none" : "");
     const displayInImageProfile = loginState.register_or_login ? "" : "none"
     // register or login examination
-
-
     const navigate = useNavigate();
+    useEffect(() => {
+        console.log(localStorage.auth === "true")
+        const data = localStorage.data ? JSON.parse(localStorage.data) : ""
+        if (localStorage.auth === "true" && data) {
+            console.log(data)
+            dispatch(editCurrentUser({ register_or_login: true, name: data.name }));
+        } else {
+            navigate("/sign_in");
+        }
+
+        // if (!loginState.register_or_login && cookie) {
+        //     dispatch(editCurrentUser({ register_or_login: true, name: cookie.name }));
+        // } else {
+        //     navigate("/sign_in");
+        // }
+    }, []);
+
+
     const styleInLinkComponent = {
         display
     }
     const styleInImageProfile = { display: displayInImageProfile };
-    // useEffect(() => {
-    //     const data = {
-    //         cookie: cookie["login"]
-    //     }
-    //     axios.post("http://localhost:4000/tokenExamination", data)
-    //         .then((res) => {
-    //             if (
-    //                 !loginState.register_or_login && cookie["login"] && res.data !== "token not valid"
-    //             ) {
-    //                 dispatch(editCurrentUser({ register_or_login: true, name: cookie.name }));
-    //             } else {
-    //                 removeCookie(["login"]);
-    //                 navigate("/sign_in");
-    //             }
-    //         })
-    //         .catch((e) => {
-    //             removeCookie(["login"]);
-    //             navigate("/sign_in");
-    //         })
-    // }, []);
 
     const clickManue = () => {
         if (manue === '') {
@@ -72,24 +67,7 @@ export default function Nav() {
 
     }
 
-    useEffect(() => {
-        console.log(localStorage.auth=== "true")
-        
-        const data = localStorage.data ? JSON.parse(localStorage.data) : ""
-        if(localStorage.auth === "true" && data) {
-            
-            console.log(data)
-            dispatch(editCurrentUser({ register_or_login: true, name: data.name }));
-        }else {
-            navigate("/sign_in");
-        }
 
-        // if (!loginState.register_or_login && cookie) {
-        //     dispatch(editCurrentUser({ register_or_login: true, name: cookie.name }));
-        // } else {
-        //     navigate("/sign_in");
-        // }
-    }, []);
 
     return (
         <>
@@ -182,7 +160,7 @@ export default function Nav() {
                 <Route path="/about_us/*" element={<AboutUsPage />} />
                 {loginState.register_or_login ? "" : <Route path="/registration/*" element={<RegistrationPage />} />}
                 {loginState.register_or_login ? "" : <Route path={"/sign_in/*"} element={<SignInPage />} />}
-                <Route path={"/add_image/*"} element={<AddPicturePage />} />
+                {loginState.register_or_login ? <Route path={"/add_image/*"} element={<AddPicturePage />} /> : ""}
                 <Route path="/*" element={<NotFoundPage />} />
             </Routes>
         </>
