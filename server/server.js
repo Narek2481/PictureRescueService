@@ -22,9 +22,10 @@ try {
             secure:false
         }
     }))
+    
     app.set("trust proxy",1)
     app.use(cookieParser());
-    app.use('/img', express.static("./server/img"));
+    app.use('/img', express.static(path.resolve("./img")));
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
     app.use(cors({

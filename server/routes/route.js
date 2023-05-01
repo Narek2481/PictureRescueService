@@ -18,6 +18,7 @@ import { containsValidNameOrLastName, validateEmail, validatePassword }
 
 
 
+
 const tokenExamination = async cookies => {
     try {
         console.log(77788)
@@ -28,7 +29,7 @@ const tokenExamination = async cookies => {
             return false;
         }
     } catch (e) {
-        return String(e);
+        return e;
     }
 
     console.log(tokenExmen, 666);
@@ -114,8 +115,8 @@ router.post(
 // image loud route -----------------------------------------------------------------------------------
 router.post("/imageLoud", async (req, res) => {
     try {
-        cookieParser.signedCookie(req.cookies['connect.sid'], process.env.SECRET)
-        console.log(cookieParser.signedCookie(req.cookies['connect.sid'], process.env.SECRET), 5252);
+       console.log(req.cookies,"kk")
+        
         const Examination = await tokenExamination(req.cookies);
 
         const imageObjArr = await imageLoudeForDataBase(req)

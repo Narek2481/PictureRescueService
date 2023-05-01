@@ -5,13 +5,13 @@ import { Modal } from "../modal/Modal";
 
 
 export default memo(function ImageComponent({ props }) {
-    const img = require("/home/narek/Desktop/app_/server/img/" + props.image_url);
+
     return (
         <div className="col-12 col-md-4 col-sm-6 iamage_container" >
             <h4>Image Width x Heght {props.imageWidthHeght}</h4>
-            <Modal src= {img}>
+            <Modal src= {"img/"+props.image_url}>
                 <div className="holder">
-                    <img className="img-fluid" src={img}  alt="" />
+                    <img className="img-fluid" src={"img/"+props.image_url}  alt="" />
                 </div>
             </Modal>
         </div>

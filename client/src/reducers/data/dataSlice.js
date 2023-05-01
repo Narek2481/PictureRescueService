@@ -49,6 +49,7 @@ export function downloudData(pastData, offset, fetchChange, categoryValue, setFa
         return (
             loudeData(offset, categoryValue)
                 .then((req) => {
+                    console.log(req.data)
                     if (req.data) {
                         console.log(req.data[1])
                         localStorage.removeItem("auth")
@@ -57,7 +58,6 @@ export function downloudData(pastData, offset, fetchChange, categoryValue, setFa
                         dispatch(editData([...pastData, ...req.data[0]]));
                         return dispatch(fetchChange)
                     }
-
                     setFatchNull(true);
                     dispatch(fetchChange);
 
