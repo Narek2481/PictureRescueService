@@ -9,10 +9,10 @@ import { generateVerificationToken, tokenVerify }
     from "../tokenWork/tokenCreater.js";
 import { preparationRegistrationSubmit }
     from
-    "./functionsForRoutes/preparationRegistrationSubmit.js";
+    "./controllers/controllerRegistrationSubmit.js";
 import { checkDatabaseUser, imageLoudeForDataBase }
     from "../data_base/queryInDataBase.js";
-import { imagePush } from "./functionsForRoutes/preparationImagePush.js";
+import { imagePush } from "./controllers/controllerImagePush.js";
 import { containsValidNameOrLastName, validateEmail, validatePassword }
     from "../validatry/validatry.js";
 
@@ -112,7 +112,7 @@ router.post(
     "/imagePush", upload.single('image'), imagePush
 );
 // image loud route -----------------------------------------------------------------------------------
-router.post("/image_loud", async (req, res) => {
+router.post("/imageLoud", async (req, res) => {
     try {
         cookieParser.signedCookie(req.cookies['connect.sid'], process.env.SECRET)
         console.log(cookieParser.signedCookie(req.cookies['connect.sid'], process.env.SECRET), 5252);
@@ -120,9 +120,12 @@ router.post("/image_loud", async (req, res) => {
 
         const imageObjArr = await imageLoudeForDataBase(req)
         console.log(imageObjArr, "Examination")
+        if(req.body.categoryValue !== "All"){
+           return  res.send(null)
+        }
         res.send([imageObjArr, Examination])
     } catch (e) {
-        res.send(String(e))
+        res.send(e)
     }
 });
 
@@ -151,43 +154,65 @@ const imageCategorySearchInDataBase = async () => {
         return "eror Something went wrong"
     }
 }
-const imageCategorySearchInDataBaseNesting = async category => {
-    const currentCategory = await Category.findOne({
-        where: {
-            name: category
-        }
-    });
-    const categoryInDataBase = await Category.findAll({
-        where: {
-            parent: currentCategory.id
-        }
-    });
-    const imageDataInDb = await Image.findAll({
-        where: {
-            category: currentCategory.id
-        }
-    })
-    console.log(currentCategory, 1111)
-    console.log(categoryInDataBase, 2222)
-    // console.log(imageDataInDb, 3333)
 
-    const categoryForSend = categoryInDataBase.map((elem) => {
-        return { id: elem.id, name: elem.name };
-    })
-    return categoryForSend
-}
-
-router.post("/imageCategory", async (req, res) => {
-    console.log(req.cookies, 1122);
-
+const publicExamination = data => {
     try {
 
+    } catch (e) {
+        return e
+    }
+    return
+}
+
+
+const imageCategorySearchInDataBaseNesting = async category => {
+    try {
+        const currentCategory = await Category.findOne({
+            where: {
+                name: category
+            }
+        });
+        const categoryInDataBase = await Category.findAll({
+            where: {
+                parent: currentCategory.id
+            }
+        });
+        const imageDataInDb = await Image.findAll({
+            where: {
+                category: currentCategory.id
+            }
+        })
+        
+        console.log(currentCategory, 1111)
+        console.log(categoryInDataBase, 2222)
+        console.log(585)
+        console.log(imageDataInDb, "565")
+
+        const categoryForSend = categoryInDataBase.map((elem) => {
+            return { id: elem.id, name: elem.name };
+        })
+        const imageDataForSend = imageDataInDb ? imageDataInDb.map((elem) => {
+            return {
+                imageWidthHeght: elem.width_heght,
+                image_url: elem.ref_or_path
+            }
+        }) : [];
+        console.log(imageDataForSend, 6666)
+
+        return [categoryForSend, imageDataForSend]
+    } catch (e) {
+        return e
+    }
+}
+router.post("/imageCategory", async (req, res) => {
+    console.log(req.cookies, 1122);
+    try {
         if (req.body.category) {
             const categoryDataSend = await imageCategorySearchInDataBaseNesting(req.body.category);
-            res.send([categoryDataSend])
+            res.send([[categoryDataSend[0]],categoryDataSend[1]])
         } else {
             const categoryDataSend = await imageCategorySearchInDataBase()
-            res.send([categoryDataSend]);
+            res.send([[categoryDataSend]]);
         }
     } catch (e) {
         res.send(e)

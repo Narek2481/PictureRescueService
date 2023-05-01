@@ -1,5 +1,5 @@
 import axios from "axios";
 
-export async function loudeData(offset) {
-        return await axios.post("/image_loud",{offset},{withCredentials:true})
+export async function loudeData(offset,categoryValue) {
+        return await axios.post("/imageLoud",{offset,categoryValue},{withCredentials:true})
 }

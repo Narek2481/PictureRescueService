@@ -1,3 +1,4 @@
+import { parentCategoryChange } from "../category/categorySlice";
 import { imageCategoryGet, imageCategoryPost } from "./categorySendApi";
 
 
@@ -22,25 +23,25 @@ export function editCategorySend(pyload) {
     }
 }
 export function downloudCategoryGet() {
-    return (dispatch, get_state) => {
+    return (dispatch) => {
         return imageCategoryGet()
             .then((res) => {
-                return dispatch(editCategorySend([...res.data]));
+                return dispatch(editCategorySend([...res.data[0]]));
             })
             .catch((e) => {
                 return e;
             });
     }
 }
-export function downloudCategoryPost(past_data,value) {
+export function downloudCategoryPost(pastData,value) {
     
-
+    pastData = parentCategoryChange(pastData, value)
     return (dispatch) => {
         return (
             imageCategoryPost(value)
                 .then((res) => {
-                    console.log([...past_data, ...res.data], "post data ")
-                    dispatch(editCategorySend([...past_data, ...res.data]));
+                    console.log([...pastData, ...res.data], "post data ")
+                    dispatch(editCategorySend([...pastData, ...res.data[0]]));
                 })
                 .catch((e) => {
                     return e;

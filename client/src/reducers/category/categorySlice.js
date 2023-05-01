@@ -1,3 +1,4 @@
+import { editDataCategory } from "../data/dataSlice";
 import { imageCategoryGet, imageCategoryPost } from "./categoryApi";
 
 
@@ -26,7 +27,8 @@ export function downloudCategoryGet() {
     return (dispatch, get_state) => {
         return imageCategoryGet()
             .then((res) => {
-                return dispatch(editCategorySearch([...res.data]));
+                
+                return dispatch(editCategorySearch([...res.data[0]]));
             })
             .catch((e) => {
                 return e;
@@ -34,15 +36,21 @@ export function downloudCategoryGet() {
     }
 }
 
-function parentCategoryChange(pastData, value) {
+export function parentCategoryChange(pastData, value) {
     let indexParent = false;
+
     pastData.forEach((element, i) => {
-        element.forEach(e => {
-            if (e.name === value) {
-                indexParent = i
-            }
-        })
+        console.log(element)
+        if (element) {
+            element.forEach(e => {
+                if (e.name === value) {
+                    indexParent = i
+                }
+            })
+        }
+
     });
+
     console.log(indexParent, "index")
 
     let newData = pastData.filter((data, index) => {
@@ -57,7 +65,7 @@ export function downloudCategoryPost(pastData, value) {
     console.log(pastData)
     pastData = parentCategoryChange(pastData, value)
     if (value === "All") {
-        return (dispatch, get_state) => {
+        return (dispatch) => {
             dispatch(editCategorySearch([...pastData]))
         }
     } else {
@@ -66,8 +74,9 @@ export function downloudCategoryPost(pastData, value) {
             return (
                 imageCategoryPost(value, pastData)
                     .then((res) => {
+                        dispatch(editDataCategory(res.data[1]))
                         console.log([...pastData, ...res.data], "post data ")
-                        dispatch(editCategorySearch([...pastData, ...res.data]));
+                        dispatch(editCategorySearch([...pastData, ...res.data[0]]));
                     })
                     .catch((e) => {
                         return e;

@@ -29,9 +29,10 @@ function Home() {
     const offset = useRef(0);
     const loaderRef = useRef(null);
     const [modalIsOpen, setIsOpen] = useState(false);
+    const [fatchNull, setFatchNull] = useState(false)
     useEffect(() => {
         if (fatchDataRedux) {
-            dispatch(downloudData(nowData, offset.current, editFatching({ fatching: false })));
+            dispatch(downloudData(nowData, offset.current, editFatching({ fatching: false }), selectValue, setFatchNull));
             offset.current++
         }
     }, [fatchDataRedux]);
@@ -49,7 +50,7 @@ function Home() {
         }
     }, [nesting, fetchingCategory]);
 
-    const handle_observer = entries => {
+    const handleObserver = entries => {
         const target = entries[0];
         if (target.isIntersecting) {
             return dispatch(editFatching({ fatching: true }));
@@ -64,8 +65,8 @@ function Home() {
             threshold: 1.0
         };
 
-        const observer = new IntersectionObserver(handle_observer, options);
-        if (loaderRef.current) {
+        const observer = new IntersectionObserver(handleObserver, options);
+        if (loaderRef.current && !fatchNull) {
             observer.observe(loaderRef.current);
         }
 
@@ -94,6 +95,8 @@ function Home() {
         setIsOpen(false);
     }
     Modal.setAppElement("#root");
+
+    // console.log(nowData,111111);
     return (
         <div className="home">
             <h1 className="text-center mt-5">
@@ -160,7 +163,10 @@ function Home() {
                     }, [nowData])
                 }
             </div>
-            <div className="d-flex justify-content-center" style={{ height: "200px" }} ref={loaderRef}>
+            <div className={`d-${fatchNull ? "none" : "flex"} justify-content-center`}
+                style={{ height: "200px"}}
+                ref={loaderRef}
+            >
                 <DotSpinner
                     size={60}
                     speed={1.75}

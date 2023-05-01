@@ -167,7 +167,8 @@ Image.belongsTo(Category, {
 sequelize.sync()
     .then(() => console.log("  crated tables"))
 
-
+User.belongsTo(Public);
+Public.belongsTo(User);
 export { Public, Image, User, Announcement, Category }
 
 
