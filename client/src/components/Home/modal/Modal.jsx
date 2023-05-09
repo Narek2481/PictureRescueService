@@ -4,7 +4,7 @@ import { editModal } from "../../../reducers/modal/modalSlice";
 import { RemoveScroll } from 'react-remove-scroll';
 const modal = {
   position: "fixed",
-  zIndex: 1,
+  zIndex: 5,
   left: 0,
   top: 0,
   width: "100vw",

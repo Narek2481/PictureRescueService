@@ -1,7 +1,6 @@
 import multer from "multer";
 import express from "express";
-import session, { Session } from "express-session";
-import cookieParser from "cookie-parser";
+
 
 import { Public, Image, User, Announcement, Category }
     from "../data_base/tables.js";
@@ -19,32 +18,11 @@ import { containsValidNameOrLastName, validateEmail, validatePassword }
 
 
 
-const tokenExamination = async cookies => {
-    try {
-        console.log(77788)
-        if (Object.keys(cookies).length > 0) {
-            const tokenE = await tokenVerify(cookies.login)
-            return tokenE;
-        } else {
-            return false;
-        }
-    } catch (e) {
-        return e;
-    }
 
-    console.log(tokenExmen, 666);
-}
-
-//  {
-//     domain: 'http://localhost:3000',
-//     path: '/'
-//     // expires: new Date(Date.now() + 900000)
-// }
 const router = express.Router();
 // root route -----------------------------------------------------------------------------------
 router.get("/", async (req, res) => {
 
-    req.session.cookieName = "11"
     res.send("ok");
 });
 
@@ -81,6 +59,7 @@ router.post("/registrationSubmit", async (req, res) => {
 // login submit route -----------------------------------------------------------------------------------
 router.post("/loginSubmit", async (req, res) => {
     try {
+
         const validation = validateEmail(req.body.login) && validatePassword(req.body.password) === "ok";
         validation ? "" : res.status(400).send("validation failed");
         console.log(req.body)
@@ -92,11 +71,9 @@ router.post("/loginSubmit", async (req, res) => {
         } else {
             console.log(result.id, "result")
             const token = await generateVerificationToken(result.id);
-            // res.session.cookie('login', { token, name: result.name }, { maxAge: 900000, path: '/' });
-            const cookieValue = { token, name: result.name }
-
-            req.session.login = cookieValue
-            res.status(200).json({ token, name: result.name });
+            const cookieValue = { token, name: result.name };
+            res.cookie('login', cookieValue, { maxAge: 60 * 60 * 1000, httpOnly: true, path: "/" });
+            res.status(200).json({ auth: true, name: result.name });
         }
     } catch (e) {
         res.send(String(e));
@@ -110,21 +87,19 @@ router.post("/loginSubmit", async (req, res) => {
 const upload = multer({ dest: './img' });
 
 router.post(
-    "/imagePush", upload.single('image'), imagePush
+    "/imagePush", upload.single('image'), async (req,res) => {
+        await imagePush(req,res);
+    }
 );
 // image loud route -----------------------------------------------------------------------------------
 router.post("/imageLoud", async (req, res) => {
     try {
-       console.log(req.cookies,"kk")
-        
-        const Examination = await tokenExamination(req.cookies);
-
         const imageObjArr = await imageLoudeForDataBase(req)
-        console.log(imageObjArr, "Examination")
-        if(req.body.categoryValue !== "All"){
-           return  res.send(null)
+        // console.log(imageObjArr, "Examination")
+        if (req.body.categoryValue !== "All") {
+            return res.send(null)
         }
-        res.send([imageObjArr, Examination])
+        res.send([imageObjArr, req.cookies.loginStatus])
     } catch (e) {
         res.send(e)
     }
@@ -132,6 +107,8 @@ router.post("/imageLoud", async (req, res) => {
 
 // avatarPush route -----------------------------------------------------------------------------------
 router.post("/avatarPush", async (req, res) => {
+    
+
     res.send("ok");
 });
 
@@ -183,7 +160,7 @@ const imageCategorySearchInDataBaseNesting = async category => {
                 category: currentCategory.id
             }
         })
-        
+
         console.log(currentCategory, 1111)
         console.log(categoryInDataBase, 2222)
         console.log(585)
@@ -207,10 +184,12 @@ const imageCategorySearchInDataBaseNesting = async category => {
 }
 router.post("/imageCategory", async (req, res) => {
     console.log(req.cookies, 1122);
+    console.log(process.env.AUTH, "Auth121");
+
     try {
         if (req.body.category) {
             const categoryDataSend = await imageCategorySearchInDataBaseNesting(req.body.category);
-            res.send([[categoryDataSend[0]],categoryDataSend[1]])
+            res.send([[categoryDataSend[0]], categoryDataSend[1],req.cookies.loginStatus])
         } else {
             const categoryDataSend = await imageCategorySearchInDataBase()
             res.send([[categoryDataSend]]);

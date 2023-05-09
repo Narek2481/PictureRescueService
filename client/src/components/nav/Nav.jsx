@@ -12,9 +12,11 @@ import logo from "../../img_logo/logo12.jpg"
 import NotFoundPage from "../../pages/NotFoundPage";
 import { editCurrentUser } from "../../reducers/user/userSlice";
 import ImageProfile from "./imageProfile/imageProfile";
+import { selectCurrentUser } from "../../reducers/user/userSlice";
 
 
 export default function Nav() {
+
     // hamburger manue state
     const [manue, setManu] = useState("");
     // manue components open or close 
@@ -22,28 +24,34 @@ export default function Nav() {
     const [icon_1, setIcon_1] = useState("");
     const [none, setnone] = useState("");
     // register or login state 
-    const loginState = useSelector((state) => state.currentUser);
+    const auth = useSelector(selectCurrentUser);
     const dispatch = useDispatch();
     // register or login styles 
-    const display = (loginState.register_or_login ? "none" : "");
-    const displayInImageProfile = loginState.register_or_login ? "" : "none"
+    const display = (auth.register_or_login ? "none" : "");
+    const displayInImageProfile = auth.register_or_login ? "" : "none"
     // register or login examination
     const navigate = useNavigate();
     useEffect(() => {
-        console.log(localStorage.auth === "true")
-        const data = localStorage.data ? JSON.parse(localStorage.data) : ""
-        if (localStorage.auth === "true" && data) {
-            console.log(data)
-            dispatch(editCurrentUser({ register_or_login: true, name: data.name }));
-        } else {
+        if (!auth) {
             navigate("/sign_in");
         }
-
-        // if (!loginState.register_or_login && cookie) {
-        //     dispatch(editCurrentUser({ register_or_login: true, name: cookie.name }));
-        // } else {
-        //     navigate("/sign_in");
-        // }
+        if (!auth.register_or_login) {
+            let login = {
+                register_or_login: false,
+                name: ""
+            }
+            try {
+                login.register_or_login = JSON.parse(localStorage.getItem("auth"));
+                login.name = JSON.parse(localStorage.getItem("name"));
+            }
+            catch (e) {
+                console.log(String(e));
+            }
+            dispatch(editCurrentUser({
+                register_or_login: login.register_or_login,
+                name: login.name
+            }))
+        }
     }, []);
 
 
@@ -67,7 +75,7 @@ export default function Nav() {
 
     }
 
-
+    console.log(auth)
 
     return (
         <>
@@ -105,7 +113,7 @@ export default function Nav() {
                                     text: "Home",
                                     click: clickManue
                                 }
-                            }, [loginState])
+                            }, [auth])
                         }
                         />
                         <LinkComponent props={
@@ -115,7 +123,7 @@ export default function Nav() {
                                     text: "About us",
                                     click: clickManue
                                 }
-                            }, [loginState])
+                            }, [auth])
                         }
                         />
 
@@ -127,7 +135,7 @@ export default function Nav() {
                                     style: styleInLinkComponent,
                                     click: clickManue
                                 }
-                            }, [loginState])
+                            }, [auth])
                         }
                         />
 
@@ -139,7 +147,7 @@ export default function Nav() {
                                     style: styleInLinkComponent,
                                     click: clickManue
                                 }
-                            }, [loginState])
+                            }, [auth])
                         }
                         />
                         <ImageProfile props={
@@ -147,7 +155,7 @@ export default function Nav() {
                                 return {
                                     style: styleInImageProfile
                                 }
-                            }, [loginState])
+                            }, [auth])
                         }
                         />
                     </div>
@@ -158,9 +166,9 @@ export default function Nav() {
                 <Route path={"/"} element={<Navigate to="/home" replace />} />
                 <Route path={"/home"} element={<HomePage />} />
                 <Route path="/about_us/*" element={<AboutUsPage />} />
-                {loginState.register_or_login ? "" : <Route path="/registration/*" element={<RegistrationPage />} />}
-                {loginState.register_or_login ? "" : <Route path={"/sign_in/*"} element={<SignInPage />} />}
-                {loginState.register_or_login ? <Route path={"/add_image/*"} element={<AddPicturePage />} /> : ""}
+                {auth.register_or_login ? "" : <Route path="/registration/*" element={<RegistrationPage />} />}
+                {auth.register_or_login ? "" : <Route path={"/sign_in/*"} element={<SignInPage />} />}
+                {auth.register_or_login ? <Route path={"/add_image/*"} element={<AddPicturePage />} /> : ""}
                 <Route path="/*" element={<NotFoundPage />} />
             </Routes>
         </>

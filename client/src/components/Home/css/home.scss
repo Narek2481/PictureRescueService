@@ -29,10 +29,18 @@
     text-align: center;
     margin-top: 30px;
     padding: 20px;
+
 }
 
 .iamage_container img {
     height: 200px;
+}
+
+.iamage_container img:hover {
+    z-index: 1;
+    scale: 1.4;
+    position: relative;
+    transition: .5s;
 }
 
 .row {
@@ -40,7 +48,7 @@
 }
 
 .select_control {
-    
+
     margin: 0 auto;
 }
 
@@ -155,5 +163,12 @@
 
     100% {
         transform: rotate(360deg);
+    }
+}
+
+@media only screen and (max-width:960px) {
+    .iamage_container img:hover {
+        scale: none;
+        
     }
 }

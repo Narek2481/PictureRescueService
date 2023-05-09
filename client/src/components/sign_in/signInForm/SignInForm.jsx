@@ -36,10 +36,11 @@ export default function SignInForm() {
     const signInSubmitThen = res => {
         console.log(res)
         if (res.status === 200) {
-            console.log(55555)
+            localStorage.setItem("auth",JSON.stringify(res.data.auth));
+            localStorage.setItem("name",JSON.stringify(res.data.name));
             dispatch(editCurrentUser(
                 {
-                    register_or_login: true,
+                    register_or_login: res.data.auth,
                     name :res.data.name
                 }
             ));
@@ -56,10 +57,6 @@ export default function SignInForm() {
             console.log(111111)
             loginSubmit(login, password)
                 .then(res => {
-                    console.log(222)
-                    localStorage.setItem("data",JSON.stringify(res.data))
-                    localStorage.setItem("auth",true)
-                    console.log(res);
                     signInSubmitThen(res);
                     setStyleValidEror({ login: {}, password: {} });
                 })

@@ -96,11 +96,11 @@ function Home() {
     }
     Modal.setAppElement("#root");
 
-    // console.log(nowData,111111);
+    console.log(nowData,111111);
     return (
         <div className="home">
             <h1 className="text-center mt-5">
-                Recommended pictures {selectValue === "All" ? "" : `search category: "${selectValue}"`}
+                Recommended pictures {selectValue === "All" ? "" : `search category: ${selectValue}`}
             </h1>
 
             {
@@ -164,15 +164,17 @@ function Home() {
                 }
             </div>
             <div className={`d-${fatchNull ? "none" : "flex"} justify-content-center`}
-                style={{ height: "200px"}}
+                style={{ height: "200px" }}
                 ref={loaderRef}
             >
-                <DotSpinner
-                    size={60}
-                    speed={1.75}
-                    color="#385898"
-                    lineWeight={3.5}
-                />
+                {
+                    fatchDataRedux ? <DotSpinner
+                        size={60}
+                        speed={1.75}
+                        color="#385898"
+                        lineWeight={3.5}
+                    /> : ""
+                }
             </div>
         </div>
     );

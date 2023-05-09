@@ -103,7 +103,6 @@ const addImageDataInDataBase = async (
 
 const imageLoudeForDataBase = async (req) => {
     try{
-        
         const offset = req.body.offset * 12
         let imagesInDb = await Image.findAll({
             order: [['id']],
@@ -117,7 +116,7 @@ const imageLoudeForDataBase = async (req) => {
             })
         }
         const imageObjArr  = imagesInDb.map((e) => {
-            console.log(e,"map map")
+            
             return {
                 image_url : e.ref_or_path,
                 imageWidthHeght :e.width_heght

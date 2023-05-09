@@ -5,24 +5,14 @@ import  dotenv  from "dotenv"
 import cookieParser from 'cookie-parser';
 import { sequelize } from "./data_base/db.js";
 import { router } from "./routes/route.js";
-import session from "express-session";
-// import { Public, Image, User, Announcement, Category } from "./data_base/tables.js";
+import { tokenVerifyMiddleware } from "./tokenWork/tokenCreater.js";
+
 
 try {
     sequelize.authenticate();
     const app = express();
     dotenv.config();
-    app.use(session({
-        resave:false,
-        saveUninitialized:false,
-        secret:process.env.SECRET,
-        cookie:{
-            maxAge:1000*60*60,
-            sameSite:"lax",
-            secure:false
-        }
-    }))
-    
+    app.use((req,res,next)=> tokenVerifyMiddleware(req,res,next));
     app.set("trust proxy",1)
     app.use(cookieParser());
     app.use('/img', express.static(path.resolve("./img")));
@@ -30,7 +20,7 @@ try {
     app.use(express.urlencoded({ extended: true }));
     app.use(cors({
         credentials:true,
-        origin:"http://cookiefront.heraukapp.com"
+        origin:"http://PictureRescueService.com"
     }));
     app.use(router);
     console.log(process.env.SECRET,777)
