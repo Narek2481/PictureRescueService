@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"
 import SelectCategory from "./SelectCategory/SelectCategory";
 import { useDispatch, useSelector } from "react-redux";
 import { downloudData, editFatching } from "../../reducers/data/dataSlice";
-import { downloudCategoryGet, downloudCategoryPost } from "../../reducers/category/categorySlice";
+import { downloudCategoryGet, downloudCategoryPost, editCategoryFetch } from "../../reducers/category/categorySlice";
 import { ModalContent } from "./modal/Modal";
 import "./css/home.scss"
 import { DotSpinner } from '@uiball/loaders'
@@ -19,8 +19,9 @@ import { selectCurrentUser } from "../../reducers/user/userSlice";
 function Home() {
     const fatchDataRedux = useSelector((state) => state.downlodeData.fatching);
     const nowData = useSelector((state) => state.downlodeData.data);
+    const limit = useSelector((state) => state.downlodeData.limit);
     const requsetCategoryRedux = useSelector(state => state.categorySearch.category);
-    const fetchingCategory = true;
+    const fetchingCategory = useSelector(state => state.categorySearch.fetchingCategory);
     const [selectValue, setSelectValue] = useState("All")
     const [nesting, setNesting] = useState(0);
     const dispatch = useDispatch();
@@ -32,7 +33,7 @@ function Home() {
     const [fatchNull, setFatchNull] = useState(false)
     useEffect(() => {
         if (fatchDataRedux) {
-            dispatch(downloudData(nowData, offset.current, editFatching({ fatching: false }), selectValue, setFatchNull));
+            dispatch(downloudData(nowData, limit, editFatching({ fatching: false }), selectValue, setFatchNull));
             offset.current++
         }
     }, [fatchDataRedux]);
@@ -40,13 +41,20 @@ function Home() {
     // requset category
     useEffect(() => {
 
-        // requset category first 
-        if (fetchingCategory && nesting <= 0) {
-            dispatch(downloudCategoryGet());
-        }
-        // requset category in  category
-        if (nesting > 0) {
-            dispatch(downloudCategoryPost(requsetCategoryRedux, selectValue));
+        if (fetchingCategory) {
+            // requset category first 
+            if (fetchingCategory && nesting <= 0) {
+                console.log("fetchingCategory && nesting <= 0")
+                dispatch(downloudCategoryGet(selectValue));
+                dispatch(editCategoryFetch(!fetchingCategory))
+            }
+            // requset category in  category
+            if (nesting > 0) {
+                console.log("nesting <= 0")
+
+                dispatch(downloudCategoryPost(requsetCategoryRedux, selectValue));
+                dispatch(editCategoryFetch(!fetchingCategory));
+            }
         }
     }, [nesting, fetchingCategory]);
 
@@ -95,8 +103,7 @@ function Home() {
         setIsOpen(false);
     }
     Modal.setAppElement("#root");
-
-    console.log(nowData,111111);
+    console.log(loginState);
     return (
         <div className="home">
             <h1 className="text-center mt-5">
@@ -138,7 +145,7 @@ function Home() {
             {
 
                 requsetCategoryRedux?.map((elem, index) => {
-                    return <SelectCategory props={{ elem, setSelectValue, setNesting }} key={index} />
+                    return <SelectCategory props={{ elem, setSelectValue, setNesting ,index}} key={index} />
                 })
 
             }

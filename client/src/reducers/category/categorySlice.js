@@ -8,12 +8,18 @@ export function categorySearchReducer(state = null, action) {
             ...state,
             category: action.pyload
         }
+    }else if(action.type === "categoryFetch"){
+        return {
+            ...state,
+            fetchingCategory: action.pyload
+        }
     }
     return state;
 }
 
 export const initialCategorySearch = {
-    category: null
+    category: null,
+    fetchingCategory:true
 };
 
 export function editCategorySearch(pyload) {
@@ -22,9 +28,15 @@ export function editCategorySearch(pyload) {
         pyload: pyload
     }
 }
+export function editCategoryFetch(pyload) {
+    return {
+        type: "categoryFetch",
+        pyload: pyload
+    }
+}
 export function downloudCategoryGet() {
 
-    return (dispatch, get_state) => {
+    return (dispatch) => {
         return imageCategoryGet()
             .then((res) => {
                 
@@ -70,7 +82,7 @@ export function downloudCategoryPost(pastData, value) {
         }
     } else {
         console.log(pastData)
-        return (dispatch, get_state) => {
+        return (dispatch) => {
             return (
                 imageCategoryPost(value, pastData)
                     .then((res) => {

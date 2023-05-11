@@ -1,18 +1,27 @@
 import { memo, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { editCategoryFetch } from "../../../reducers/category/categorySlice";
 
-const SelectCategory =  ({ props }) => {
-    
+let defaultValue = [];
+
+const SelectCategory = ({ props }) => {
+    const dispatch = useDispatch()
+    const fetchingCategory = useSelector(state => state.categorySearch.fetchingCategory);
+
     return (
         <div className="category_container container " >
             <label className="mb-4" htmlFor="category">Select a category to search</label>
             <select
                 className="select_control form-control form-control-lg  text-center"
                 name="category"
-                defaultValue={'All'}
+                defaultValue={defaultValue[props.index] ? defaultValue[props.index] : "All"}
                 onChange={(e) => {
-                        props.setSelectValue(e.target.value);
-                        props.setNesting((state) => ++state);
-                    }}
+                    console.log(e.target.value)
+                    defaultValue[props.index] = e.target.value
+                    props.setSelectValue(e.target.value);
+                    props.setNesting((state) => ++state);
+                    dispatch(editCategoryFetch(!fetchingCategory));
+                }}
             >
                 <option value={"All"}>All</option>
                 {

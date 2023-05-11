@@ -16,8 +16,6 @@ const imagePush = async (req, res) => {
         selectValue: req.body.selectValue,
         newCategory: req.body.newCategory
     };
-    console.log(req.body.publicImage, req.body.userToken, "---------------")
-    console.log(req.file.path, 88888888888888888888)
     fs.readFile(req.file.path, (err, data) => {
         if (err) {
             console.error(err);

@@ -1,7 +1,6 @@
 import multer from "multer";
 import express from "express";
 
-
 import { Public, Image, User, Announcement, Category }
     from "../data_base/tables.js";
 import { generateVerificationToken, tokenVerify }
@@ -71,8 +70,9 @@ router.post("/loginSubmit", async (req, res) => {
         } else {
             console.log(result.id, "result")
             const token = await generateVerificationToken(result.id);
-            const cookieValue = { token, name: result.name };
+            const cookieValue = { token };
             res.cookie('login', cookieValue, { maxAge: 60 * 60 * 1000, httpOnly: true, path: "/" });
+            res.cookie('name', result.name, { maxAge: 60 * 60 * 1000, httpOnly: true, path: "/" });
             res.status(200).json({ auth: true, name: result.name });
         }
     } catch (e) {
@@ -87,8 +87,8 @@ router.post("/loginSubmit", async (req, res) => {
 const upload = multer({ dest: './img' });
 
 router.post(
-    "/imagePush", upload.single('image'), async (req,res) => {
-        await imagePush(req,res);
+    "/imagePush", upload.single('image'), async (req, res) => {
+        await imagePush(req, res);
     }
 );
 // image loud route -----------------------------------------------------------------------------------
@@ -99,7 +99,7 @@ router.post("/imageLoud", async (req, res) => {
         if (req.body.categoryValue !== "All") {
             return res.send(null)
         }
-        res.send([imageObjArr, req.cookies.loginStatus])
+        res.send([imageObjArr])
     } catch (e) {
         res.send(e)
     }
@@ -107,7 +107,7 @@ router.post("/imageLoud", async (req, res) => {
 
 // avatarPush route -----------------------------------------------------------------------------------
 router.post("/avatarPush", async (req, res) => {
-    
+
 
     res.send("ok");
 });
@@ -115,7 +115,7 @@ router.post("/avatarPush", async (req, res) => {
 
 
 // image category route -----------------------------------------------------------------------------------
-const imageCategorySearchInDataBase = async () => {
+const imageCategorySearchInDataBase = async (req) => {
     try {
         const categoryInDataBase = await Category.findAll({
             where: {
@@ -125,8 +125,17 @@ const imageCategorySearchInDataBase = async () => {
         const newDataInaCategory = categoryInDataBase.map(elem => {
             return { id: elem.id, name: elem.name };
         });
-        console.log(newDataInaCategory, 1111111111111111111)
-        return newDataInaCategory;
+        const imageObjArr = await Image.findAll({
+            limit: 9
+        })
+        const imageDataForSend = imageObjArr ? imageObjArr.map((elem) => {
+            return {
+                imageWidthHeght: elem.width_heght,
+                image_url: elem.ref_or_path
+            }
+        }) : [];
+
+        return [newDataInaCategory, imageDataForSend];
     } catch (e) {
         console.log(e)
         return "eror Something went wrong"
@@ -145,6 +154,13 @@ const publicExamination = data => {
 
 const imageCategorySearchInDataBaseNesting = async category => {
     try {
+
+        const limit = 9
+        console.log(category, "categoryData")
+        if (category === "All") {
+            const data = await imageCategorySearchInDataBase()
+            return data;
+        }
         const currentCategory = await Category.findOne({
             where: {
                 name: category
@@ -157,8 +173,10 @@ const imageCategorySearchInDataBaseNesting = async category => {
         });
         const imageDataInDb = await Image.findAll({
             where: {
+
                 category: currentCategory.id
-            }
+            },
+            limit: 9
         })
 
         console.log(currentCategory, 1111)
@@ -177,7 +195,7 @@ const imageCategorySearchInDataBaseNesting = async category => {
         }) : [];
         console.log(imageDataForSend, 6666)
 
-        return [categoryForSend, imageDataForSend]
+        return [categoryForSend, imageDataForSend, limit]
     } catch (e) {
         return e
     }
@@ -185,14 +203,15 @@ const imageCategorySearchInDataBaseNesting = async category => {
 router.post("/imageCategory", async (req, res) => {
     console.log(req.cookies, 1122);
     console.log(process.env.AUTH, "Auth121");
+    console.log(req.body.category, "categoruData");
 
     try {
         if (req.body.category) {
             const categoryDataSend = await imageCategorySearchInDataBaseNesting(req.body.category);
-            res.send([[categoryDataSend[0]], categoryDataSend[1],req.cookies.loginStatus])
+            res.send([[categoryDataSend[0]], categoryDataSend[1], req.cookies.loginStatus, categoryDataSend[2]])
         } else {
-            const categoryDataSend = await imageCategorySearchInDataBase()
-            res.send([[categoryDataSend]]);
+            const categoryDataSend = await imageCategorySearchInDataBase(req)
+            res.send([[categoryDataSend[0]], categoryDataSend[2], categoryDataSend[1]]);
         }
     } catch (e) {
         res.send(e)

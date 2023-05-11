@@ -1,10 +1,16 @@
 import { loudeData } from "./dataApi";
-import { editCurrentUser } from "../user/userSlice"
+import { editCurrentUser } from "../user/userSlice";
+import { useSelector } from "react-redux";
+
+
 export function downlodeDataReducer(state = {}, action) {
+    
     if (action.type === "downlode_data_change") {
+        const limit = state.limit+=9;
         return {
             ...state,
-            data: action.pyload
+            data: action.pyload,
+            limit:limit
         };
     } else if (action.type === "change_fetching") {
         return {
@@ -23,7 +29,8 @@ export function downlodeDataReducer(state = {}, action) {
 }
 export const initialDownlodeData = {
     data: [],
-    fatching: true
+    fatching: true,
+    limit :9
 };
 export function editDataCategory(pyload) {
     return {
@@ -44,21 +51,12 @@ export function editFatching(pyload) {
     }
 }
 export function downloudData(pastData, offset, fetchChange, categoryValue, setFatchNull) {
+    
     return (dispatch) => {
         return (
             loudeData(offset, categoryValue)
                 .then((res) => {
-                    console.log(res.data)
-                    if (res.data) {
-                        if (res.data[1] === "true") {
-                            console.log(res.data[1])
-                            localStorage.setItem("auth", JSON.stringify(res.data[1]));
-                            // localStorage.setItem("name", JSON.stringify(res.data.name ? res.data.name : ""));
-                            dispatch(editCurrentUser({
-                                register_or_login: res.data[1] ? true : false,
-                                name: ""
-                            }));
-                        }
+                    if (res.data) { 
                         dispatch(editData([...pastData, ...res.data[0]]));
                         return dispatch(fetchChange)
                     }

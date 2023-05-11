@@ -106,8 +106,7 @@ const imageLoudeForDataBase = async (req) => {
         const offset = req.body.offset * 12
         let imagesInDb = await Image.findAll({
             order: [['id']],
-            limit: 9,
-            offset:offset
+            limit: offset
         })
         if(imagesInDb.length === 0) {
             imagesInDb = await Image.findAll({

@@ -13,6 +13,7 @@ import NotFoundPage from "../../pages/NotFoundPage";
 import { editCurrentUser } from "../../reducers/user/userSlice";
 import ImageProfile from "./imageProfile/imageProfile";
 import { selectCurrentUser } from "../../reducers/user/userSlice";
+import Cookies from "js-cookie";
 
 
 export default function Nav() {
@@ -32,24 +33,12 @@ export default function Nav() {
     // register or login examination
     const navigate = useNavigate();
     useEffect(() => {
-        if (!auth) {
-            navigate("/sign_in");
-        }
-        if (!auth.register_or_login) {
-            let login = {
-                register_or_login: false,
-                name: ""
-            }
-            try {
-                login.register_or_login = JSON.parse(localStorage.getItem("auth"));
-                login.name = JSON.parse(localStorage.getItem("name"));
-            }
-            catch (e) {
-                console.log(String(e));
-            }
+        console.log(Cookies.loginStatus)
+        console.log(Cookies.name)
+        if (Cookies.loginStatus) {
             dispatch(editCurrentUser({
-                register_or_login: login.register_or_login,
-                name: login.name
+                register_or_login: Cookies.loginStatus,
+                name: Cookies.name
             }))
         }
     }, []);

@@ -10,17 +10,12 @@ export default async function imagePush(imageData, selectValue, createCategory,p
     formData.append("selectValue",selectValue);
     formData.append("newCategory",createCategory);
     formData.append("publicImage",publicImage);
-    formData.append("userToken",userToken.login.token);
+    // formData.append("userToken",userToken.login.token);
     console.log(formData);
-    axios.post('/imagePush', formData, {
+    const response =  await axios.post('/imagePush', formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
         }
-    },{withCredentials:true})
-        .then(response => {
-            console.log(response.data);
-        })
-        .catch(error => {
-            console.error(error);
-        });
+    },{withCredentials:true});
+    return response;
 }

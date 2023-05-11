@@ -15,7 +15,7 @@ export default function SignInForm() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [styleValidEror, setStyleValidEror] = useState({ login: {}, password: {} });
-
+    
     const goToHome = () => {
         navigate('/home');
     }
@@ -62,7 +62,7 @@ export default function SignInForm() {
                 })
                 .catch(e => {
                     console.log(e)
-                    setValidErr(String(e))
+                    setValidErr(e.response.data)
                 });
         } else {
             if (validatePassword(password) !== "ok") {
