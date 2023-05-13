@@ -13,6 +13,7 @@ import { checkDatabaseUser, imageLoudeForDataBase }
 import { imagePush } from "./controllers/controllerImagePush.js";
 import { containsValidNameOrLastName, validateEmail, validatePassword }
     from "../validatry/validatry.js";
+import controllreShare from "./controllers/controllreShare.js";
 
 
 
@@ -125,10 +126,12 @@ const imageCategorySearchInDataBase = async (req) => {
         const newDataInaCategory = categoryInDataBase.map(elem => {
             return { id: elem.id, name: elem.name };
         });
-        const imageObjArr = await Image.findAll({
+
+        let imagesInDb = await Image.findAll({
+            order: [['id']],
             limit: 9
-        })
-        const imageDataForSend = imageObjArr ? imageObjArr.map((elem) => {
+        });
+        const imageDataForSend = imagesInDb ? imagesInDb.map((elem) => {
             return {
                 imageWidthHeght: elem.width_heght,
                 image_url: elem.ref_or_path
@@ -204,20 +207,29 @@ router.post("/imageCategory", async (req, res) => {
     console.log(req.cookies, 1122);
     console.log(process.env.AUTH, "Auth121");
     console.log(req.body.category, "categoruData");
-
+    
     try {
         if (req.body.category) {
+            console.log(66669)
             const categoryDataSend = await imageCategorySearchInDataBaseNesting(req.body.category);
             res.send([[categoryDataSend[0]], categoryDataSend[1], req.cookies.loginStatus, categoryDataSend[2]])
         } else {
             const categoryDataSend = await imageCategorySearchInDataBase(req)
-            res.send([[categoryDataSend[0]], categoryDataSend[2], categoryDataSend[1]]);
+            res.send([[categoryDataSend[0]], categoryDataSend[1], req.cookies.loginStatus]);
         }
     } catch (e) {
         res.send(e)
     }
 
 });
+
+
+// share -----------------------------------------------------------------------------------------
+router.post("/share", async (req, res) => {
+    const data = await controllreShare(req);
+    res.send(data);
+});
+
 
 
 

@@ -9,6 +9,7 @@ import StickyInputLabel from "../sign_in/signInForm/StickyInputLabel/StickyInput
 import "./css/add_picture.scss"
 import ImageStatus from "./ImageStatus/ImageStatus";
 import { useNavigate } from "react-router-dom";
+import { selectValueCategory } from "../../reducers/valueCategory/valueCategorySlice";
 
 const AddPicture = () => {
     const [imageUrl, setImageUrl] = useState(null);
@@ -24,6 +25,8 @@ const AddPicture = () => {
     const [requsetSuccessful, setRequsetSuccessful] = useState(false);
     const [reqMessige, setReqMessige] = useState("");
     const [modalIsOpen, setIsOpen] = useState(false);
+    const categoryValue = useSelector(selectValueCategory).value;
+ 
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -38,7 +41,7 @@ const AddPicture = () => {
         }
         // requset category in  category
         if (nesting > 0) {
-            dispatch(downloudCategoryPost(requsetCategoryRedux, selectValue));
+            dispatch(downloudCategoryPost(requsetCategoryRedux, selectValue,categoryValue));
         }
     }, [nesting, fetchingCategory]);
     const onImageChange = useCallback(event => {

@@ -158,17 +158,10 @@ const Public = sequelize.define('Public', {
 }, {
     tableName: "Public"
 });
-Category.hasMany(Image, {
-    foreignKey: 'category'
-});
-Image.belongsTo(Category, {
-    foreignKey: 'category'
-});
+
 sequelize.sync()
     .then(() => console.log("  crated tables"))
-
-User.belongsTo(Public);
-Public.belongsTo(User);
+    .catch((e)=> e);
 export { Public, Image, User, Announcement, Category }
 
 

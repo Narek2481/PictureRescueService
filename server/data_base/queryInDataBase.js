@@ -106,7 +106,7 @@ const imageLoudeForDataBase = async (req) => {
         const offset = req.body.offset * 12
         let imagesInDb = await Image.findAll({
             order: [['id']],
-            limit: offset
+            limit: offset ? offset : 9
         })
         if(imagesInDb.length === 0) {
             imagesInDb = await Image.findAll({
@@ -118,10 +118,11 @@ const imageLoudeForDataBase = async (req) => {
             
             return {
                 image_url : e.ref_or_path,
-                imageWidthHeght :e.width_heght
-    
+                imageWidthHeght :e.width_heght,
+                id:e.id
             }
         })
+        console.log(imageObjArr,"--------------------------")
         return imageObjArr;
     }catch(e){
         return e;

@@ -5,6 +5,7 @@ import { currentUserReducer, initialCurrentUser } from "../reducers/user/userSli
 import thunk from "redux-thunk"
 import { categorySendReducer, initialCategorySend } from "../reducers/categorySend/categorySendSlice";
 import { currentModalReduser, initialModal } from "../reducers/modal/modalSlice";
+import { initialValueCategory, valueCategoryReducer } from "../reducers/valueCategory/valueCategorySlice";
 
 
 
@@ -14,14 +15,15 @@ const store = createStore(combineReducers({
     downlodeData: downlodeDataReducer,
     categorySearch: categorySearchReducer,
     categorySend : categorySendReducer,
-    modal:currentModalReduser
-
+    modal:currentModalReduser,
+    value:valueCategoryReducer
 }), {
     categorySend:initialCategorySend,
     currentUser: initialCurrentUser,
     downlodeData: initialDownlodeData,
     categorySearch: initialCategorySearch,
-    modal:initialModal
+    modal:initialModal,
+    value:initialValueCategory
 }, applyMiddleware(thunk));
 
 export default store;

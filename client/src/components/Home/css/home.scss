@@ -29,7 +29,26 @@
     text-align: center;
     margin-top: 30px;
     padding: 20px;
+    button img {
+        width: 30px;
+        height: 30px;
+        
+    }
+    button{
+        background-color: #385898;
+        color: white;
+        margin-top: 10px;
+        border: none;
+        padding: 5px 10px;
 
+    }
+    button:focus{
+        scale: 1.2;
+        outline: none !important;
+    }
+    button:hover{
+        scale: 1.2;
+    }
 }
 
 .iamage_container img {

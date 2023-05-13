@@ -12,6 +12,7 @@ import UploadAvatar from "./UploadAvatar/UploadAvatar";
 import Modal from 'react-modal';
 import { RemoveScroll } from "react-remove-scroll";
 import { selectCurrentUser } from "../../reducers/user/userSlice";
+import { selectValueCategory } from "../../reducers/valueCategory/valueCategorySlice";
 
 
 
@@ -26,11 +27,12 @@ function Home() {
     const [nesting, setNesting] = useState(0);
     const dispatch = useDispatch();
     const modalData = useSelector((state) => state.modal);
-    const loginState = useSelector(selectCurrentUser).register_or_login
+    const loginState = useSelector(selectCurrentUser).register_or_login;
     const offset = useRef(0);
     const loaderRef = useRef(null);
     const [modalIsOpen, setIsOpen] = useState(false);
-    const [fatchNull, setFatchNull] = useState(false)
+    const [fatchNull, setFatchNull] = useState(false);
+    const categoryValue = useSelector(selectValueCategory).value;
     useEffect(() => {
         if (fatchDataRedux) {
             dispatch(downloudData(nowData, limit, editFatching({ fatching: false }), selectValue, setFatchNull));
@@ -44,15 +46,15 @@ function Home() {
         if (fetchingCategory) {
             // requset category first 
             if (fetchingCategory && nesting <= 0) {
-                console.log("fetchingCategory && nesting <= 0")
+                // console.log("fetchingCategory && nesting <= 0")
                 dispatch(downloudCategoryGet(selectValue));
                 dispatch(editCategoryFetch(!fetchingCategory))
             }
             // requset category in  category
             if (nesting > 0) {
-                console.log("nesting <= 0")
+                // console.log("nesting <= 0")
 
-                dispatch(downloudCategoryPost(requsetCategoryRedux, selectValue));
+                dispatch(downloudCategoryPost(requsetCategoryRedux, selectValue,categoryValue));
                 dispatch(editCategoryFetch(!fetchingCategory));
             }
         }
@@ -103,7 +105,7 @@ function Home() {
         setIsOpen(false);
     }
     Modal.setAppElement("#root");
-    console.log(loginState);
+    console.log(categoryValue);
     return (
         <div className="home">
             <h1 className="text-center mt-5">
@@ -164,6 +166,7 @@ function Home() {
                         return nowData?.map((elem, index) => {
                             return <ImageComponent
                                 props={elem}
+
                                 key={Math.random() * 100}
                             />
                         })

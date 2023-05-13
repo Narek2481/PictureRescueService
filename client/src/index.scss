@@ -19,7 +19,9 @@ body a {
 }
 
 
-
+button:focus{
+  outline: none !important;
+}
 
 /* registration ------------------------------------------------------------------------------------------- */
 .registration {

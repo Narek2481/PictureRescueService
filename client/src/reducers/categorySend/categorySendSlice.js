@@ -33,9 +33,10 @@ export function downloudCategoryGet() {
             });
     }
 }
-export function downloudCategoryPost(pastData,value) {
+export function downloudCategoryPost(pastData,value,categoryValue) {
+    const pastDataIndex = categoryValue.indexOf("All");
     
-    pastData = parentCategoryChange(pastData, value)
+    pastData = pastData.slice(0, pastDataIndex)
     return (dispatch) => {
         return (
             imageCategoryPost(value)
