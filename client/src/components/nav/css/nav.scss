@@ -18,194 +18,204 @@ nav {
 .profileImage {
   margin-bottom: 10px;
 
-  img {
-    width: 50px;
-    height: 50px;
-    border-radius: 25px;
-  }
-}
-
-.profileImage:hover {
-  border-bottom: 1px solid #385898 !important;
-}
-
-.manue_icon .all_span {
-  display: block;
-  background-color: white;
-  height: 1px;
-  width: 35px;
-  margin: 5px 0 10px 0;
-  transform: 1s;
-  transition: 0.6s;
-  animation-duration: 3s;
-  height: 2px;
-}
-
-.manue_icon .all_span:last-child {
-  transform: 0s;
-  transition: 0s;
-  animation-duration: 0s;
-}
-
-.manue_close_1 {
-  transform: rotate(50deg);
-  margin: 0 !important;
-  transform: 1s;
-  transition: 0.6s;
-  position: relative;
-  top: 20%;
-}
-
-.manue_close_2 {
-
-  transform: rotate(-50deg);
-  margin: 0 !important;
-  transform: 1s;
-  transition: 0.6s;
-  position: relative;
-  top: 20%;
-}
-
-.manue_icon {
-  padding-top: 5px;
-}
-
-.logo_manue {
-  width: 20%;
-  display: flex;
-  justify-content: space-between;
-
-}
-
-.logo_manue>div:first-child {
-  padding-bottom: 10px;
-}
-
-
-
-nav>ul {
-  display: flex;
-  list-style: none;
-  color: white;
-  /* flex: 1; */
-  text-align: center;
-  justify-content: space-between;
-  flex-wrap: wrap-reverse;
-  margin-bottom: 0;
-}
-
-.navigation {
-
-  display: flex;
-  flex-wrap: wrap-reverse;
-  justify-content: space-around;
-  flex: 1;
-  transform: 1s;
-  transition: 0.6s;
-
-}
-
-nav>ul li {
-  /* display: none; */
-  flex-basis: 100px;
-}
-
-
-
-nav>ul li>a {
-  text-decoration: none;
-  color: white;
-
-}
-
-nav>ul li {
-  border-bottom: 3px solid #385898;
-  transition: 0.5s;
-  padding-bottom: 2px;
-}
-
-nav>ul li:hover {
-  border-bottom: 2px solid white;
-  transition: 0.5s;
-}
-
-.profileImage {
-  display: flex;
-  justify-content: space-between;
-  width: 20%;
-  margin-bottom: 10px;
-  border-bottom: 1px solid #385898 !important;
-
-  img {
-    width: 35px;
-    height: 35px;
-    border-radius: 25px;
-
-  }
-}
-
-.profileImage:hover {
-  border-bottom: 1px solid #385898 !important;
-}
-
-@media only screen and (max-width: 1000px) {
-  .manue_icon {
-    display: block;
-  }
-
-  .navigation {
-    display: none;
-    transition: 0.5s;
-  }
-
-  .manu_block {
-    opacity: 100%;
-    transition: all .3s ease;
-    -webkit-transition: all .3s ease;
-    transition: all 2s linear;
-    translate: 1s;
-    z-index: 10;
-    transform: 1s;
-    transition: 0.6s;
-    position: absolute;
+  .btnNotification {
+    padding: 0px !important;
     background-color: #385898;
-    width: 50%;
-    top: 60px;
-    left: 50%;
-    display: flex;
-    flex-flow: column-reverse;
-    li {
-      flex: 1 ;
-      width: 100%;
-      text-align: left;
-      padding: 10px;
+    border: none !important;
+    margin-left: 5px;
+
+  }
+
+    img {
+      margin-left: 5px;
+      width: 50px;
+      height: 50px;
+      border-radius: 25px;
     }
   }
 
-
-
-  nav>ul li:hover {
-    border: none !important;
+  .profileImage:hover {
+    border-bottom: 1px solid #385898 !important;
   }
 
-  nav>ul li {
-    border: none !important;
+  .manue_icon .all_span {
+    display: block;
+    background-color: white;
+    height: 1px;
+    width: 35px;
+    margin: 5px 0 10px 0;
+    transform: 1s;
+    transition: 0.6s;
+    animation-duration: 3s;
+    height: 2px;
+  }
+
+  .manue_icon .all_span:last-child {
+    transform: 0s;
+    transition: 0s;
+    animation-duration: 0s;
+  }
+
+  .manue_close_1 {
+    transform: rotate(50deg);
+    margin: 0 !important;
+    transform: 1s;
+    transition: 0.6s;
+    position: relative;
+    top: 20%;
+  }
+
+  .manue_close_2 {
+
+    transform: rotate(-50deg);
+    margin: 0 !important;
+    transform: 1s;
+    transition: 0.6s;
+    position: relative;
+    top: 20%;
+  }
+
+  .manue_icon {
+    padding-top: 5px;
   }
 
   .logo_manue {
-    width: 100%;
-  }
-}
+    width: 20%;
+    display: flex;
+    justify-content: space-between;
 
-@media only screen and (max-width: 600px) {
-  .manu_block {
-    width: 50%;
-    left: 50%;
   }
-}
 
-@media only screen and (max-width: 400px) {
-  .manu_block {
-    font-size: 20px;
+  .logo_manue>div:first-child {
+    padding-bottom: 10px;
   }
-}
+
+
+
+  nav>ul {
+    display: flex;
+    list-style: none;
+    color: white;
+    /* flex: 1; */
+    text-align: center;
+    justify-content: space-between;
+    flex-wrap: wrap-reverse;
+    margin-bottom: 0;
+  }
+
+  .navigation {
+
+    display: flex;
+    flex-wrap: wrap-reverse;
+    justify-content: space-around;
+    flex: 1;
+    transform: 1s;
+    transition: 0.6s;
+
+  }
+
+  nav>ul li {
+    /* display: none; */
+    flex-basis: 100px;
+  }
+
+
+
+  nav>ul li>a {
+    text-decoration: none;
+    color: white;
+
+  }
+
+  nav>ul li {
+    border-bottom: 3px solid #385898;
+    transition: 0.5s;
+    padding-bottom: 2px;
+  }
+
+  nav>ul li:hover {
+    border-bottom: 2px solid white;
+    transition: 0.5s;
+  }
+
+  .profileImage {
+    display: flex;
+    justify-content: space-between;
+    width: 20%;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #385898 !important;
+
+    img {
+      width: 35px;
+      height: 35px;
+      border-radius: 25px;
+
+    }
+  }
+
+  .profileImage:hover {
+    border-bottom: 1px solid #385898 !important;
+  }
+
+  @media only screen and (max-width: 1000px) {
+    .manue_icon {
+      display: block;
+    }
+
+    .navigation {
+      display: none;
+      transition: 0.5s;
+    }
+
+    .manu_block {
+      opacity: 100%;
+      transition: all .3s ease;
+      -webkit-transition: all .3s ease;
+      transition: all 2s linear;
+      translate: 1s;
+      z-index: 10;
+      transform: 1s;
+      transition: 0.6s;
+      position: absolute;
+      background-color: #385898;
+      width: 50%;
+      top: 60px;
+      left: 50%;
+      display: flex;
+      flex-flow: column-reverse;
+
+      li {
+        flex: 1;
+        width: 100%;
+        text-align: left;
+        padding: 10px;
+      }
+    }
+
+
+
+    nav>ul li:hover {
+      border: none !important;
+    }
+
+    nav>ul li {
+      border: none !important;
+    }
+
+    .logo_manue {
+      width: 100%;
+    }
+  }
+
+  @media only screen and (max-width: 600px) {
+    .manu_block {
+      width: 50%;
+      left: 50%;
+    }
+  }
+
+  @media only screen and (max-width: 400px) {
+    .manu_block {
+      font-size: 20px;
+    }
+  }

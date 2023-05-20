@@ -5,14 +5,14 @@ import  dotenv  from "dotenv"
 import cookieParser from 'cookie-parser';
 import { sequelize } from "./data_base/db.js";
 import { router } from "./routes/route.js";
-import { tokenVerifyMiddleware } from "./tokenWork/tokenCreater.js";
+// import { tokenVerifyMiddleware } from "./tokenWork/tokenCreater.js";
 
 
 try {
     sequelize.authenticate();
     const app = express();
     dotenv.config();
-    app.use((req,res,next)=> tokenVerifyMiddleware(req,res,next));
+    // app.use((req,res,next)=> tokenVerifyMiddleware(req,res,next));
     app.set("trust proxy",1)
     app.use(cookieParser());
     app.use('/img', express.static(path.resolve("./img")));

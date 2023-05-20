@@ -3,7 +3,7 @@ import express from "express";
 
 import { Public, Image, User, Announcement, Category }
     from "../data_base/tables.js";
-import { generateVerificationToken, tokenVerify }
+import { authenticateToken, generateVerificationToken, tokenVerify, tokenVerifyMiddleware }
     from "../tokenWork/tokenCreater.js";
 import { preparationRegistrationSubmit }
     from
@@ -14,6 +14,8 @@ import { imagePush } from "./controllers/controllerImagePush.js";
 import { containsValidNameOrLastName, validateEmail, validatePassword }
     from "../validatry/validatry.js";
 import controllreShare from "./controllers/controllreShare.js";
+import { imageCategorySearchInDataBase, imageCategorySearchInDataBaseNesting } from "./controllers/controllerImageCategory.js";
+import controllreNotification from "./controllers/controllreNotification.js";
 
 
 
@@ -36,9 +38,11 @@ router.post("/registrationSubmit", async (req, res) => {
         );
         if (validation) {
             const data = await preparationRegistrationSubmit(req.body);
-            console.log(data, "--------------------------")
+            console.log(data, "--------------------------");
             if (typeof data === "object") {
-                res.status(200)
+                res.cookie('login', data.token, { maxAge: 60 * 60 * 1000, httpOnly: true, path: "/" });
+                res.cookie('name', data.name, { maxAge: 60 * 60 * 1000, httpOnly: true, path: "/" });
+                res.status(200);
                 res.send(data);
             } else {
                 res.status(400);
@@ -62,14 +66,14 @@ router.post("/loginSubmit", async (req, res) => {
 
         const validation = validateEmail(req.body.login) && validatePassword(req.body.password) === "ok";
         validation ? "" : res.status(400).send("validation failed");
-        console.log(req.body)
+        console.log(req.body);
         const result = await checkDatabaseUser(req.body);
         if (result === "password is not correct") {
             res.status(400).json("password is not correct");
         } else if (result === "Something went wrong") {
             res.status(400).json("Something went wrong");
         } else {
-            console.log(result.id, "result")
+            console.log(result.id, "result");
             const token = await generateVerificationToken(result.id);
             const cookieValue = { token };
             res.cookie('login', cookieValue, { maxAge: 60 * 60 * 1000, httpOnly: true, path: "/" });
@@ -95,130 +99,56 @@ router.post(
 // image loud route -----------------------------------------------------------------------------------
 router.post("/imageLoud", async (req, res) => {
     try {
-        const imageObjArr = await imageLoudeForDataBase(req)
+        const imageObjArr = await imageLoudeForDataBase(req);
         // console.log(imageObjArr, "Examination")
         if (req.body.categoryValue !== "All") {
-            return res.send(null)
+            return res.send(null);
         }
-        res.send([imageObjArr])
+        res.send([imageObjArr]);
     } catch (e) {
-        res.send(e)
+        res.send(e);
     }
 });
 
 // avatarPush route -----------------------------------------------------------------------------------
 router.post("/avatarPush", async (req, res) => {
 
-
+    req.cookies.token
     res.send("ok");
 });
 
 
 
 // image category route -----------------------------------------------------------------------------------
-const imageCategorySearchInDataBase = async (req) => {
-    try {
-        const categoryInDataBase = await Category.findAll({
-            where: {
-                parent: null
-            }
-        });
-        const newDataInaCategory = categoryInDataBase.map(elem => {
-            return { id: elem.id, name: elem.name };
-        });
-
-        let imagesInDb = await Image.findAll({
-            order: [['id']],
-            limit: 9
-        });
-        const imageDataForSend = imagesInDb ? imagesInDb.map((elem) => {
-            return {
-                imageWidthHeght: elem.width_heght,
-                image_url: elem.ref_or_path
-            }
-        }) : [];
-
-        return [newDataInaCategory, imageDataForSend];
-    } catch (e) {
-        console.log(e)
-        return "eror Something went wrong"
-    }
-}
-
-const publicExamination = data => {
-    try {
-
-    } catch (e) {
-        return e
-    }
-    return
-}
 
 
-const imageCategorySearchInDataBaseNesting = async category => {
-    try {
+// const publicExamination = data => {
+//     try {
 
-        const limit = 9
-        console.log(category, "categoryData")
-        if (category === "All") {
-            const data = await imageCategorySearchInDataBase()
-            return data;
-        }
-        const currentCategory = await Category.findOne({
-            where: {
-                name: category
-            }
-        });
-        const categoryInDataBase = await Category.findAll({
-            where: {
-                parent: currentCategory.id
-            }
-        });
-        const imageDataInDb = await Image.findAll({
-            where: {
+//     } catch (e) {
+//         return e
+//     }
+//     return
+// }
 
-                category: currentCategory.id
-            },
-            limit: 9
-        })
 
-        console.log(currentCategory, 1111)
-        console.log(categoryInDataBase, 2222)
-        console.log(585)
-        console.log(imageDataInDb, "565")
 
-        const categoryForSend = categoryInDataBase.map((elem) => {
-            return { id: elem.id, name: elem.name };
-        })
-        const imageDataForSend = imageDataInDb ? imageDataInDb.map((elem) => {
-            return {
-                imageWidthHeght: elem.width_heght,
-                image_url: elem.ref_or_path
-            }
-        }) : [];
-        console.log(imageDataForSend, 6666)
-
-        return [categoryForSend, imageDataForSend, limit]
-    } catch (e) {
-        return e
-    }
-}
 router.post("/imageCategory", async (req, res) => {
     console.log(req.cookies, 1122);
-    console.log(process.env.AUTH, "Auth121");
+    // console.log(process.env.AUTH, "Auth121");
     console.log(req.body.category, "categoruData");
     
     try {
         if (req.body.category) {
-            console.log(66669)
+            console.log(66669);
             const categoryDataSend = await imageCategorySearchInDataBaseNesting(req.body.category);
-            res.send([[categoryDataSend[0]], categoryDataSend[1], req.cookies.loginStatus, categoryDataSend[2]])
+            res.send([[categoryDataSend[0]], categoryDataSend[1], req.cookies.loginStatus, categoryDataSend[2]]);
         } else {
-            const categoryDataSend = await imageCategorySearchInDataBase(req)
+            const categoryDataSend = await imageCategorySearchInDataBase(req);
             res.send([[categoryDataSend[0]], categoryDataSend[1], req.cookies.loginStatus]);
         }
     } catch (e) {
-        res.send(e)
+        res.send(e);
     }
 
 });
@@ -227,10 +157,16 @@ router.post("/imageCategory", async (req, res) => {
 // share -----------------------------------------------------------------------------------------
 router.post("/share", async (req, res) => {
     const data = await controllreShare(req);
+    console.log(data, "shdhha")
     res.send(data);
 });
 
-
+// getNotification -----------------------------------------------------------
+router.get("/getNotification",async (req,res)=>{
+    const data = await controllreNotification(req);
+    
+    res.send(data);
+})
 
 
 export { router };

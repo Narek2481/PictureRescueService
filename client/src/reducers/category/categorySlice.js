@@ -54,7 +54,7 @@ export function downloudCategoryPost(pastData, value,categoryValue) {
     
     const pastDataIndex = categoryValue.indexOf("All");
     
-    pastData = pastData.slice(0, pastDataIndex+1)
+    pastData = pastData.slice(0, pastDataIndex === 0 ? 1 :pastDataIndex )
     if (value === "All") {
         return (dispatch) => {
             dispatch(editFatching(true))

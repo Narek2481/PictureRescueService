@@ -68,7 +68,7 @@ const addImageDataInDataBase = async (
         console.log(publicOrPrivateInDataBase)
         const parentCategory = await Category.findOne({
             where: {
-                name: categoryData.selectValue
+                name: categoryData.selectValue 
             }
         });
 
@@ -80,7 +80,7 @@ const addImageDataInDataBase = async (
 
         const newCategory = {
             name: categoryData.newCategory ? categoryData.newCategory : categoryData.selectValue,
-            parent: parentCategory ? parentCategory.id : null
+            parent: categoryData.selectValue === 'All' || !parentCategory? null : parentCategory.id
         };
 
         const newCategoryInDataBase = CategoryIsEmpty ? false : await Category.create(newCategory);

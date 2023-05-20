@@ -20,7 +20,7 @@ const UploadAvatar = () => {
         setPreview(view)
     }
     return (
-        <div className="text-center" style={{overflowY:"scroll"}}>
+        <div className="text-center">
             <h3>{valid ? valid : ""}</h3>
             <Avatar
                 width={300}

@@ -21,7 +21,7 @@ const controllreShare = async req => {
             return "Such user does not exist"
         }
     } catch (e) {
-        return e
+        return e;
     }
 }
 

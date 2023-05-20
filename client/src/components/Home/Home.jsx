@@ -54,7 +54,7 @@ function Home() {
             if (nesting > 0) {
                 // console.log("nesting <= 0")
 
-                dispatch(downloudCategoryPost(requsetCategoryRedux, selectValue,categoryValue));
+                dispatch(downloudCategoryPost(requsetCategoryRedux, selectValue, categoryValue));
                 dispatch(editCategoryFetch(!fetchingCategory));
             }
         }
@@ -88,6 +88,10 @@ function Home() {
         };
     }, []);
     const customStyles = {
+        overlay: {
+            backgroundColor: "rgba(46, 45, 45, 0.75)",
+            overflowY: 'auto'
+        },
         content: {
             top: '50%',
             left: '50%',
@@ -95,6 +99,8 @@ function Home() {
             bottom: 'auto',
             marginRight: '-50%',
             transform: 'translate(-50%, -50%)',
+            overflowY: 'none',
+            borderRadius: '4px'
         },
     };
 
@@ -123,6 +129,7 @@ function Home() {
                         style={customStyles}
 
                     >
+
                         <RemoveScroll>
                             <UploadAvatar />
                         </RemoveScroll>
@@ -147,7 +154,7 @@ function Home() {
             {
 
                 requsetCategoryRedux?.map((elem, index) => {
-                    return <SelectCategory props={{ elem, setSelectValue, setNesting ,index}} key={index} />
+                    return <SelectCategory props={{ elem, setSelectValue, setNesting, index }} key={index} />
                 })
 
             }
