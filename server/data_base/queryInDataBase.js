@@ -107,8 +107,76 @@ const addImageDataInDataBase = async (
 
 const imageLoudeForDataBase = async (req) => {
     try {
-        if (req.categoryValue === "All") {
-            const offset = req.body.offset * 12
+        // if (req.categoryValue === "All") {
+        //     const offset = req.body.offset * 12
+        //     let imagesInDb = await Image.findAll({
+        //         order: [['id']],
+        //         limit: offset ? offset : 9
+        //     })
+        //     if (imagesInDb.length === 0) {
+        //         imagesInDb = await Image.findAll({
+        //             order: [['id']],
+        //             limit: 9,
+        //         })
+        //     }
+        //     const imageObjArr = imagesInDb.map((e) => {
+
+        //         return {
+        //             image_url: e.ref_or_path,
+        //             imageWidthHeght: e.width_heght,
+        //             id: e.id
+        //         }
+        //     })
+        //     console.log(imageObjArr, "--------------------------")
+        //     return imageObjArr;
+        // } else {
+        //     const offset = req.body.offset * 12
+        //     let categoryData = await Category.findAll({
+        //         where: {
+        //             name: req.categoryValue
+        //         }
+        //     })
+        //     categoryData = categoryData.map((elem) => {
+        //         return elem.id
+        //     })
+        //     const products = await Product.findAll({
+        //         where: {
+        //             id: {
+        //                 [Op.in]: productIds
+        //             }
+        //         }
+        //     });
+        //     let imagesInDb = await Image.findAll({
+        //         where: {
+        //             category: {
+        //                 [Op.in]: categoryData
+        //             }
+        //         },
+        //         order: [['id']],
+        //         limit: offset ? offset : 9
+        //     })
+        //     if (imagesInDb.length === 0) {
+        //         imagesInDb = await Image.findAll({
+        //             where: {
+        //                 category: {
+        //                     [Op.in]: categoryData
+        //                 }
+        //             },
+        //             order: [['id']],
+        //             limit: 9,
+        //         })
+        //     }
+        //     const imageObjArr = imagesInDb.map((e) => {
+
+        //         return {
+        //             image_url: e.ref_or_path,
+        //             imageWidthHeght: e.width_heght,
+        //             id: e.id
+        //         }
+        //     })
+        //     return imageObjArr;
+        // }
+        const offset = req.body.offset * 12
             let imagesInDb = await Image.findAll({
                 order: [['id']],
                 limit: offset ? offset : 9
@@ -129,54 +197,6 @@ const imageLoudeForDataBase = async (req) => {
             })
             console.log(imageObjArr, "--------------------------")
             return imageObjArr;
-        } else {
-            const offset = req.body.offset * 12
-            let categoryData = await Category.findAll({
-                where: {
-                    name: req.categoryValue
-                }
-            })
-            categoryData = categoryData.map((elem) => {
-                return elem.id
-            })
-            const products = await Product.findAll({
-                where: {
-                    id: {
-                        [Op.in]: productIds
-                    }
-                }
-            });
-            let imagesInDb = await Image.findAll({
-                where: {
-                    category: {
-                        [Op.in]: categoryData
-                    }
-                },
-                order: [['id']],
-                limit: offset ? offset : 9
-            })
-            if (imagesInDb.length === 0) {
-                imagesInDb = await Image.findAll({
-                    where: {
-                        category: {
-                            [Op.in]: categoryData
-                        }
-                    },
-                    order: [['id']],
-                    limit: 9,
-                })
-            }
-            const imageObjArr = imagesInDb.map((e) => {
-
-                return {
-                    image_url: e.ref_or_path,
-                    imageWidthHeght: e.width_heght,
-                    id: e.id
-                }
-            })
-            return imageObjArr;
-        }
-
 
     } catch (e) {
         return e;
