@@ -12,6 +12,7 @@ const ImageProfile = ({ props }) => {
             <> {name}</>
             <img src={img} alt="" />
             <NotificationImage/>
+            
         </li>
 
     )

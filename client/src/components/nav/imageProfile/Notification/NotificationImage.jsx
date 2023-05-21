@@ -7,7 +7,12 @@ import ImageComponent from '../../../Home/images/ImageComponent';
 function NotificationImage() {
     const [show, setShow] = useState(false);
     const [notificationData, setNotificationData] = useState([]);
-    
+    const styuleSpan = {
+        borderRadius: "50%",
+        backgroundColor: "red",
+        padding: "3px",
+        height: "3px"
+    }
     // useEffect(() => {
     //     const Images = getNotification()
     //     setNotificationData(Images)
@@ -17,7 +22,7 @@ function NotificationImage() {
             <Button className='btnNotification' variant="primary" onClick={() => setShow(true)}>
                 <img src={img} alt="" />
             </Button>
-
+           <span style={notificationData.length > 0 ? styuleSpan : {}}></span>
             <Modal
                 show={show}
                 onHide={() => setShow(false)}
@@ -31,7 +36,7 @@ function NotificationImage() {
                 </Modal.Header>
                 <Modal.Body>
                     {
-                        notificationData.length > 0 ? "" :"You have not Notification "
+                        notificationData.length > 0 ? "" :"You have not Notifications "
                     }
                     {
 

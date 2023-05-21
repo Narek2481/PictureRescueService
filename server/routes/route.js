@@ -18,6 +18,7 @@ import { imageCategorySearchInDataBase, imageCategorySearchInDataBaseNesting } f
 import controllreNotification from "./controllers/controllreNotification.js";
 
 
+const upload = multer({ dest: './img' });
 
 
 
@@ -89,7 +90,6 @@ router.post("/loginSubmit", async (req, res) => {
 
 
 // image push route -----------------------------------------------------------------------------------
-const upload = multer({ dest: './img' });
 
 router.post(
     "/imagePush", upload.single('image'), async (req, res) => {
@@ -111,7 +111,7 @@ router.post("/imageLoud", async (req, res) => {
 });
 
 // avatarPush route -----------------------------------------------------------------------------------
-router.post("/avatarPush", async (req, res) => {
+router.post("/avatarPush", upload.single('image') ,async (req, res) => {
 
     req.cookies.token
     res.send("ok");
@@ -120,19 +120,6 @@ router.post("/avatarPush", async (req, res) => {
 
 
 // image category route -----------------------------------------------------------------------------------
-
-
-// const publicExamination = data => {
-//     try {
-
-//     } catch (e) {
-//         return e
-//     }
-//     return
-// }
-
-
-
 router.post("/imageCategory", async (req, res) => {
     console.log(req.cookies, 1122);
     // console.log(process.env.AUTH, "Auth121");

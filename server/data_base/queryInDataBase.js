@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import {  Public, Image, User, Announcement, Category} from "./tables.js";
+import { Public, Image, User, Announcement, Category } from "./tables.js";
 
 
 
@@ -66,13 +66,15 @@ const addImageDataInDataBase = async (
     try {
         const publicOrPrivateInDataBase = await publicOrPrivateCreater(publicImage, userToken);
         console.log(publicOrPrivateInDataBase)
-        const parentCategory = await Category.findOne({
+        const parentCategory = categoryData.selectValue === "All" ? false : await Category.findOne({
             where: {
-                name: categoryData.selectValue 
+                name: categoryData.selectValue
             }
         });
+        if (categoryData.selectValue === "All") {
 
-        const CategoryIsEmpty = categoryData.newCategory ? await Category.findOne({
+        }
+        const CategoryIsEmpty = categoryData.newCategory !== "" ? await Category.findOne({
             where: {
                 name: categoryData.newCategory
             }
@@ -80,16 +82,18 @@ const addImageDataInDataBase = async (
 
         const newCategory = {
             name: categoryData.newCategory ? categoryData.newCategory : categoryData.selectValue,
-            parent: categoryData.selectValue === 'All' || !parentCategory? null : parentCategory.id
+            parent: parentCategory ? parentCategory.id : null
         };
-
-        const newCategoryInDataBase = CategoryIsEmpty ? false : await Category.create(newCategory);
+        // await Category.create(newCategory)
+        const newCategoryStatus = CategoryIsEmpty ? CategoryIsEmpty.id : false;
+        const newCategoryInDataBase = categoryData.newCategory !== "" && newCategoryStatus ? await Category.create(newCategory) : parentCategory.id;
+        console.log(newCategoryInDataBase, "CategoryIsEmpty")
 
         console.log(publicOrPrivateInDataBase, 22222211111)
         const newImage = {
             ref_or_path: imageData.name,
             width_heght: imageData.imageSizeForDataBase,
-            category: newCategoryInDataBase ? newCategoryInDataBase.id : CategoryIsEmpty.id,
+            category: newCategoryInDataBase.id,
             public_or_private: publicOrPrivateInDataBase.id
         };
 
@@ -102,31 +106,81 @@ const addImageDataInDataBase = async (
 }
 
 const imageLoudeForDataBase = async (req) => {
-    try{
-        const offset = req.body.offset * 12
-        let imagesInDb = await Image.findAll({
-            order: [['id']],
-            limit: offset ? offset : 9
-        })
-        if(imagesInDb.length === 0) {
-            imagesInDb = await Image.findAll({
+    try {
+        if (req.categoryValue === "All") {
+            const offset = req.body.offset * 12
+            let imagesInDb = await Image.findAll({
                 order: [['id']],
-                limit: 9,
+                limit: offset ? offset : 9
             })
-        }
-        const imageObjArr  = imagesInDb.map((e) => {
-            
-            return {
-                image_url : e.ref_or_path,
-                imageWidthHeght :e.width_heght,
-                id:e.id
+            if (imagesInDb.length === 0) {
+                imagesInDb = await Image.findAll({
+                    order: [['id']],
+                    limit: 9,
+                })
             }
-        })
-        console.log(imageObjArr,"--------------------------")
-        return imageObjArr;
-    }catch(e){
+            const imageObjArr = imagesInDb.map((e) => {
+
+                return {
+                    image_url: e.ref_or_path,
+                    imageWidthHeght: e.width_heght,
+                    id: e.id
+                }
+            })
+            console.log(imageObjArr, "--------------------------")
+            return imageObjArr;
+        } else {
+            const offset = req.body.offset * 12
+            let categoryData = await Category.findAll({
+                where: {
+                    name: req.categoryValue
+                }
+            })
+            categoryData = categoryData.map((elem) => {
+                return elem.id
+            })
+            const products = await Product.findAll({
+                where: {
+                    id: {
+                        [Op.in]: productIds
+                    }
+                }
+            });
+            let imagesInDb = await Image.findAll({
+                where: {
+                    category: {
+                        [Op.in]: categoryData
+                    }
+                },
+                order: [['id']],
+                limit: offset ? offset : 9
+            })
+            if (imagesInDb.length === 0) {
+                imagesInDb = await Image.findAll({
+                    where: {
+                        category: {
+                            [Op.in]: categoryData
+                        }
+                    },
+                    order: [['id']],
+                    limit: 9,
+                })
+            }
+            const imageObjArr = imagesInDb.map((e) => {
+
+                return {
+                    image_url: e.ref_or_path,
+                    imageWidthHeght: e.width_heght,
+                    id: e.id
+                }
+            })
+            return imageObjArr;
+        }
+
+
+    } catch (e) {
         return e;
     }
 }
 
-export {addDatabaseUser,checkDatabaseUser,addImageDataInDataBase,imageLoudeForDataBase}
+export { addDatabaseUser, checkDatabaseUser, addImageDataInDataBase, imageLoudeForDataBase }
