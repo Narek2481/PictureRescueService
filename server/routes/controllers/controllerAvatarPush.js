@@ -41,3 +41,5 @@ const controllerAvatarPush = async req => {
         }
     });
 }
+
+export default controllerAvatarPush;

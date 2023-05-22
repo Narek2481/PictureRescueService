@@ -71,9 +71,7 @@ const addImageDataInDataBase = async (
                 name: categoryData.selectValue
             }
         });
-        if (categoryData.selectValue === "All") {
-
-        }
+        
         const CategoryIsEmpty = categoryData.newCategory !== "" ? await Category.findOne({
             where: {
                 name: categoryData.newCategory
@@ -85,8 +83,8 @@ const addImageDataInDataBase = async (
             parent: parentCategory ? parentCategory.id : null
         };
         // await Category.create(newCategory)
-        const newCategoryStatus = CategoryIsEmpty ? CategoryIsEmpty.id : false;
-        const newCategoryInDataBase = categoryData.newCategory !== "" && newCategoryStatus ? await Category.create(newCategory) : parentCategory.id;
+        const newCategoryStatus = CategoryIsEmpty ? CategoryIsEmpty : false;
+        const newCategoryInDataBase =  newCategoryStatus ? newCategoryStatus :await Category.create(newCategory);
         console.log(newCategoryInDataBase, "CategoryIsEmpty")
 
         console.log(publicOrPrivateInDataBase, 22222211111)
@@ -107,75 +105,6 @@ const addImageDataInDataBase = async (
 
 const imageLoudeForDataBase = async (req) => {
     try {
-        // if (req.categoryValue === "All") {
-        //     const offset = req.body.offset * 12
-        //     let imagesInDb = await Image.findAll({
-        //         order: [['id']],
-        //         limit: offset ? offset : 9
-        //     })
-        //     if (imagesInDb.length === 0) {
-        //         imagesInDb = await Image.findAll({
-        //             order: [['id']],
-        //             limit: 9,
-        //         })
-        //     }
-        //     const imageObjArr = imagesInDb.map((e) => {
-
-        //         return {
-        //             image_url: e.ref_or_path,
-        //             imageWidthHeght: e.width_heght,
-        //             id: e.id
-        //         }
-        //     })
-        //     console.log(imageObjArr, "--------------------------")
-        //     return imageObjArr;
-        // } else {
-        //     const offset = req.body.offset * 12
-        //     let categoryData = await Category.findAll({
-        //         where: {
-        //             name: req.categoryValue
-        //         }
-        //     })
-        //     categoryData = categoryData.map((elem) => {
-        //         return elem.id
-        //     })
-        //     const products = await Product.findAll({
-        //         where: {
-        //             id: {
-        //                 [Op.in]: productIds
-        //             }
-        //         }
-        //     });
-        //     let imagesInDb = await Image.findAll({
-        //         where: {
-        //             category: {
-        //                 [Op.in]: categoryData
-        //             }
-        //         },
-        //         order: [['id']],
-        //         limit: offset ? offset : 9
-        //     })
-        //     if (imagesInDb.length === 0) {
-        //         imagesInDb = await Image.findAll({
-        //             where: {
-        //                 category: {
-        //                     [Op.in]: categoryData
-        //                 }
-        //             },
-        //             order: [['id']],
-        //             limit: 9,
-        //         })
-        //     }
-        //     const imageObjArr = imagesInDb.map((e) => {
-
-        //         return {
-        //             image_url: e.ref_or_path,
-        //             imageWidthHeght: e.width_heght,
-        //             id: e.id
-        //         }
-        //     })
-        //     return imageObjArr;
-        // }
         const offset = req.body.offset * 12
             let imagesInDb = await Image.findAll({
                 order: [['id']],
@@ -203,4 +132,32 @@ const imageLoudeForDataBase = async (req) => {
     }
 }
 
-export { addDatabaseUser, checkDatabaseUser, addImageDataInDataBase, imageLoudeForDataBase }
+const imageLoudeForDataBaseForCategory = async req =>{
+    try{
+        const offset = req.body.offset * 12
+            let categoryData = await Category.findOne({
+                where: {
+                    name: req.categoryValue
+                }
+            })
+            let imagesInDb = await Image.findAll({
+                where: {
+                    category:  categoryData.id
+                    
+                },
+                order: [['id']],
+                limit: offset ? offset : 9
+            })
+            const imageObjArr = imagesInDb.map((e) => {
+                return {
+                    image_url: e.ref_or_path,
+                    imageWidthHeght: e.width_heght,
+                    id: e.id
+                }
+            });
+            return imageObjArr;
+    }catch(e){
+        return e
+    }
+}
+export { addDatabaseUser, checkDatabaseUser, addImageDataInDataBase, imageLoudeForDataBase,imageLoudeForDataBaseForCategory }

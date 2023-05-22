@@ -8,7 +8,7 @@ import { authenticateToken, generateVerificationToken, tokenVerify, tokenVerifyM
 import { preparationRegistrationSubmit }
     from
     "./controllers/controllerRegistrationSubmit.js";
-import { checkDatabaseUser, imageLoudeForDataBase }
+import { checkDatabaseUser, imageLoudeForDataBase, imageLoudeForDataBaseForCategory }
     from "../data_base/queryInDataBase.js";
 import { imagePush } from "./controllers/controllerImagePush.js";
 import { containsValidNameOrLastName, validateEmail, validatePassword }
@@ -16,6 +16,7 @@ import { containsValidNameOrLastName, validateEmail, validatePassword }
 import controllreShare from "./controllers/controllreShare.js";
 import { imageCategorySearchInDataBase, imageCategorySearchInDataBaseNesting } from "./controllers/controllerImageCategory.js";
 import controllreNotification from "./controllers/controllreNotification.js";
+import controllerAvatarPush from "./controllers/controllerAvatarPush.js";
 
 
 const upload = multer({ dest: './img' });
@@ -102,7 +103,8 @@ router.post("/imageLoud", async (req, res) => {
         const imageObjArr = await imageLoudeForDataBase(req);
         // console.log(imageObjArr, "Examination")
         if (req.body.categoryValue !== "All") {
-            return res.send(null);
+            const imageData = await imageLoudeForDataBaseForCategory(req);
+            return res.send([imageData]);
         }
         res.send([imageObjArr]);
     } catch (e) {
@@ -112,9 +114,8 @@ router.post("/imageLoud", async (req, res) => {
 
 // avatarPush route -----------------------------------------------------------------------------------
 router.post("/avatarPush", upload.single('image') ,async (req, res) => {
-
-    req.cookies.token
-    res.send("ok");
+    const data = await controllerAvatarPush(req)
+    res.send(data);
 });
 
 
@@ -122,9 +123,7 @@ router.post("/avatarPush", upload.single('image') ,async (req, res) => {
 // image category route -----------------------------------------------------------------------------------
 router.post("/imageCategory", async (req, res) => {
     console.log(req.cookies, 1122);
-    // console.log(process.env.AUTH, "Auth121");
     console.log(req.body.category, "categoruData");
-    
     try {
         if (req.body.category) {
             console.log(66669);
