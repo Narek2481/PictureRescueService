@@ -1,6 +1,4 @@
-import { loudeData } from "./dataApi";
-import { editCurrentUser } from "../user/userSlice";
-import { useSelector } from "react-redux";
+import { loudeData } from "../../action/dataApi";
 
 
 export function downlodeDataReducer(state = {}, action) {

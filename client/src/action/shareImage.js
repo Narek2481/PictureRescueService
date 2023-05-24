@@ -1,7 +1,7 @@
-import axios from "axios";
+import $api from ".";
 
 export default async function shareImage (data) {
-    const req = await axios.post("/share", {
+    const req = await $api.post("/share", {
         email:data.email,
         imageId:data.id
     },{withCredentials:true})

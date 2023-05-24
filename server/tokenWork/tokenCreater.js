@@ -2,22 +2,45 @@ import jwt from "jsonwebtoken";
 
 
 
+const generateRefreshToken = async email => {
+    try {
+        const payload = {
+            email : email
+        };
+        const option = {
+            expiresIn: '30d',
+        };
+        const refreshToken = await jwt.sign(payload, process.env.SECRET_REFRESH, option);
+        return {
+            refreshToken
+        }
+
+    } catch (e) {
+
+    }
+}
 
 const generateVerificationToken = async (userId) => {
     try {
         const payload = {
-            clientId: userId,
+            clientId: userId
         };
         const options = {
-            expiresIn: '1h', // Set the expiration time for the token
+            expiresIn: '15m'
         };
-        const token = await jwt.sign(payload, process.env.SECRET, options);
-        console.log(token)
-        return token
+
+        const accessToken = await jwt.sign(payload, process.env.SECRET, options);
+        console.log(accessToken)
+
+        return {
+            accessToken
+        }
     } catch (e) {
         return e;
     }
 }
+
+
 
 const tokenVerify = async (userToken) => {
     try {
@@ -56,20 +79,20 @@ const tokenVerifyMiddleware = async (req, res, next) => {
 function authenticateToken(req, res, next) {
     // Get the token from the cookies
     const token = req.cookies.loginToken;
-  
-    if (!token) {
-      return res.status(401).json({ message: 'No token provided.' });
-    }
-  
-    jwt.verify(token,  process.env.SECRET, (err, decodedToken) => {
-      if (err) {
-        return res.status(403).json({ message: 'Invalid token.' });
-      }
-  
-      // Token is valid. You can optionally attach the decoded token to the request object for later use.
-      req.user = decodedToken;
-      next();
-    });
-  }
 
-export { generateVerificationToken, tokenVerify, tokenVerifyMiddleware,authenticateToken }
+    if (!token) {
+        return res.status(401).json({ message: 'No token provided.' });
+    }
+
+    jwt.verify(token, process.env.SECRET, (err, decodedToken) => {
+        if (err) {
+            return res.status(403).json({ message: 'Invalid token.' });
+        }
+
+        // Token is valid. You can optionally attach the decoded token to the request object for later use.
+        req.user = decodedToken;
+        next();
+    });
+}
+
+export { generateVerificationToken, tokenVerify, tokenVerifyMiddleware, authenticateToken, generateRefreshToken }

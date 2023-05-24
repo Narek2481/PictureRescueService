@@ -1,8 +1,11 @@
-import axios from "axios";
+import $api from ".";
 export default async function loginSubmit(login, password) {
-    const respons = await axios.post("/loginSubmit", {
+    const respons = await $api.post("/loginSubmit", {
         login, password
-    },{withCredentials:true});
+    })
+    // const respons = await axios.post("/loginSubmit", {
+    //     login, password
+    // },{withCredentials:true});
     return respons;
 
 }

@@ -1,11 +1,11 @@
 import { applyMiddleware, combineReducers, createStore } from "redux";
-import { categorySearchReducer, initialCategorySearch } from "../reducers/category/categorySlice";
-import { downlodeDataReducer, initialDownlodeData } from "../reducers/data/dataSlice";
-import { currentUserReducer, initialCurrentUser } from "../reducers/user/userSlice";
+import { categorySearchReducer, initialCategorySearch } from "../category/categorySlice";
+import { downlodeDataReducer, initialDownlodeData } from "../data/dataSlice";
+import { currentUserReducer, initialCurrentUser } from "../user/userSlice";
 import thunk from "redux-thunk"
-import { categorySendReducer, initialCategorySend } from "../reducers/categorySend/categorySendSlice";
-import { currentModalReduser, initialModal } from "../reducers/modal/modalSlice";
-import { initialValueCategory, valueCategoryReducer } from "../reducers/valueCategory/valueCategorySlice";
+import { categorySendReducer, initialCategorySend } from "../categorySend/categorySendSlice";
+import { currentModalReduser, initialModal } from "../modal/modalSlice";
+import { initialValueCategory, valueCategoryReducer } from "../valueCategory/valueCategorySlice";
 
 
 

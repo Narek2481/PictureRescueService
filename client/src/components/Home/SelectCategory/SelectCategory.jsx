@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { editCategoryFetch } from "../../../reducers/category/categorySlice";
-import { editValueCategory, selectValueCategory } from "../../../reducers/valueCategory/valueCategorySlice";
+import { editCategoryFetch } from "../../../redux/category/categorySlice";
+import { editValueCategory, selectValueCategory } from "../../../redux/valueCategory/valueCategorySlice";
 
 
 

@@ -2,6 +2,7 @@ import { Category, Image} from "../../data_base/tables.js";
 
 
 
+
 const imageCategorySearchInDataBase = async (req) => {
     try {
         const categoryInDataBase = await Category.findAll({
@@ -30,6 +31,8 @@ const imageCategorySearchInDataBase = async (req) => {
         return "eror Something went wrong";
     }
 }
+
+
 
 
 const imageCategorySearchInDataBaseNesting = async category => {

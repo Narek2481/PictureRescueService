@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { editModal } from "../../../reducers/modal/modalSlice";
+import { editModal } from "../../../redux/modal/modalSlice";
 import { RemoveScroll } from 'react-remove-scroll';
 const modal = {
   position: "fixed",

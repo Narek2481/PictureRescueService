@@ -2,7 +2,7 @@ import Footer from "../footer/Footer";
 import { useState } from "react";
 import registrationSubmit from "../../action/registr";
 import { useDispatch, } from "react-redux";
-import { editCurrentUser } from "../../reducers/user/userSlice";
+import { editCurrentUser } from "../../redux/user/userSlice";
 import { useMemo } from "react";
 import StickyInputLabel from "../sign_in/signInForm/StickyInputLabel/StickyInputLabel";
 import { useNavigate } from 'react-router-dom';
@@ -39,7 +39,7 @@ const Registration = () => {
   const submitThen = res => {
     if (res.status === 200) {
       console.log(res.data)
-      dispach(editCurrentUser({ name, email, lastName, password, register_or_login: true }));
+      dispach(editCurrentUser({ name, register_or_login: true }));
       setCookie('auth', res.data, { maxAge: 3600, path: '/' });
       goToHome();
     } else {
@@ -56,6 +56,7 @@ const Registration = () => {
     ) {
       registrationSubmit(name, lastName, email, password)
         .then(res => {
+          localStorage.setItem("token",res.data.tokens.accessToken)
           setInputValidStyle({ name: {}, lastName: {}, email: {}, password: {} });
           submitThen(res)
         })
@@ -97,7 +98,13 @@ const Registration = () => {
   }
   return (
     <div className="registration">
-      <h3 className="container">{validErr}</h3>
+      <h2>Sign Up</h2>
+      <h3 className={validErr ? "container" : ""}
+        style={validErr ? {
+          padding: "20px 0",
+          color: "red"
+        }:{}}
+      >{validErr}</h3>
       <form >
         <StickyInputLabel
           props={useMemo(() => {

@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import loginSubmit from "../../../action/login";
-import { editCurrentUser } from "../../../reducers/user/userSlice";
+import { editCurrentUser } from "../../../redux/user/userSlice";
 import StickyInputLabel from "./StickyInputLabel/StickyInputLabel";
 import "../signIn.scss"
 import { useNavigate } from 'react-router-dom';
@@ -36,11 +36,9 @@ export default function SignInForm() {
     const signInSubmitThen = res => {
         console.log(res)
         if (res.status === 200) {
-            localStorage.setItem("auth",JSON.stringify(res.data.auth));
-            localStorage.setItem("name",JSON.stringify(res.data.name));
             dispatch(editCurrentUser(
                 {
-                    register_or_login: res.data.auth,
+                    register_or_login: true,
                     name :res.data.name
                 }
             ));
@@ -57,6 +55,8 @@ export default function SignInForm() {
             console.log(111111)
             loginSubmit(login, password)
                 .then(res => {
+                    console.log(res)
+                    localStorage.setItem("token",res.data.tokens)
                     signInSubmitThen(res);
                     setStyleValidEror({ login: {}, password: {} });
                 })

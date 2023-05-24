@@ -3,16 +3,16 @@ import ImageComponent from "./images/ImageComponent"
 import { Link } from "react-router-dom"
 import SelectCategory from "./SelectCategory/SelectCategory";
 import { useDispatch, useSelector } from "react-redux";
-import { downloudData, editFatching } from "../../reducers/data/dataSlice";
-import { downloudCategoryGet, downloudCategoryPost, editCategoryFetch } from "../../reducers/category/categorySlice";
+import { downloudData, editFatching } from "../../redux/data/dataSlice";
+import { downloudCategoryGet, downloudCategoryPost, editCategoryFetch } from "../../redux/category/categorySlice";
 import { ModalContent } from "./modal/Modal";
 import "./css/home.scss"
 import { DotSpinner } from '@uiball/loaders'
 import UploadAvatar from "./UploadAvatar/UploadAvatar";
 import Modal from 'react-modal';
 import { RemoveScroll } from "react-remove-scroll";
-import { selectCurrentUser } from "../../reducers/user/userSlice";
-import { selectValueCategory } from "../../reducers/valueCategory/valueCategorySlice";
+import { selectCurrentUser } from "../../redux/user/userSlice";
+import { selectValueCategory } from "../../redux/valueCategory/valueCategorySlice";
 
 
 

@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import imagePush from "../../action/addImage";
-import { downloudCategoryPost } from "../../reducers/categorySend/categorySendSlice";
-import { downloudCategoryGet } from "../../reducers/categorySend/categorySendSlice";
+import { downloudCategoryPost } from "../../redux/categorySend/categorySendSlice";
+import { downloudCategoryGet } from "../../redux/categorySend/categorySendSlice";
 import Footer from "../footer/Footer";
 import SelectCategory from "../Home/SelectCategory/SelectCategory";
 import StickyInputLabel from "../sign_in/signInForm/StickyInputLabel/StickyInputLabel";
 import "./css/add_picture.scss"
 import ImageStatus from "./ImageStatus/ImageStatus";
 import { useNavigate } from "react-router-dom";
-import { selectValueCategory } from "../../reducers/valueCategory/valueCategorySlice";
+import { selectValueCategory } from "../../redux/valueCategory/valueCategorySlice";
 
 const AddPicture = () => {
     const [imageUrl, setImageUrl] = useState(null);

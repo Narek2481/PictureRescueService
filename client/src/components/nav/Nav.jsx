@@ -10,10 +10,11 @@ import { useDispatch, useSelector } from "react-redux";
 import "./css/nav.scss"
 import logo from "../../img_logo/logo12.jpg"
 import NotFoundPage from "../../pages/NotFoundPage";
-import { editCurrentUser } from "../../reducers/user/userSlice";
+import { editCurrentUser } from "../../redux/user/userSlice";
 import ImageProfile from "./imageProfile/imageProfile";
-import { selectCurrentUser } from "../../reducers/user/userSlice";
+import { selectCurrentUser } from "../../redux/user/userSlice";
 import Cookies from "js-cookie";
+import Logout from "./logout/Logout";
 
 
 export default function Nav() {
@@ -30,24 +31,12 @@ export default function Nav() {
     // register or login styles 
     const display = (auth.register_or_login ? "none" : "");
     const displayInImageProfile = auth.register_or_login ? "" : "none"
-    // register or login examination
-    const navigate = useNavigate();
-    useEffect(() => {
-        console.log(Cookies.loginStatus)
-        console.log(Cookies.name)
-        if (Cookies.loginStatus) {
-            dispatch(editCurrentUser({
-                register_or_login: Cookies.loginStatus,
-                name: Cookies.name
-            }))
-        }
-    }, []);
 
 
     const styleInLinkComponent = {
         display
     }
-    const styleInImageProfile = { display: displayInImageProfile };
+    const styleInImageProfile = { display: displayInImageProfile ,cursor:"pointer"};
 
     const clickManue = () => {
         if (manue === '') {
@@ -146,6 +135,13 @@ export default function Nav() {
                                 }
                             }, [auth])
                         }
+                        />
+                        <Logout props={
+                            useMemo(() => {
+                                return {
+                                    style: styleInImageProfile
+                                }
+                            }, [auth])}
                         />
                     </div>
 

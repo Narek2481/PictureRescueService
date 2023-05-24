@@ -1,22 +1,18 @@
 import multer from "multer";
 import express from "express";
 
-import { Public, Image, User, Announcement, Category }
-    from "../data_base/tables.js";
-import { authenticateToken, generateVerificationToken, tokenVerify, tokenVerifyMiddleware }
-    from "../tokenWork/tokenCreater.js";
-import { preparationRegistrationSubmit }
-    from
-    "./controllers/controllerRegistrationSubmit.js";
-import { checkDatabaseUser, imageLoudeForDataBase, imageLoudeForDataBaseForCategory }
-    from "../data_base/queryInDataBase.js";
+import {  generateRefreshToken, generateVerificationToken } from "../tokenWork/tokenCreater.js";
+import { preparationRegistrationSubmit } from "./controllers/controllerRegistrationSubmit.js";
+import { checkDatabaseUser, imageLoudeForDataBase, imageLoudeForDataBaseForCategory, logout } from "../data_base/queryInDataBase.js";
 import { imagePush } from "./controllers/controllerImagePush.js";
-import { containsValidNameOrLastName, validateEmail, validatePassword }
-    from "../validatry/validatry.js";
+import { containsValidNameOrLastName, validateEmail, validatePassword }from "../validatry/validatry.js";
 import controllreShare from "./controllers/controllreShare.js";
 import { imageCategorySearchInDataBase, imageCategorySearchInDataBaseNesting } from "./controllers/controllerImageCategory.js";
 import controllreNotification from "./controllers/controllreNotification.js";
 import controllerAvatarPush from "./controllers/controllerAvatarPush.js";
+import { auth } from "../middlewares/auth-middleware.js";
+import { refresh } from "../tokenWork/RefreshToken.js";
+import { ApiError } from "../middlewares/error-middleware.js";
 
 
 const upload = multer({ dest: './img' });
@@ -42,21 +38,19 @@ router.post("/registrationSubmit", async (req, res) => {
             const data = await preparationRegistrationSubmit(req.body);
             console.log(data, "--------------------------");
             if (typeof data === "object") {
-                res.cookie('login', data.token, { maxAge: 60 * 60 * 1000, httpOnly: true, path: "/" });
+                res.cookie('refreshToken', data.tokens.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, path: "/" });
                 res.cookie('name', data.name, { maxAge: 60 * 60 * 1000, httpOnly: true, path: "/" });
                 res.status(200);
                 res.send(data);
             } else {
-                res.status(400);
-                res.send(data);
+                throw ApiError.BadRequest(data);
             }
         } else {
-            res.status(400);
-            res.send("validation failed");
+            throw ApiError.BadRequest(data)
         }
     }
     catch (e) {
-        res.send(String(e));
+        res.send(e);
     }
 });
 
@@ -65,35 +59,55 @@ router.post("/registrationSubmit", async (req, res) => {
 // login submit route -----------------------------------------------------------------------------------
 router.post("/loginSubmit", async (req, res) => {
     try {
-
-        const validation = validateEmail(req.body.login) && validatePassword(req.body.password) === "ok";
-        validation ? "" : res.status(400).send("validation failed");
+        if(!(validateEmail(req.body.login) && validatePassword(req.body.password) === "ok")){
+            throw ApiError.BadRequest("validation failed")
+        }
         console.log(req.body);
         const result = await checkDatabaseUser(req.body);
-        if (result === "password is not correct") {
-            res.status(400).json("password is not correct");
-        } else if (result === "Something went wrong") {
-            res.status(400).json("Something went wrong");
+        if (result === "Password is not correct") {
+            throw ApiError.BadRequest("Password is not correct")
+        }else if (result === "Email is not correct") {
+            throw ApiError.BadRequest("Email is not correct");
         } else {
-            console.log(result.id, "result");
-            const token = await generateVerificationToken(result.id);
-            const cookieValue = { token };
-            res.cookie('login', cookieValue, { maxAge: 60 * 60 * 1000, httpOnly: true, path: "/" });
-            res.cookie('name', result.name, { maxAge: 60 * 60 * 1000, httpOnly: true, path: "/" });
-            res.status(200).json({ auth: true, name: result.name });
+            const accessToken = await generateVerificationToken(result.id);
+            const refreshToken = await generateRefreshToken(req.body.login);
+            console.log(accessToken,refreshToken);
+            const cookieValue = { refreshToken: refreshToken.refreshToken };
+            res.cookie('refreshToken', cookieValue, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, path: "/" });
+            res.cookie('name', result.name, { maxAge: 60 * 60 * 1000, httpOnly: false, path: "/" });
+            console.log(result,"result data")
+            res.status(200).json(
+                {
+                    tokens: { accessToken: accessToken.accessToken }, 
+                    name: result.name
+                }
+            )
         }
     } catch (e) {
-        res.send(String(e));
+        res.send(e);
     }
 
     // res.end
 });
 
 
+// Logaut----------------------------------------------------------------------------------------------
+router.get("/logout", async (req, res) => {
+    try {
+        const { refreshToken } = req.cookies;
+        const token = await logout(refreshToken)
+        req.clearCookie("refreshToken");
+        res.clearCookie("refreshToken");
+        res.status(200);
+        res.end()
+    } catch (e) {
+        res.send(e)
+    }
+}
+);
 // image push route -----------------------------------------------------------------------------------
-
 router.post(
-    "/imagePush", upload.single('image'), async (req, res) => {
+    "/imagePush",auth, upload.single('image'), async (req, res) => {
         await imagePush(req, res);
     }
 );
@@ -113,7 +127,7 @@ router.post("/imageLoud", async (req, res) => {
 });
 
 // avatarPush route -----------------------------------------------------------------------------------
-router.post("/avatarPush", upload.single('image') ,async (req, res) => {
+router.post("/avatarPush",auth, upload.single('image'), async (req, res) => {
     const data = await controllerAvatarPush(req)
     res.send(data);
 });
@@ -128,10 +142,10 @@ router.post("/imageCategory", async (req, res) => {
         if (req.body.category) {
             console.log(66669);
             const categoryDataSend = await imageCategorySearchInDataBaseNesting(req.body.category);
-            res.send([[categoryDataSend[0]], categoryDataSend[1], req.cookies.loginStatus, categoryDataSend[2]]);
+            res.send([[categoryDataSend[0]], categoryDataSend[1], categoryDataSend[2]]);
         } else {
             const categoryDataSend = await imageCategorySearchInDataBase(req);
-            res.send([[categoryDataSend[0]], categoryDataSend[1], req.cookies.loginStatus]);
+            res.send([[categoryDataSend[0]], categoryDataSend[1]]);
         }
     } catch (e) {
         res.send(e);
@@ -141,18 +155,19 @@ router.post("/imageCategory", async (req, res) => {
 
 
 // share -----------------------------------------------------------------------------------------
-router.post("/share", async (req, res) => {
+router.post("/share",auth, async (req, res) => {
     const data = await controllreShare(req);
     console.log(data, "shdhha")
     res.send(data);
 });
 
 // getNotification -----------------------------------------------------------
-router.get("/getNotification",async (req,res)=>{
+router.get("/getNotification",auth, async (req, res) => {
     const data = await controllreNotification(req);
-    
+
     res.send(data);
 })
-
+// refresh -------------------------------------------------------------------------------
+router.get('/refresh', refresh);
 
 export { router };

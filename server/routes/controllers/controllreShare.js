@@ -9,17 +9,14 @@ const controllreShare = async req => {
                 email: req.body.email
             }
         });
-        const author = await jwt.verify( req.cookies.token,process.env.SECRET);
-        if(sendToUse && author.exp > 0) {
-            const AnnouncementIndb =  Announcement.create({
-                user_ref:sendToUser.id,
-                author_id:author.id,
-                image_ref:req.body.imageId
-            })
-            return "ok";
-        }else{
-            return "Such user does not exist"
-        }
+        console.log(req.user)
+        const AnnouncementIndb = Announcement.create({
+            user_ref: sendToUser.id,
+            author_id: req.user,
+            image_ref: req.body.imageId
+        })
+        return "ok";
+
     } catch (e) {
         return e;
     }

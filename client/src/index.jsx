@@ -4,7 +4,7 @@ import './index.scss';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux'
-import store from './app/store';
+import store from './redux/app/store';
 import { CookiesProvider } from "react-cookie";
 
 

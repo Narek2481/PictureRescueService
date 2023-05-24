@@ -1,5 +1,5 @@
 import { parentCategoryChange } from "../category/categorySlice";
-import { imageCategoryGet, imageCategoryPost } from "./categorySendApi";
+import { imageCategoryGet, imageCategoryPost } from "../../action/categorySendApi";
 
 
 export function categorySendReducer(state = null, action) {

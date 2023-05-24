@@ -1,5 +1,5 @@
-import { editData, editDataCategory, editFatching } from "../data/dataSlice";
-import { imageCategoryGet, imageCategoryPost } from "./categoryApi";
+import {  editDataCategory, editFatching } from "../data/dataSlice";
+import { imageCategoryGet, imageCategoryPost } from "../../action/categoryApi";
 
 
 export function categorySearchReducer(state = null, action) {

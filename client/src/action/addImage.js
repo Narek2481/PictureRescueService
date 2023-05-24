@@ -1,4 +1,4 @@
-import axios from "axios";
+import $api from ".";
 
 export default async function imagePush(imageData, selectValue, createCategory,publicImage,userToken) {
     const formData = new FormData();
@@ -12,7 +12,7 @@ export default async function imagePush(imageData, selectValue, createCategory,p
     formData.append("publicImage",publicImage);
     // formData.append("userToken",userToken.login.token);
     console.log(formData);
-    const response =  await axios.post('/imagePush', formData, {
+    const response =  await $api.post('/imagePush', formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
         }

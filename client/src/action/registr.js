@@ -1,9 +1,12 @@
-import axios from "axios";
-export default async function registrationSubmit(name, lastname, email, password) {
+import $api from ".";
 
-    const respons = await axios.post("/registrationSubmit", {
+export default async function registrationSubmit(name, lastname, email, password) {
+    const respons = await $api.post("/registrationSubmit", {
         name, lastname, email, password
-    },{withCredentials:true});
+    })
+    // const respons = await axios.post("/registrationSubmit", {
+    //     name, lastname, email, password
+    // },{withCredentials:true});
     return respons;
 
 }

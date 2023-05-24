@@ -1,7 +1,7 @@
-import axios from "axios";
+import $api from ".";
 export default async function getNotification() {
 
-    const respons = await axios.get("/getNotification",{withCredentials:true}) 
+    const respons = await $api.get("/getNotification") 
         .then(req => {
             return []
         })
