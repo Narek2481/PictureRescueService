@@ -39,7 +39,7 @@ router.post("/registrationSubmit", async (req, res) => {
             console.log(data, "--------------------------");
             if (typeof data === "object") {
                 res.cookie('refreshToken', data.tokens.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, path: "/" });
-                res.cookie('name', data.name, { maxAge: 60 * 60 * 1000, httpOnly: true, path: "/" });
+                res.cookie('name', data.name, { maxAge: 60 * 60 * 1000, httpOnly: false, path: "/" });
                 res.status(200);
                 res.send(data);
             } else {
@@ -164,7 +164,6 @@ router.post("/share",auth, async (req, res) => {
 // getNotification -----------------------------------------------------------
 router.get("/getNotification",auth, async (req, res) => {
     const data = await controllreNotification(req);
-
     res.send(data);
 })
 // refresh -------------------------------------------------------------------------------

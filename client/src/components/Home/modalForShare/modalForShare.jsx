@@ -4,14 +4,19 @@ import Modal from 'react-bootstrap/Modal';
 import ShareModal from './shareModal/ShareModal';
 import btnImg from "../../../img_logo/61020.png"
 import shareImage from '../../../action/shareImage';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectCurrentUser } from '../../../redux/user/userSlice';
 
 
 function Example({ props }) {
+    const auth = useSelector(selectCurrentUser)
     const [dataForSend, setDataForSend] = useState("")
     const [show, setShow] = useState(false);
     const [eror, setEror] = useState("");
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const navigate = useNavigate();
     const sendData = e => {
         shareImage({ email: dataForSend, id: props })
             .then(() => {
@@ -23,7 +28,14 @@ function Example({ props }) {
     }
     return (
         <>
-            <Button variant="primary" onClick={handleShow}>
+            <Button variant="primary" onClick={() => {
+                if (auth.register_or_login) {
+                    handleShow();
+                } else {
+                    navigate("/sign_in")
+                }
+
+            }}>
                 Share
                 <img src={btnImg} alt="" />
             </Button>

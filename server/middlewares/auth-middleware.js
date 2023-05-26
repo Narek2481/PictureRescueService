@@ -3,6 +3,7 @@ import { validateAccessToken } from "../tokenWork/RefreshToken.js";
 const auth = (req, res, next) => {
     try {
         const authorizationHeader = req.headers.autorizational;
+        console.log(authorizationHeader,"authorizationHeader")
         if (!authorizationHeader) {
             res.status(401);
             return next();
@@ -19,6 +20,7 @@ const auth = (req, res, next) => {
             return next();
         }
         req.user = userData
+        console.log(req.user)
         return next();
     } catch (e) {
         

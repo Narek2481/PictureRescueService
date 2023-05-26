@@ -18,7 +18,7 @@ $api.interceptors.response.use(config => {
     if (err.response.status === 401 && err.config && !err.config._isRetry) {
         try {
             const respons = await axios.get("/refresh", { withCredentials: true })
-            localStorage.setItem("token", respons.data.accessToken)
+            localStorage.setItem("token", JSON.stringify(respons.data.accessToken))
             return $api.request(originalRequest);
         } catch (e) {
             console.log("user not autorezown")

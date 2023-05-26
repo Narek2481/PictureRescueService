@@ -18,7 +18,6 @@ import Logout from "./logout/Logout";
 
 
 export default function Nav() {
-
     // hamburger manue state
     const [manue, setManu] = useState("");
     // manue components open or close 
@@ -27,12 +26,9 @@ export default function Nav() {
     const [none, setnone] = useState("");
     // register or login state 
     const auth = useSelector(selectCurrentUser);
-    const dispatch = useDispatch();
     // register or login styles 
     const display = (auth.register_or_login ? "none" : "");
     const displayInImageProfile = auth.register_or_login ? "" : "none"
-
-
     const styleInLinkComponent = {
         display
     }
@@ -52,8 +48,6 @@ export default function Nav() {
         }
 
     }
-
-    console.log(auth)
 
     return (
         <>

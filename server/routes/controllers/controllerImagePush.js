@@ -11,6 +11,7 @@ const returnImageWidthHeight = async path => {
 
 
 const imagePush = async (req, res) => {
+    console.log(req);
     const imageSizeForDataBase = await returnImageWidthHeight(req.file.path);
     const categoryData = {
         selectValue: req.body.selectValue,

@@ -26,7 +26,7 @@ const generateVerificationToken = async (userId) => {
             clientId: userId
         };
         const options = {
-            expiresIn: '15m'
+            expiresIn: '30m'
         };
 
         const accessToken = await jwt.sign(payload, process.env.SECRET, options);

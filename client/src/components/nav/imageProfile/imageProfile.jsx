@@ -18,10 +18,9 @@ const ImageProfile = ({ props }) => {
             ));
         }
     }, [])
-    console.log(name)
     return (
         <li style={props.style} className="profileImage">
-            <> {name}</>
+            <span> {name}</span>
             <img src={img} alt="" />
             <NotificationImage />
         </li>

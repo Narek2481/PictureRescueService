@@ -5,8 +5,7 @@ import { useDispatch, } from "react-redux";
 import { editCurrentUser } from "../../redux/user/userSlice";
 import { useMemo } from "react";
 import StickyInputLabel from "../sign_in/signInForm/StickyInputLabel/StickyInputLabel";
-import { useNavigate } from 'react-router-dom';
-import { useCookies } from "react-cookie";
+import { json, useNavigate } from 'react-router-dom';
 
 const Registration = () => {
   const [email, setEmail] = useState("");
@@ -14,7 +13,6 @@ const Registration = () => {
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [validErr, setValidErr] = useState('');
-  const [cookies, setCookie, removeCookie] = useCookies(['auth']);
   const dispach = useDispatch();
   const navigate = useNavigate();
   const [inputValidStyle, setInputValidStyle] = useState({ name: {}, lastName: {}, email: {}, password: {} });
@@ -40,7 +38,6 @@ const Registration = () => {
     if (res.status === 200) {
       console.log(res.data)
       dispach(editCurrentUser({ name, register_or_login: true }));
-      setCookie('auth', res.data, { maxAge: 3600, path: '/' });
       goToHome();
     } else {
       setValidErr("Something went wrong, Try again");
@@ -56,7 +53,7 @@ const Registration = () => {
     ) {
       registrationSubmit(name, lastName, email, password)
         .then(res => {
-          localStorage.setItem("token",res.data.tokens.accessToken)
+          localStorage.setItem("token",JSON.stringify(res.data.tokens.accessToken))
           setInputValidStyle({ name: {}, lastName: {}, email: {}, password: {} });
           submitThen(res)
         })

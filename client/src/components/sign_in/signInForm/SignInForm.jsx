@@ -56,7 +56,7 @@ export default function SignInForm() {
             loginSubmit(login, password)
                 .then(res => {
                     console.log(res)
-                    localStorage.setItem("token",res.data.tokens)
+                    localStorage.setItem("token",JSON.stringify(res.data.tokens.accessToken))
                     signInSubmitThen(res);
                     setStyleValidEror({ login: {}, password: {} });
                 })

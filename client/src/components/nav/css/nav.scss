@@ -157,7 +157,7 @@ nav {
     border-bottom: 1px solid #385898 !important;
   }
 
-  @media only screen and (max-width: 1000px) {
+  @media only screen and (max-width: 960px) {
     .manue_icon {
       display: block;
     }
@@ -192,7 +192,14 @@ nav {
       }
     }
 
-
+    .profileImage{
+      display: flex;
+      span{
+        display: inline;
+        
+        margin-right: 50%;
+      }
+    }
 
     nav>ul li:hover {
       border: none !important;

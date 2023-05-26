@@ -63,43 +63,71 @@ const publicOrPrivateCreater = async (publicImage, userToken) => {
     }
 }
 
+const categoryCreater = async (categoryData) => {
+    try {
+        console.log(categoryData,"categoryDatacategoryDatacategoryData");
+        const { selectValue, newCategory } = categoryData;
+        if (selectValue === "All") {
+            const newCategorySearch = await Category.findOne({
+                where: {
+                    name: newCategory
+                }
+            });
+            if (newCategorySearch) {
+                return newCategorySearch.id
+            } else {
+                const newCategoryCreate = await Category.create({
+                    name:newCategory,
+                    parent:null
+                });
+                return newCategoryCreate.id
+            }
+        } else {
+            const selectValueCategorySearch = await Category.findOne({
+                where: {
+                    name: selectValue
+                }
+            });
+            if (newCategory) {
+                const newCategorySearch = await Category.findOne({
+                    where: {
+                        name: newCategory
+                    }
+                });
+                if (newCategorySearch) {
+                    return newCategorySearch.id
+                } else {
+                    const newCategoryCreat = await Category.create({
+                        name:newCategory,
+                        parent:selectValueCategorySearch.id
+                    })
+                    return newCategoryCreat.id
+                }
+            } else {
+               return selectValueCategorySearch.id
+            }
+
+        }
+    } catch (e) {
+        return e
+    }
+}
+
+
 const addImageDataInDataBase = async (
     imageData, categoryData, publicImage, userToken
 ) => {
     try {
-        const publicOrPrivateInDataBase = await publicOrPrivateCreater(publicImage, userToken);
-        console.log(publicOrPrivateInDataBase)
-        const parentCategory = categoryData.selectValue === "All" ? false : await Category.findOne({
-            where: {
-                name: categoryData.selectValue
-            }
-        });
-
-        const CategoryIsEmpty = categoryData.newCategory !== "" ? await Category.findOne({
-            where: {
-                name: categoryData.newCategory
-            }
-        }) : false;
-
-        const newCategory = {
-            name: categoryData.newCategory ? categoryData.newCategory : categoryData.selectValue,
-            parent: parentCategory ? parentCategory.id : null
-        };
-        // await Category.create(newCategory)
-        const newCategoryStatus = CategoryIsEmpty ? CategoryIsEmpty : false;
-        const newCategoryInDataBase = newCategoryStatus ? newCategoryStatus : await Category.create(newCategory);
-        console.log(newCategoryInDataBase, "CategoryIsEmpty")
-
-        console.log(publicOrPrivateInDataBase, 22222211111)
+        
+        // const publicOrPrivateInDataBase = await publicOrPrivateCreater(publicImage, userToken);
+        const myCategory = await categoryCreater(categoryData);
+        console.log(myCategory,"myCategory")
         const newImage = {
             ref_or_path: imageData.name,
             width_heght: imageData.imageSizeForDataBase,
-            category: newCategoryInDataBase.id,
-            public_or_private: publicOrPrivateInDataBase.id
+            category: myCategory,
         };
-
         await Image.create(newImage);
-
         return "ok"
     } catch (e) {
         return "eror"
@@ -171,4 +199,4 @@ const logout = async refreshToken => {
         { where: { refreshToken } }
     )
 }
-export { addDatabaseUser, checkDatabaseUser, addImageDataInDataBase, imageLoudeForDataBase, imageLoudeForDataBaseForCategory,logout }
+export { addDatabaseUser, checkDatabaseUser, addImageDataInDataBase, imageLoudeForDataBase, imageLoudeForDataBaseForCategory, logout }

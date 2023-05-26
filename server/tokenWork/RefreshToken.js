@@ -6,7 +6,7 @@ import { ApiError } from "../middlewares/error-middleware.js";
 const validateAccessToken = async token => {
     try {
         const userData = await jwt.verify(token, process.env.SECRET);
-        return userData
+        return userData;
     } catch (e) {
         return null;
     }
@@ -17,26 +17,28 @@ const validateRefreshToken = async token => {
         const userData = await jwt.verify(token, process.env.SECRET_REFRESH);
         return userData
     } catch (e) {
-        console.log(e)
         return null;
     }
 }
 
 const RefreshToken = async (refreshToken) => {
+    console.log("-----------------2-------------------------------------------------");
+    console.log(refreshToken)
     try {
-        console.log(refreshToken,"userDatauserData")
+        console.log(refreshToken,"rtk")
         if (!refreshToken) {
-            throw ApiError.UnauthorizedError()
+            return null
         }
         const userData = await validateRefreshToken(refreshToken);
         console.log(refreshToken,"userDatauserData")
-        const tokenInDB = User.findOne({
+        const tokenInDB = await User.findOne({
             email: {
                 userData
             }
         });
-        if(userData || tokenInDB){
-            throw ApiError.UnauthorizedError()
+        console.log(tokenInDB,userData)
+        if(!userData || !tokenInDB){
+            return null
         }
         const accessToken = await generateVerificationToken(tokenInDB.id);
         const newRefreshToken = await generateRefreshToken(tokenInDB.email);
@@ -53,13 +55,16 @@ const RefreshToken = async (refreshToken) => {
 const refresh = async (req, res, next) => {
     try {
         const {refreshToken} = req.cookies;
+        console.log(refreshToken,"rtk2");
         console.log(process.env.SECRET_REFRESH,5567)
-        const userData = await RefreshToken(refreshToken);
-        console.log(userData)
-        res.cookie('refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
-        return res.json(userData.accessToken);
+        const userData = await RefreshToken(refreshToken.refreshToken);
+        if( !userData.tokens.refreshToken ) {
+            throw ApiError.UnauthorizedError()
+        }
+        res.cookie('refreshToken', userData.tokens.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
+        res.status(200).json({token:userData.tokens.accessToken,name:userData.name});
     } catch (e) {
-        res.json(e)
+        res.send(e)
         return next();
     }
 }
