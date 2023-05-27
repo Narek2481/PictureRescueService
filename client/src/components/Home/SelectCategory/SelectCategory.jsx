@@ -12,7 +12,7 @@ const SelectCategory = ({ props }) => {
     console.log(categoryValue)
     return (
         <div className="category_container container " >
-            <label className="mb-4" htmlFor="category">Select a category to search</label>
+            <label className="mb-4">Select a category to search</label>
             <select
                 className="select_control form-control form-control-lg  text-center"
                 name="category"

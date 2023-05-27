@@ -1,8 +1,10 @@
 import bcrypt from "bcrypt";
-import { User } from "../../data_base/tables.js";
-import { generateRefreshToken, generateVerificationToken } from "../../tokenWork/tokenCreater.js";
+import { User } from "../data_base/tables.js";
+import { generateRefreshToken, generateVerificationToken } from "../tokenWork/tokenCreater.js";
 import { v4 as uuidv4 } from 'uuid';
-import MailService from "../../email_veryfication/trueEmail.js";
+import MailService from "../email_veryfication/trueEmail.js";
+import { containsValidNameOrLastName, validateEmail, validatePassword } from "../validatry/validatry.js";
+import { ApiError } from "../middlewares/error-middleware.js";
 const addDatabaseUser = async body => {
     try {
         const hashedPassword = await bcrypt.hash(body.password, 10);
@@ -12,28 +14,26 @@ const addDatabaseUser = async body => {
                 email: body.email
             }
         });
-        
-        console.log(attemptToRegister);
         if (attemptToRegister !== null) {
             return { status: "This email or UserName exists ", data: null }
         }
         return { status: "ok", data: hashedPassword };
     } catch (e) {
-        console.log(e)
-        return `Eror ${e}`;
+    
+        return e;
     }
 }
 
 
 
 const preparationRegistrationSubmit = async (body) => {
-    console.log(body)
+    
     const status = await addDatabaseUser(body);
     if (status.status === "ok") {
         try {
-            console.log(body.email,"body.email");
+           
             const refreshToken = await generateRefreshToken(body.email)
-            console.log(refreshToken,"refreshToken")
+            
             const userData = await User.create({
                 name: body.name,
                 email: body.email,
@@ -41,7 +41,6 @@ const preparationRegistrationSubmit = async (body) => {
                 last_name: body.lastname,
                 refreshToken:refreshToken.refreshToken
             });
-            console.log(userData)
             const accessToken = await generateVerificationToken(userData.id, userData);
             // const activationLink = uuidv4();
             // console.log(activationLink)
@@ -61,4 +60,33 @@ const preparationRegistrationSubmit = async (body) => {
 }
 
 
-export { preparationRegistrationSubmit };
+
+
+const registrationSubmitController = async (req, res,next) => {
+    try {
+        const validation = (
+            containsValidNameOrLastName(req.body.name, req.body.lastname) &&
+            containsValidNameOrLastName(req.body.lastname) &&
+            validateEmail(req.body.email) && validatePassword(req.body.password) === "ok"
+        );
+        if (validation) {
+            const data = await preparationRegistrationSubmit(req.body);
+            if (typeof data === "object") {
+                res.cookie('refreshToken', data.tokens.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, path: "/" });
+                res.cookie('name', data.name, { maxAge: 60 * 60 * 1000, httpOnly: false, path: "/" });
+                res.status(201);
+                res.send(data);
+            } else {
+                next(ApiError.BadRequest(data));
+            }
+        } else {
+             next(ApiError.BadRequest(data))
+        }
+    }
+    catch (e) {
+        res.send(e);
+    }
+}
+
+
+export { preparationRegistrationSubmit,registrationSubmitController };

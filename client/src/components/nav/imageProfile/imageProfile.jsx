@@ -1,6 +1,5 @@
 import img from "../../../img_logo/istockphoto-1130884625-612x612.jpg"
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom"
 import NotificationImage from "./Notification/NotificationImage";
 import { useEffect } from "react";
 import Cookies from "js-cookie";

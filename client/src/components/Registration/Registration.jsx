@@ -35,7 +35,7 @@ const Registration = () => {
     return "ok";
   }
   const submitThen = res => {
-    if (res.status === 200) {
+    if (res.status === 201) {
       console.log(res.data)
       dispach(editCurrentUser({ name, register_or_login: true }));
       goToHome();

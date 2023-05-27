@@ -62,7 +62,7 @@ export default function SignInForm() {
                 })
                 .catch(e => {
                     console.log(e)
-                    setValidErr(e.response.data)
+                    setValidErr(e.response.data.message)
                 });
         } else {
             if (validatePassword(password) !== "ok") {

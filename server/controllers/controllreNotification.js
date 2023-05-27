@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken"
-import { Announcement, Image } from "../../data_base/tables.js";
+import { Announcement, Image } from "../data_base/tables.js";
 const controllreNotification = async (req) => {
     try {
         const id = await jwt.verify(req.cookies.token, process.env.SECRET).clientId;

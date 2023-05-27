@@ -1,6 +1,21 @@
-import { tokenVerify } from "../../tokenWork/tokenCreater.js"
-const controllerAvatarPush = async req => {
-    const userId = await tokenVerify(req.cookies.login.token);
+import sharp from "sharp";
+import fs from "fs";
+import { addImageDataInDataBase } from "../services/imageService.js";
+
+const returnImageWidthHeight = async path => {
+    const img = await sharp(path);
+    const metadata = await img.metadata();
+    return metadata.width + "x" + metadata.height
+}
+
+
+
+const imagePush = async (req, res) => {
+    const imageSizeForDataBase = await returnImageWidthHeight(req.file.path);
+    const categoryData = {
+        selectValue: req.body.selectValue,
+        newCategory: req.body.newCategory
+    };
     fs.readFile(req.file.path, (err, data) => {
         if (err) {
             console.error(err);
@@ -29,7 +44,7 @@ const controllerAvatarPush = async req => {
                         }
                         , categoryData
                         , req.body.publicImage
-                        , req.cookies.login.token
+                        , req.cookies.token
                     );
                     const statusRespons = dataBaseStatus === "ok" ? 200 : 500
                     res.status(statusRespons)
@@ -42,4 +57,4 @@ const controllerAvatarPush = async req => {
     });
 }
 
-export default controllerAvatarPush;
+export {imagePush}

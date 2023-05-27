@@ -1,29 +1,27 @@
 import { validateAccessToken } from "../tokenWork/RefreshToken.js";
+import { ApiError } from "./error-middleware.js";
 
-const auth = (req, res, next) => {
+
+const auth = async (req, res, next) => {
     try {
-        const authorizationHeader = req.headers.autorizational;
+        const authorizationHeader = req.headers.authorization;
         console.log(authorizationHeader,"authorizationHeader")
         if (!authorizationHeader) {
-            res.status(401);
-            return next();
+            return next(ApiError.UnauthorizedError());
         }
-        const accessToken = authorizationHeader.split(" ")[1];
-        if(!accessToken){
-            res.status(401);
-            return next();
+        const accessToken = authorizationHeader.split(' ')[1];
+        if (!accessToken) {
+            return next(ApiError.UnauthorizedError());
         }
-        const userData = validateAccessToken(accessToken);
-        if(!userData){
-            console.error("User is not authorized ")
-            res.status(401);
-            return next();
+
+        const userData = await validateAccessToken(accessToken);
+        if (!userData) {
+            return next(ApiError.UnauthorizedError());
         }
-        req.user = userData
-        console.log(req.user)
-        return next();
-    } catch (e) {
         
+        req.user = userData;
+        next();
+    } catch (e) {
         return next(e);
     }
 }

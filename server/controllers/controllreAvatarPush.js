@@ -1,7 +1,6 @@
 import sharp from "sharp";
 import fs from "fs";
-import { addImageDataInDataBase } from "../../data_base/queryInDataBase.js";
-
+import { addImageDataInDataBase } from "../services/imageService.js";
 
 const returnImageWidthHeight = async path => {
     const img = await sharp(path);

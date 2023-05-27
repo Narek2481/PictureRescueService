@@ -18,6 +18,7 @@ function Example({ props }) {
     const handleShow = () => setShow(true);
     const navigate = useNavigate();
     const sendData = e => {
+        e.preventDefault()
         shareImage({ email: dataForSend, id: props })
             .then(() => {
                 handleClose();

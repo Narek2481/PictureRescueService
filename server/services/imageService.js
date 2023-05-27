@@ -1,71 +1,8 @@
-import bcrypt from "bcrypt";
-import { Public, Image, User, Announcement, Category } from "./tables.js";
-import { validateRefreshToken } from "../tokenWork/RefreshToken.js";
-
-
-
-const addDatabaseUser = async body => {
-    try {
-        const hashedPassword = await bcrypt.hash(body.password, 10);
-        const attemptToRegister = await User.findOne({
-            where: {
-                email: body.email
-            }
-        });
-
-        console.log(attemptToRegister);
-        if (attemptToRegister !== null) {
-            return { status: "This email or UserName exists", data: null }
-        }
-        return { status: "ok", data: hashedPassword };
-    } catch (e) {
-        console.log(e)
-        return `Eror ${e}`;
-    }
-}
-
-const checkDatabaseUser = async body => {
-    try {
-        const user = await User.findOne({
-            where: {
-                email: body.login
-            }
-        });
-        if (user) {
-            const compare = await bcrypt.compare(body.password, user.password)
-            const compareResult = compare ? { id: user.id, name: user.name } : "Password is not correct"
-            console.log(compareResult, 11212222222222)
-            return compareResult
-        } else {
-            return "Email is not correct"
-        }
-    } catch (e) {
-        return "Something went wrong"
-    }
-
-};
-
-const publicOrPrivateCreater = async (publicImage, userToken) => {
-    try {
-        console.log(publicImage, 4444444)
-        console.log(userToken, "-------------------")
-        const decodedToken = await tokenVerify(userToken);
-        const userId = decodedToken.clientId;
-        console.log(userId, 55555555555555555555555555555555555)
-        const publicTable = await Public.create({
-            public: publicImage,
-            author: userId
-        });
-        return publicTable
-    } catch (e) {
-        console.log(e, 888888888888888888888888888888888888888888888888888888)
-        return "eror Something went wrong"
-    }
-}
+import { Public, Image, User, Announcement, Category } from "../data_base/tables.js";
 
 const categoryCreater = async (categoryData) => {
     try {
-        console.log(categoryData,"categoryDatacategoryDatacategoryData");
+        console.log(categoryData, "categoryDatacategoryDatacategoryData");
         const { selectValue, newCategory } = categoryData;
         if (selectValue === "All") {
             const newCategorySearch = await Category.findOne({
@@ -77,8 +14,8 @@ const categoryCreater = async (categoryData) => {
                 return newCategorySearch.id
             } else {
                 const newCategoryCreate = await Category.create({
-                    name:newCategory,
-                    parent:null
+                    name: newCategory,
+                    parent: null
                 });
                 return newCategoryCreate.id
             }
@@ -98,13 +35,13 @@ const categoryCreater = async (categoryData) => {
                     return newCategorySearch.id
                 } else {
                     const newCategoryCreat = await Category.create({
-                        name:newCategory,
-                        parent:selectValueCategorySearch.id
+                        name: newCategory,
+                        parent: selectValueCategorySearch.id
                     })
                     return newCategoryCreat.id
                 }
             } else {
-               return selectValueCategorySearch.id
+                return selectValueCategorySearch.id
             }
 
         }
@@ -113,15 +50,33 @@ const categoryCreater = async (categoryData) => {
     }
 }
 
+const publicOrPrivateCreater = async (publicImage, userToken) => {
+    try {
+        console.log(publicImage, 4444444)
+        console.log(userToken, "-------------------")
+        const decodedToken = await tokenVerify(userToken);
+        const userId = decodedToken.clientId;
+        console.log(userId, 55555555555555555555555555555555555)
+        const publicTable = await Public.create({
+            public: publicImage,
+            author: userId
+        });
+        return publicTable
+    } catch (e) {
+        console.log(e, 888888888888888888888888888888888888888888888888888888)
+        return "eror Something went wrong"
+    }
+}
+
 
 const addImageDataInDataBase = async (
     imageData, categoryData, publicImage, userToken
 ) => {
     try {
-        
+
         // const publicOrPrivateInDataBase = await publicOrPrivateCreater(publicImage, userToken);
         const myCategory = await categoryCreater(categoryData);
-        console.log(myCategory,"myCategory")
+        console.log(myCategory, "myCategory")
         const newImage = {
             ref_or_path: imageData.name,
             width_heght: imageData.imageSizeForDataBase,
@@ -137,7 +92,7 @@ const addImageDataInDataBase = async (
 const imageLoudeForDataBase = async (req) => {
     try {
 
-        const offset = req.body.offset * 12
+        const offset = req.query.offset
         let imagesInDb = await Image.findAll({
             order: [['id']],
             limit: offset ? offset : 9
@@ -193,10 +148,4 @@ const imageLoudeForDataBaseForCategory = async req => {
     }
 }
 
-const logout = async refreshToken => {
-    await User.update(
-        { refreshToken: null },
-        { where: { refreshToken } }
-    )
-}
-export { addDatabaseUser, checkDatabaseUser, addImageDataInDataBase, imageLoudeForDataBase, imageLoudeForDataBaseForCategory, logout }
+export { imageLoudeForDataBaseForCategory, imageLoudeForDataBase, addImageDataInDataBase, publicOrPrivateCreater }

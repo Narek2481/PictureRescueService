@@ -49,7 +49,7 @@ export function editFatching(pyload) {
     }
 }
 export function downloudData(pastData, offset, fetchChange, categoryValue, setFatchNull) {
-    
+    console.log(offset)
     return (dispatch) => {
         return (
             loudeData(offset, categoryValue)
