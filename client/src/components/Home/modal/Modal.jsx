@@ -4,7 +4,7 @@ import { editModal } from "../../../redux/modal/modalSlice";
 import { RemoveScroll } from 'react-remove-scroll';
 const modal = {
   position: "fixed",
-  zIndex: 5,
+  zIndex: 1000000001,
   left: 0,
   top: 0,
   width: "100vw",
@@ -46,12 +46,14 @@ export const ModalContent = ({ children }) => {
   return (
 
     <RemoveScroll>
+
       <div style={modal}>
         <span style={close} onClick={() => dispatch(editModal({ modal: !isOpen.modal, modalImg: isOpen.modalImg }))}>
           &times;
         </span>
         <div style={modalContent}>{children}</div>
       </div>
+
     </RemoveScroll>
 
   );

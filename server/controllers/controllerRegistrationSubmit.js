@@ -73,7 +73,7 @@ const registrationSubmitController = async (req, res,next) => {
             const data = await preparationRegistrationSubmit(req.body);
             if (typeof data === "object") {
                 res.cookie('refreshToken', data.tokens.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, path: "/" });
-                res.cookie('name', data.name, { maxAge: 60 * 60 * 1000, httpOnly: false, path: "/" });
+                res.cookie('name', data.name, { maxAge: 60 * 60 * 1000, httpOnly: false, path: "/api/user" });
                 res.status(201);
                 res.send(data);
             } else {

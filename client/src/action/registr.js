@@ -1,7 +1,7 @@
 import $api from ".";
 
 export default async function registrationSubmit(name, lastname, email, password) {
-    const respons = await $api.post("/registrationSubmit", {
+    const respons = await $api.post("/user/registrationSubmit", {
         name, lastname, email, password
     })
     // const respons = await axios.post("/registrationSubmit", {

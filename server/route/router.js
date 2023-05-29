@@ -5,7 +5,7 @@ import { registrationSubmitController } from "../controllers/controllerRegistrat
 import { imagePush } from "../controllers/controllerImagePush.js";
 import controllreShare from "../controllers/controllreShare.js";
 import { imageCategorySearchInDataBase, imageCategorySearchInDataBaseNesting } from "../controllers/controllerImageCategory.js";
-import controllreNotification from "../controllers/controllreNotification.js";
+import controllreNotificationData from "../controllers/controllreNotification.js";
 import controllerAvatarPush from "../controllers/controllerAvatarPush.js";
 import { auth } from "../middlewares/auth-middleware.js";
 import { refresh } from "../tokenWork/RefreshToken.js";
@@ -22,20 +22,20 @@ const router = express.Router();
 // root route -----------------------------------------------------------------------------------
 router.get("/", async (req, res) => {
 
-    res.send("ok");
+    res.send("ok"); getNotification
 });
 
 // registrationSubmit route -----------------------------------------------------------------------------------
-router.post("/api/registrationSubmit", registrationSubmitController);
+router.post("/api/user/registrationSubmit", registrationSubmitController);
 
 
 
 // login submit route -----------------------------------------------------------------------------------
-router.post("/api/loginSubmit", loginSubmitController);
+router.post("/api/user/loginSubmit", loginSubmitController);
 
 
 // Logaut----------------------------------------------------------------------------------------------
-router.get("/api/logout", async (req, res) => {
+router.get("/api/user/logout", async (req, res) => {
     try {
         const { refreshToken } = req.cookies;
         await logout(refreshToken)
@@ -50,8 +50,8 @@ router.get("/api/logout", async (req, res) => {
 );
 // image push route -----------------------------------------------------------------------------------
 router.post(
-    "/api/imagePush",auth, upload.single('image'), async (req, res) => {
-        console.log(req.user,"req.userreq.user")
+    "/api/imagePush", auth, upload.single('image'), async (req, res) => {
+        console.log(req.user, "req.userreq.user")
         await imagePush(req, res);
     }
 );
@@ -71,7 +71,7 @@ router.get("/api/imageLoud", async (req, res) => {
 });
 
 // avatarPush route -----------------------------------------------------------------------------------
-router.post("/api/avatarPush",auth, upload.single('image'), async (req, res) => {
+router.post("/api/avatarPush", auth, upload.single('image'), async (req, res) => {
     const data = await controllerAvatarPush(req)
     res.send(data);
 });
@@ -94,17 +94,14 @@ router.post("/api/imageCategory", async (req, res) => {
 
 
 // share -----------------------------------------------------------------------------------------
-router.post("/api/share",auth, async (req, res) => {
+router.post("/api/share", auth, async (req, res) => {
     const data = await controllreShare(req);
     console.log(data, "shdhha")
     res.send("ok");
 });
 
 // getNotification -----------------------------------------------------------
-router.get("/api/getNotification",auth, async (req, res) => {
-    const data = await controllreNotification(req);
-    res.send(data);
-})
+router.get("/api/getNotification", auth, controllreNotificationData);
 // refresh -------------------------------------------------------------------------------
 router.get('/api/refresh', refresh);
 

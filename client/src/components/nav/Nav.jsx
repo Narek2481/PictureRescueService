@@ -32,7 +32,7 @@ export default function Nav() {
     const styleInLinkComponent = {
         display
     }
-    const styleInImageProfile = { display: displayInImageProfile ,cursor:"pointer"};
+    const styleInImageProfile = { display: displayInImageProfile, cursor: "pointer" };
 
     const clickManue = () => {
         if (manue === '') {
@@ -122,6 +122,17 @@ export default function Nav() {
                             }, [auth])
                         }
                         />
+                        <LinkComponent props={
+                            useMemo(() => {
+                                return {
+                                    path: "personalArea",
+                                    text: "Own space",
+                                    style: styleInImageProfile,
+                                    click: clickManue
+                                }
+                            }, [auth])
+                        }
+                        />
                         <ImageProfile props={
                             useMemo(() => {
                                 return {
@@ -149,6 +160,7 @@ export default function Nav() {
                 {auth.register_or_login ? "" : <Route path={"/sign_in/*"} element={<SignInPage />} />}
                 {auth.register_or_login ? <Route path={"/add_image/*"} element={<AddPicturePage />} /> : ""}
                 <Route path="/*" element={<NotFoundPage />} />
+                {auth.register_or_login ? <Route path={"/personalArea/*"} element={<AddPicturePage />} /> : ""}
             </Routes>
         </>
     );

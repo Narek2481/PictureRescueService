@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import img from "../../../../img_logo/images.png"
 import getNotification from '../../../../action/getNotification';
-import ImageComponent from '../../../Home/images/ImageComponent';
+import NotificationData from './NotificationData';
 function NotificationImage() {
     const [show, setShow] = useState(false);
     const [notificationData, setNotificationData] = useState([]);
@@ -13,16 +13,21 @@ function NotificationImage() {
         padding: "3px",
         height: "3px"
     }
-    // useEffect(() => {
-    //     const Images = getNotification()
-    //     setNotificationData(Images)
-    // }, [])
+    useEffect(() => {
+        getNotification()
+            .then(req => {
+                setNotificationData(req.data)
+            })
+            .catch(e => {
+                console.log(e)
+            });
+    }, [])
     return (
         <>
             <Button className='btnNotification' variant="primary" onClick={() => setShow(true)}>
                 <img src={img} alt="" />
             </Button>
-           <span style={notificationData.length > 0 ? styuleSpan : {}}></span>
+            <span style={notificationData.length > 0 ? styuleSpan : {}}></span>
             <Modal
                 show={show}
                 onHide={() => setShow(false)}
@@ -36,15 +41,13 @@ function NotificationImage() {
                 </Modal.Header>
                 <Modal.Body>
                     {
-                        notificationData.length > 0 ? "" :"You have not Notifications "
+                        notificationData.length > 0 ? "" : "You have not Notifications "
                     }
                     {
-
                         notificationData?.map((elem) => {
-                            return <ImageComponent
-                                props={elem}
-                                key={Math.random() * 100}
-                            />
+                            return (
+                                <NotificationData key={Math.random() * 100} elem={elem}/>
+                            );
                         })
                     }
                 </Modal.Body>

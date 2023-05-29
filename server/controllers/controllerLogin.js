@@ -17,7 +17,7 @@ const loginSubmitController= async (req, res,next) => {
             const accessToken = await generateVerificationToken(result.id);
             const refreshToken = await generateRefreshToken(req.body.login);
             const cookieValue = { refreshToken: refreshToken.refreshToken };
-            res.cookie('refreshToken', cookieValue, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, path: "/" });
+            res.cookie('refreshToken', cookieValue, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, path: "/api/user" });
             res.cookie('name', result.name, { maxAge: 60 * 60 * 1000, httpOnly: false, path: "/" });
             res.status(200).json(
                 {
