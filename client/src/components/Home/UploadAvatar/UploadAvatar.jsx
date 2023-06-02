@@ -3,20 +3,26 @@ import Avatar from "react-avatar-edit"
 import addAvatar from "../../../action/addAvatar";
 
 const UploadAvatar = () => {
-    const [src,setSrc] = useState(null);
-    const [preview,setPreview] = useState(null);
-    const [valid,setValid] = useState("")
+    const [src, setSrc] = useState(null);
+    const [preview, setPreview] = useState(null);
+    const [valid, setValid] = useState("")
     const submitAvatar = e => {
-        if(preview){
-            setValid("Please add your avatar")
-        }else{
-            addAvatar(preview)
-        }
+        // console.log(55555555555555555555)
+        // if (preview) {
+        //     setValid("Please add your avatar")
+        // } else {
+
+        // }
+        addAvatar(preview)
+            .then(res => {
+                console.log(res.data)
+            })
+            .catch(e => console.log(e))
     }
-    const onClose = ()=>{
+    const onClose = () => {
         setPreview(null);
     }
-    const onCrop = view =>{
+    const onCrop = view => {
         setPreview(view)
     }
     return (
@@ -31,7 +37,7 @@ const UploadAvatar = () => {
             />
             {preview && <img src={preview} alt="" />}
             <br />
-            <button className="go_add_image">Add Avatar Image</button>
+            <button className="go_add_image" onClick={submitAvatar}>Add Avatar Image</button>
         </div>
     )
 }

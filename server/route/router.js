@@ -12,10 +12,10 @@ import { refresh } from "../tokenWork/RefreshToken.js";
 import loginSubmitController from "../controllers/controllerLogin.js";
 import { logout } from "../services/loginRegisterService.js";
 import { imageLoudeForDataBase, imageLoudeForDataBaseForCategory } from "../services/imageService.js";
+import adecryptPassword from "../middlewares/decriptPassword.js";
 
 
 const upload = multer({ dest: './img' });
-
 
 
 const router = express.Router();
@@ -26,12 +26,12 @@ router.get("/", async (req, res) => {
 });
 
 // registrationSubmit route -----------------------------------------------------------------------------------
-router.post("/api/user/registrationSubmit", registrationSubmitController);
+router.post("/api/user/registrationSubmit",adecryptPassword, registrationSubmitController);
 
 
 
 // login submit route -----------------------------------------------------------------------------------
-router.post("/api/user/loginSubmit", loginSubmitController);
+router.post("/api/user/loginSubmit",adecryptPassword, loginSubmitController);
 
 
 // Logaut----------------------------------------------------------------------------------------------
@@ -40,7 +40,7 @@ router.get("/api/user/logout", async (req, res) => {
         const { refreshToken } = req.cookies;
         await logout(refreshToken)
 
-        res.clearCookie("refreshToken", { domain: "http://PictureRescueService.com", path: "/" });
+        res.clearCookie("refreshToken", { path: "/" });
         res.status(200);
         res.end()
     } catch (e) {
@@ -72,8 +72,7 @@ router.get("/api/imageLoud", async (req, res) => {
 
 // avatarPush route -----------------------------------------------------------------------------------
 router.post("/api/avatarPush", auth, upload.single('image'), async (req, res) => {
-    const data = await controllerAvatarPush(req)
-    res.send(data);
+    await controllerAvatarPush(req,res)
 });
 // image category route -----------------------------------------------------------------------------------
 router.post("/api/imageCategory", async (req, res) => {
@@ -101,7 +100,7 @@ router.post("/api/share", auth, async (req, res) => {
 });
 
 // getNotification -----------------------------------------------------------
-router.get("/api/getNotification", auth, controllreNotificationData);
+router.post("/api/getNotification", auth, controllreNotificationData);
 // refresh -------------------------------------------------------------------------------
 router.get('/api/refresh', refresh);
 

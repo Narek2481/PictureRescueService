@@ -11,6 +11,8 @@ const returnImageWidthHeight = async path => {
 
 
 const imagePush = async (req, res) => {
+    console.log(req,"ddddddddddddd")
+    const userId = req.user.clientId;
     const imageSizeForDataBase = await returnImageWidthHeight(req.file.path);
     const categoryData = {
         selectValue: req.body.selectValue,
@@ -44,7 +46,7 @@ const imagePush = async (req, res) => {
                         }
                         , categoryData
                         , req.body.publicImage
-                        , req.cookies.token
+                        , userId
                     );
                     const statusRespons = dataBaseStatus === "ok" ? 200 : 500
                     res.status(statusRespons)

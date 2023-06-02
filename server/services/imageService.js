@@ -50,37 +50,31 @@ const categoryCreater = async (categoryData) => {
     }
 }
 
-const publicOrPrivateCreater = async (publicImage, userToken) => {
+const publicOrPrivateCreater = async (publicImage, userId) => {
     try {
-        console.log(publicImage, 4444444)
-        console.log(userToken, "-------------------")
-        const decodedToken = await tokenVerify(userToken);
-        const userId = decodedToken.clientId;
-        console.log(userId, 55555555555555555555555555555555555)
         const publicTable = await Public.create({
             public: publicImage,
             author: userId
         });
         return publicTable
     } catch (e) {
-        console.log(e, 888888888888888888888888888888888888888888888888888888)
         return "eror Something went wrong"
     }
 }
 
 
 const addImageDataInDataBase = async (
-    imageData, categoryData, publicImage, userToken
+    imageData, categoryData, publicImage, userId
 ) => {
     try {
-
-        // const publicOrPrivateInDataBase = await publicOrPrivateCreater(publicImage, userToken);
+        const publicOrPrivateInDataBase = await publicOrPrivateCreater(publicImage, userId);
         const myCategory = await categoryCreater(categoryData);
         console.log(myCategory, "myCategory")
         const newImage = {
             ref_or_path: imageData.name,
             width_heght: imageData.imageSizeForDataBase,
             category: myCategory,
+            public_or_private:publicOrPrivateInDataBase.id
         };
         await Image.create(newImage);
         return "ok"
@@ -91,7 +85,7 @@ const addImageDataInDataBase = async (
 
 const imageLoudeForDataBase = async (req) => {
     try {
-
+        
         const offset = req.query.offset
         let imagesInDb = await Image.findAll({
             order: [['id']],
@@ -104,7 +98,7 @@ const imageLoudeForDataBase = async (req) => {
             })
         }
         const imageObjArr = imagesInDb.map((e) => {
-
+            
             return {
                 image_url: e.ref_or_path,
                 imageWidthHeght: e.width_heght,
@@ -148,4 +142,24 @@ const imageLoudeForDataBaseForCategory = async req => {
     }
 }
 
-export { imageLoudeForDataBaseForCategory, imageLoudeForDataBase, addImageDataInDataBase, publicOrPrivateCreater }
+const addAvatarInDB = async (imageData, userId) => {
+    try {
+        const publicOrPrivate = await publicOrPrivateCreater(false, userId)
+        const imageInDB = await Image.create({
+            ref_or_path: imageData.name,
+            width_heght: imageData.imageSizeForDataBase,
+            category: null,
+            public_or_private: publicOrPrivate.id
+        });
+        User.update(
+            { profile_image: imageInDB.id },
+            { where: { id: userId } }
+          )
+        return "ok"
+    } catch (e) {
+        return e
+    }
+
+}
+
+export { imageLoudeForDataBaseForCategory, imageLoudeForDataBase, addImageDataInDataBase, publicOrPrivateCreater ,addAvatarInDB}

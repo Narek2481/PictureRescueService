@@ -13,6 +13,7 @@ import Modal from 'react-modal';
 import { RemoveScroll } from "react-remove-scroll";
 import { selectCurrentUser } from "../../redux/user/userSlice";
 import { selectValueCategory } from "../../redux/valueCategory/valueCategorySlice";
+import env from "react-dotenv";
 
 
 
@@ -111,7 +112,7 @@ function Home() {
         setIsOpen(false);
     }
     Modal.setAppElement("#root");
-    console.log(categoryValue);
+    
     return (
         <div className="home">
             <h1 className="text-center mt-5">

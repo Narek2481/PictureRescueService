@@ -4,9 +4,13 @@ import Modal from 'react-bootstrap/Modal';
 import img from "../../../../img_logo/images.png"
 import getNotification from '../../../../action/getNotification';
 import NotificationData from './NotificationData';
+import { useDispatch } from 'react-redux';
+import { editCurrentUser } from '../../../../redux/user/userSlice';
+
 function NotificationImage() {
     const [show, setShow] = useState(false);
     const [notificationData, setNotificationData] = useState([]);
+    const dispatch = useDispatch()
     const styuleSpan = {
         borderRadius: "50%",
         backgroundColor: "red",
@@ -19,6 +23,7 @@ function NotificationImage() {
                 setNotificationData(req.data)
             })
             .catch(e => {
+                dispatch(editCurrentUser({name:"",register_or_login:false}));
                 console.log(e)
             });
     }, [])

@@ -5,6 +5,8 @@ import { editCurrentUser } from "../../../redux/user/userSlice";
 import StickyInputLabel from "./StickyInputLabel/StickyInputLabel";
 import "../signIn.scss"
 import { useNavigate } from 'react-router-dom';
+import env from "react-dotenv";
+import encryptPassword from "../../../encrypt/encryptPassword";
 
 
 
@@ -53,7 +55,7 @@ export default function SignInForm() {
         e.preventDefault();
         if (validatePassword(password) === "ok" && validateEmail(login)) {
             console.log(111111)
-            loginSubmit(login, password)
+            loginSubmit(login, encryptPassword(password,env.ENCRYPTION_SECRET))
                 .then(res => {
                     console.log(res)
                     localStorage.setItem("token",JSON.stringify(res.data.tokens.accessToken))

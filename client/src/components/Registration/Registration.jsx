@@ -6,6 +6,8 @@ import { editCurrentUser } from "../../redux/user/userSlice";
 import { useMemo } from "react";
 import StickyInputLabel from "../sign_in/signInForm/StickyInputLabel/StickyInputLabel";
 import { json, useNavigate } from 'react-router-dom';
+import env from "react-dotenv";
+import encryptPassword from "../../encrypt/encryptPassword";
 
 const Registration = () => {
   const [email, setEmail] = useState("");
@@ -51,7 +53,7 @@ const Registration = () => {
       containsValidNameOrLastName(lastName) &&
       validateEmail(email)
     ) {
-      registrationSubmit(name, lastName, email, password)
+      registrationSubmit(name, lastName, email, encryptPassword(password,env.ENCRYPTION_SECRET))
         .then(res => {
           localStorage.setItem("token",JSON.stringify(res.data.tokens.accessToken))
           setInputValidStyle({ name: {}, lastName: {}, email: {}, password: {} });
@@ -93,6 +95,8 @@ const Registration = () => {
     }
 
   }
+
+  console.log(env.ENCRYPTION_SECRET)
   return (
     <div className="registration">
       <h2>Sign Up</h2>

@@ -6,6 +6,7 @@ import Cookies from "js-cookie";
 import { editCurrentUser } from "../../../redux/user/userSlice";
 
 const ImageProfile = ({ props }) => {
+    
     const name = useSelector((state) => state.currentUser.name)
     const loginState = useSelector((state) => state.currentUser.register_or_login)
     const dispatch = useDispatch()
@@ -21,7 +22,7 @@ const ImageProfile = ({ props }) => {
         <li style={props.style} className="profileImage">
             <span> {name}</span>
             <img src={img} alt="" />
-            <NotificationImage />
+            {loginState ? <NotificationImage /> : ""}
         </li>
 
     )

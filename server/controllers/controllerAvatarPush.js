@@ -1,7 +1,22 @@
-import { tokenVerify } from "../tokenWork/tokenCreater.js"
+import fs from "fs";
+import sharp from "sharp";
+
+import { addAvatarInDB } from "../services/imageService.js";
+
+const returnImageWidthHeight = async path => {
+    const img = await sharp(path);
+    const metadata = await img.metadata();
+    return metadata.width + "x" + metadata.height
+}
 
 const controllerAvatarPush = async req => {
-    const userId = await tokenVerify(req.cookies.login.token);
+    console.log(req, "ddddddddddddd")
+    const userId = req.user.clientId;
+    const imageSizeForDataBase = await returnImageWidthHeight(req.file.path);
+    const categoryData = {
+        selectValue: req.body.selectValue,
+        newCategory: req.body.newCategory
+    };
     fs.readFile(req.file.path, (err, data) => {
         if (err) {
             console.error(err);
@@ -22,16 +37,11 @@ const controllerAvatarPush = async req => {
                     console.error(err);
                     res.status(500).send('Error saving image file');
                 } else {
-                    const dataBaseStatus = await addImageDataInDataBase(
-                        {
-                            name: req.file.originalname,
-                            imageSizeForDataBase,
-                            publicImage: req.body.publicImage
-                        }
-                        , categoryData
-                        , req.body.publicImage
-                        , req.cookies.login.token
-                    );
+                    const dataBaseStatus = await addAvatarInDB({
+                        name: req.file.originalname,
+                        imageSizeForDataBase,
+                        publicImage: req.body.publicImage
+                    }, userId);
                     const statusRespons = dataBaseStatus === "ok" ? 200 : 500
                     res.status(statusRespons)
                         .send(
