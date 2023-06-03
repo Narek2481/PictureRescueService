@@ -9,7 +9,7 @@ const returnImageWidthHeight = async path => {
     return metadata.width + "x" + metadata.height
 }
 
-const controllerAvatarPush = async req => {
+const controllerAvatarPush = async (req,res) => {
     console.log(req, "ddddddddddddd")
     const userId = req.user.clientId;
     const imageSizeForDataBase = await returnImageWidthHeight(req.file.path);

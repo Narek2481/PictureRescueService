@@ -19,7 +19,7 @@ const auth = async (req, res, next) => {
         if (!userData) {
             return next(ApiError.UnauthorizedError());
         }
-        
+        console.log(userData,"dskgh49324isdf")
         req.user = userData;
         next();
     } catch (e) {

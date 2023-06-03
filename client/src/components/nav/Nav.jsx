@@ -1,20 +1,19 @@
-import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import AboutUsPage from "../../pages/AboutUsPage"
 import SignInPage from "../../pages/SignInPage"
 import RegistrationPage from "../../pages/RegistrationPage"
-import { useEffect, useMemo, useState } from "react";
+import {  useMemo, useState } from "react";
 import HomePage from "../../pages/HomePage";
 import LinkComponent from "./linkComponent/linkComponent";
 import AddPicturePage from "../../pages/AddPicturePage";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 import "./css/nav.scss"
 import logo from "../../img_logo/logo12.jpg"
 import NotFoundPage from "../../pages/NotFoundPage";
-import { editCurrentUser } from "../../redux/user/userSlice";
 import ImageProfile from "./imageProfile/imageProfile";
 import { selectCurrentUser } from "../../redux/user/userSlice";
-import Cookies from "js-cookie";
 import Logout from "./logout/Logout";
+import PersonalAreaPage from "../../pages/PersonalAreaPage";
 
 
 export default function Nav() {
@@ -160,7 +159,7 @@ export default function Nav() {
                 {auth.register_or_login ? "" : <Route path={"/sign_in/*"} element={<SignInPage />} />}
                 {auth.register_or_login ? <Route path={"/add_image/*"} element={<AddPicturePage />} /> : ""}
                 <Route path="/*" element={<NotFoundPage />} />
-                {auth.register_or_login ? <Route path={"/personalArea/*"} element={<AddPicturePage />} /> : ""}
+                {auth.register_or_login ? <Route path={"/personalArea/*"} element={<PersonalAreaPage/>} /> : ""}
             </Routes>
         </>
     );

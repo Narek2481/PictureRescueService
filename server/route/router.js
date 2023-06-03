@@ -13,9 +13,12 @@ import loginSubmitController from "../controllers/controllerLogin.js";
 import { logout } from "../services/loginRegisterService.js";
 import { imageLoudeForDataBase, imageLoudeForDataBaseForCategory } from "../services/imageService.js";
 import adecryptPassword from "../middlewares/decriptPassword.js";
+import getUserDataControler from "../controllers/getUserDataControler.js";
+import getAvatarController from "../controllers/getAvatarController.js";
 
 
 const upload = multer({ dest: './img' });
+const upload2 = multer({ dest: './avatar' });
 
 
 const router = express.Router();
@@ -71,8 +74,8 @@ router.get("/api/imageLoud", async (req, res) => {
 });
 
 // avatarPush route -----------------------------------------------------------------------------------
-router.post("/api/avatarPush", auth, upload.single('image'), async (req, res) => {
-    await controllerAvatarPush(req,res)
+router.post("/api/avatar", auth, upload2.single('avatar'), async (req, res) => {
+    await controllerAvatarPush(req,res);
 });
 // image category route -----------------------------------------------------------------------------------
 router.post("/api/imageCategory", async (req, res) => {
@@ -102,6 +105,10 @@ router.post("/api/share", auth, async (req, res) => {
 // getNotification -----------------------------------------------------------
 router.post("/api/getNotification", auth, controllreNotificationData);
 // refresh -------------------------------------------------------------------------------
-router.get('/api/refresh', refresh);
+router.get('/api/user/refresh', refresh);
+// getUserData -----------------------------------------------------------------------------
+router.get('/api/getUserData',auth,getUserDataControler);
+// getAvatar ------------------------------------------------------------------
+router.get("/api/getAvatar",auth,getAvatarController);
 
 export { router };

@@ -32,9 +32,8 @@ const RefreshToken = async (refreshToken) => {
         const userData = await validateRefreshToken(refreshToken);
         console.log(refreshToken, "userDatauserData")
         const tokenInDB = await User.findOne({
-            email: {
-                userData
-            }
+           where:{ email: userData.email}
+    
         });
         console.log(tokenInDB, userData)
         if (!userData || !tokenInDB) {

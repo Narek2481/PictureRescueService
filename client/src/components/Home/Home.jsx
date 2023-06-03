@@ -13,7 +13,7 @@ import Modal from 'react-modal';
 import { RemoveScroll } from "react-remove-scroll";
 import { selectCurrentUser } from "../../redux/user/userSlice";
 import { selectValueCategory } from "../../redux/valueCategory/valueCategorySlice";
-import env from "react-dotenv";
+
 
 
 

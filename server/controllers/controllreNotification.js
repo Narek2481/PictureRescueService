@@ -2,16 +2,19 @@ import jwt from "jsonwebtoken"
 import { Announcement, Image } from "../data_base/tables.js";
 import { Sequelize } from "sequelize";
 const controllreNotification = async (req) => {
+
     try {
-        console.log("11111111111111111111111111111111111111111111")
+        console.log("1111111111111111111111111111111111111111111144")
+
         const userId = req.user.clientId
-        
+        console.log(userId)
         const notification = await Announcement.findAll({
             where: {
                 user_ref: userId
             }
         });
-        console.log("1111111111111111111111111111111111111111111122")
+        console.log(notification)
+       
 
         let notificationImagesId = [];
         if (notification) {
@@ -19,8 +22,8 @@ const controllreNotification = async (req) => {
                 return elem.image_ref;
             });
         }
-        console.log("11111111111111111111111111111111111111111111333")
-        
+        console.log(notificationImagesId)
+
         const notificationImages = await Image.findAll({
             where: {
                 id: {
@@ -28,15 +31,15 @@ const controllreNotification = async (req) => {
                 }
             }
         })
-       
-        console.log("11111111111111111111111111111111111111111111444")
 
-        console.log(notificationImages,"notificationImages")
-        const sendData = notificationImages.map((elem)=>{
+        console.log(notificationImages)
+
+        console.log(notificationImages, "notificationImages")
+        const sendData = notificationImages.map((elem) => {
             return {
-                image_url : elem.ref_or_path,
-                imageWidthHeght :elem.width_heght,
-                id:elem.id
+                image_url: elem.ref_or_path,
+                imageWidthHeght: elem.width_heght,
+                id: elem.id
             }
         })
         console.log("1111111111111111111111111111111111111111111144")
@@ -48,12 +51,16 @@ const controllreNotification = async (req) => {
 }
 
 
-const controllreNotificationData = async (req, res, next ) => {
-    const data = await controllreNotification(req);
-    if(data){
-        res.status(200).json(data)
-    }else{
-        res.status(500).json(data);
+const controllreNotificationData = async (req, res, next) => {
+    try {
+        const data = await controllreNotification(req);
+        if (data) {
+            res.status(200).json(data)
+        } else {
+            res.status(500).json(data);
+        }
+    } catch (e) {
+        next(e)
     }
 }
 
