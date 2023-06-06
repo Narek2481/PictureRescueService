@@ -1,3 +1,20 @@
 .PersonalArea {
     padding: 80px 0;
+
+}
+
+.text {
+    font-size: 22px;
+}
+
+button{
+    border: none !important;
+}
+
+
+@media(max-width:576px){
+    .text {
+        font-size: 18px;
+    }
+    
 }

@@ -16,15 +16,20 @@ const ImageProfile = ({ props }) => {
         $api
             .get("/getAvatar", { responseType: 'arraybuffer' })
             .then((response) => {
-                const blob = new Blob([response.data], { type: 'image/png' });
-                const url = URL.createObjectURL(blob);
-                setImageUrl(url);
+                if (response.data.byteLength) {
+                    const blob = new Blob([response.data], { type: 'image/png' });
+                    const url = URL.createObjectURL(blob);
+                    console.log(url)
+                    setImageUrl(url);
+                }else{
+                    setImageUrl(img)
+                }
             })
             .catch((error) => {
                 console.log("Error fetching image:", error);
-
+                setImageUrl(img)
             });
-    }, []);
+    }, [loginState]);
 
     useEffect(() => {
         if (name === "") {
@@ -38,7 +43,7 @@ const ImageProfile = ({ props }) => {
     return (
         <li style={props.style} className="profileImage">
             <span> {name}</span>
-            <img src={imageUrl ?imageUrl :img} alt="Avatar" />
+            <img src={imageUrl ? imageUrl : img} alt="Avatar" />
             {loginState ? <NotificationImage /> : ""}
         </li>
     )

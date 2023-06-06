@@ -39,7 +39,7 @@ function NotificationImage() {
                 dialogClassName="modal-90w"
                 aria-labelledby="example-custom-modal-styling-title"
             >
-                <Modal.Header closeButton>
+                <Modal.Header>
                     <Modal.Title id="example-custom-modal-styling-title">
                         Here are your notifications
                     </Modal.Title>

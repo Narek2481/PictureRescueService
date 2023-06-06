@@ -21,7 +21,6 @@ const getAvatarController = async (req, res, next) => {
         });
 
         const imagePath = path.resolve("./avatar/" + imageData.ref_or_path);
-        console.log(imagePath, "imagePathimagePathimagePath")
         res.setHeader("Content-Type", "image/png");
         res.setHeader("Content-Length", fs.statSync(imagePath).size);
 

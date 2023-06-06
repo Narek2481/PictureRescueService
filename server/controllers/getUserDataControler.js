@@ -11,7 +11,8 @@ const getUserDataControler = async (req, res, next) => {
         });
         const resultData = {
             name: userData.name,
-            lastName: userData.last_name
+            lastName: userData.last_name,
+            email:userData.email
         }
         res.status(200).json(resultData)
     } catch (e) {

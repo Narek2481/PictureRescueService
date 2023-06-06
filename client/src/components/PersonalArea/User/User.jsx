@@ -1,11 +1,14 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { memo, useEffect, useMemo, useState } from 'react';
 import img from "../../../img_logo/istockphoto-1130884625-612x612.jpg"
 import getUserData from '../../../action/getPersonalAreaData';
-import StickyInputLabel from '../../sign_in/signInForm/StickyInputLabel/StickyInputLabel';
+import btn from "../../../img_logo/pencil-g9d2a08ec1_640 1.png"
+import userImage from "../../../img_logo/user_icon_150670 1.png"
+import emailImage from "../../../img_logo/email 1.png"
 import $api from '../../../action';
 import Modal from 'react-modal';
 import UploadAvatar from '../../Home/UploadAvatar/UploadAvatar';
 import { RemoveScroll } from 'react-remove-scroll';
+import Example from './EditUserModal/EditUserModal';
 
 const User = () => {
     const [name, setName] = useState("");
@@ -13,11 +16,12 @@ const User = () => {
     const [password, setPassword] = useState("");
     const [userData, setUserdata] = useState({
         name: "",
-        lastName: ""
+        lastName: "",
+        email: ""
     })
     const [imageUrl, setImageUrl] = useState("");
     const [modalIsOpen, setIsOpen] = useState(false);
-
+    const styleImg = imageUrl ? {} : { width: "50px", height: " 50px", borderRadius: "25px" }
     useEffect(() => {
         getUserData()
             .then(res => {
@@ -79,20 +83,24 @@ const User = () => {
     }
 
     return (
-        <div className='container text-center'>
-            <h2>Edit profile</h2>
-            <div className="row">
-                <div className='col'>
-                    <img style={imageUrl ? {} : { width: "50px", height: " 50px", borderRadius: "25px" }}
-                        src={imageUrl ? imageUrl : img}
-                        alt="" />
+        <div className='container-fluid text-center'>
+            <div className='text-center'>
+                <div className='p-1 d-flex justify-content-center align-items-center flex-column'>
+                    <div>
+                        <img
+                            style={styleImg}
+                            src={imageUrl ? imageUrl : img}
+                            alt="" />
+                    </div>
+                    <div className='text mt-1'>{userData.name} {userData.lastName}</div>
+                    <div className='mt-5'>
+
+                        <button onClick={openModal}>
+                            <img src={btn} alt="" />
+                        </button>
+                    </div>
                 </div>
-                <div className='col mt-5'>
-                    <button  
-                    className="go_add_image" 
-                    onClick={openModal}
-                    style={{ margin: 0}}
-                    >Change avatar</button>
+                <div>
                     <Modal
                         isOpen={modalIsOpen}
                         onRequestClose={closeModal}
@@ -104,57 +112,30 @@ const User = () => {
                         </RemoveScroll>
                     </Modal>
                 </div>
-            </div>
-            <div className="row">
-                <div className='col mt-5'>{userData.name}</div>
-                <div className='col'>
-                    <StickyInputLabel props={
-                        useMemo(() => {
-                            return {
-                                text: "Name",
-                                name: "name",
-                                type: "text",
-                                inputValue: name,
-                                setInputValue: setName,
-                            }
-                        }, [name])
-                    } />
+                <h2 className='mt-5'>PROFILE</h2>
+                <div className='userData'>
+                    <div className="d-flex justify-content-center align-items-center mt-5 flex-column text flex-sm-row">
+                        <div>
+                            <img src={userImage} alt="" />
+                            UserName
+                        </div>
+                        <div className='p-5'>{userData.name}</div>
+                    </div>
+                    <div className="d-flex justify-content-center align-items-center mt-2 ml-5-sm flex-column text flex-sm-row">
+                        <div className="offset-1  offset-sm"></div>
+                        <div>
+                            <img src={emailImage} alt="" />
+                            Email
+                        </div>
+                        <div className='ml-5'>{userData.email}</div>
+                    </div>
                 </div>
             </div>
-            <div className="row">
-                <div className='col  mt-5'>{userData.lastName}</div>
-                <div className='col'>
-                    <StickyInputLabel props={
-                        useMemo(() => {
-                            return {
-                                text: "Last Name",
-                                name: "lastName",
-                                type: "text",
-                                inputValue: lastName,
-                                setInputValue: setLastName,
-                            }
-                        }, [lastName])
-                    } />
-                </div>
-            </div>
-            <div className="row">
-                <div className='col mt-5'>my name</div>
-                <div className='col'>
-                    <StickyInputLabel props={
-                        useMemo(() => {
-                            return {
-                                text: "Password",
-                                name: "password",
-                                type: "password",
-                                inputValue: password,
-                                setInputValue: setPassword,
-                            }
-                        }, [password])
-                    } />
-                </div>
+            <div>
+                <Example />
             </div>
         </div>
     );
 };
 
-export default User;
+export default memo(User);
