@@ -8,7 +8,7 @@ import { ApiError } from "../middlewares/error-middleware.js";
 const addDatabaseUser = async body => {
     try {
         const hashedPassword = await bcrypt.hash(body.password, 10);
-        
+
         const attemptToRegister = await User.findOne({
             where: {
                 email: body.email
@@ -19,7 +19,7 @@ const addDatabaseUser = async body => {
         }
         return { status: "ok", data: hashedPassword };
     } catch (e) {
-    
+
         return e;
     }
 }
@@ -27,19 +27,19 @@ const addDatabaseUser = async body => {
 
 
 const preparationRegistrationSubmit = async (body) => {
-    
+
     const status = await addDatabaseUser(body);
     if (status.status === "ok") {
         try {
-           
+
             const refreshToken = await generateRefreshToken(body.email)
-            
+
             const userData = await User.create({
                 name: body.name,
                 email: body.email,
                 password: status.data,
                 last_name: body.lastname,
-                refreshToken:refreshToken.refreshToken
+                refreshToken: refreshToken.refreshToken
             });
             const accessToken = await generateVerificationToken(userData.id, userData);
             // const activationLink = uuidv4();
@@ -47,7 +47,7 @@ const preparationRegistrationSubmit = async (body) => {
             // await MailService.sendActivationMail(body.email,`${process.env.API_URL}/api/activate/${activationLink}`)
             return (
                 {
-                    tokens: {accessToken:accessToken.accessToken},
+                    tokens: { accessToken: accessToken.accessToken, refreshToken: refreshToken.refreshToken },
                     name: userData.name
                 }
             )
@@ -62,7 +62,7 @@ const preparationRegistrationSubmit = async (body) => {
 
 
 
-const registrationSubmitController = async (req, res,next) => {
+const registrationSubmitController = async (req, res, next) => {
     try {
         const validation = (
             containsValidNameOrLastName(req.body.name, req.body.lastname) &&
@@ -72,7 +72,8 @@ const registrationSubmitController = async (req, res,next) => {
         if (validation) {
             const data = await preparationRegistrationSubmit(req.body);
             if (typeof data === "object") {
-                res.cookie('refreshToken', data.tokens.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, path: "/" });
+                console.log(data.tokens.refreshToken, "data.tokens.refreshToken");
+                res.cookie('refreshToken', {refreshToken:data.tokens.refreshToken}, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, path: "/" });
                 res.cookie('name', data.name, { maxAge: 60 * 60 * 1000, httpOnly: false, path: "/" });
                 res.status(201);
                 res.send(data);
@@ -80,7 +81,7 @@ const registrationSubmitController = async (req, res,next) => {
                 next(ApiError.BadRequest(data));
             }
         } else {
-             next(ApiError.BadRequest(data))
+            next(ApiError.BadRequest(data))
         }
     }
     catch (e) {
@@ -89,4 +90,4 @@ const registrationSubmitController = async (req, res,next) => {
 }
 
 
-export { preparationRegistrationSubmit,registrationSubmitController };
+export { preparationRegistrationSubmit, registrationSubmitController };

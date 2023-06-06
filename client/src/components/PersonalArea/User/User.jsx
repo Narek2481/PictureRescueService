@@ -1,19 +1,17 @@
-import React, { memo, useEffect, useMemo, useState } from 'react';
-import img from "../../../img_logo/istockphoto-1130884625-612x612.jpg"
+import React, { memo, useEffect, useState } from 'react';
+import Modal from 'react-modal';
+import { RemoveScroll } from 'react-remove-scroll';
+import imgUser from "../../../img_logo/istockphoto-1130884625-612x612.jpg"
 import getUserData from '../../../action/getPersonalAreaData';
 import btn from "../../../img_logo/pencil-g9d2a08ec1_640 1.png"
 import userImage from "../../../img_logo/user_icon_150670 1.png"
 import emailImage from "../../../img_logo/email 1.png"
 import $api from '../../../action';
-import Modal from 'react-modal';
 import UploadAvatar from '../../Home/UploadAvatar/UploadAvatar';
-import { RemoveScroll } from 'react-remove-scroll';
 import Example from './EditUserModal/EditUserModal';
 
+
 const User = () => {
-    const [name, setName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [password, setPassword] = useState("");
     const [userData, setUserdata] = useState({
         name: "",
         lastName: "",
@@ -30,27 +28,16 @@ const User = () => {
             .catch(e => console.log(e));
     }, [])
 
-    const containsValidNameOrLastName = input => {
-        return input.length >= 2 && /[A-Z]/.test(input) && /[a-z]/.test(input);
-    }
-    const validateEmail = (email) => {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
-    };
-    const validatePassword = password => {
-        if (password.length < 8) {
-            console.log("Password must be at least 8 characters long.");
-            return "Password must be at least 8 characters long."
-        }
-        return "ok";
-    }
+
     useEffect(() => {
         $api
             .get("/getAvatar", { responseType: 'arraybuffer' })
             .then((response) => {
-                const blob = new Blob([response.data], { type: 'image/png' });
-                const url = URL.createObjectURL(blob);
-                setImageUrl(url);
+                if (response.data.byteLength > 0) {
+                    const blob = new Blob([response.data], { type: 'image/png' });
+                    const url = URL.createObjectURL(blob);
+                    setImageUrl(url);
+                }
             })
             .catch((error) => {
                 console.log("Error fetching image:", error);
@@ -81,7 +68,8 @@ const User = () => {
     const closeModal = () => {
         setIsOpen(false);
     }
-
+    console.log(imageUrl);
+    Modal.setAppElement('#root');
     return (
         <div className='container-fluid text-center'>
             <div className='text-center'>
@@ -89,12 +77,12 @@ const User = () => {
                     <div>
                         <img
                             style={styleImg}
-                            src={imageUrl ? imageUrl : img}
+                            src={imageUrl ? imageUrl : imgUser}
                             alt="" />
+
                     </div>
                     <div className='text mt-1'>{userData.name} {userData.lastName}</div>
                     <div className='mt-5'>
-
                         <button onClick={openModal}>
                             <img src={btn} alt="" />
                         </button>
@@ -114,14 +102,15 @@ const User = () => {
                 </div>
                 <h2 className='mt-5'>PROFILE</h2>
                 <div className='userData'>
-                    <div className="d-flex justify-content-center align-items-center mt-5 flex-column text flex-sm-row">
+                    <div className="d-flex justify-content-center align-items-center mt-2 flex-column text flex-sm-row">
+
                         <div>
                             <img src={userImage} alt="" />
                             UserName
                         </div>
                         <div className='p-5'>{userData.name}</div>
                     </div>
-                    <div className="d-flex justify-content-center align-items-center mt-2 ml-5-sm flex-column text flex-sm-row">
+                    <div className="d-flex justify-content-center align-items-center mt-2 ml-2-xl ml-5-sm flex-column text flex-sm-row">
                         <div className="offset-1  offset-sm"></div>
                         <div>
                             <img src={emailImage} alt="" />

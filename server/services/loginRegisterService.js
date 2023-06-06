@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { Public, Image, User, Announcement, Category } from "../data_base/tables.js";
+import { User } from "../data_base/tables.js";
 const addDatabaseUser = async body => {
     try {
         const hashedPassword = await bcrypt.hash(body.password, 10);

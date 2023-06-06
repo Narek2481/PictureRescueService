@@ -10,6 +10,14 @@
 button{
     border: none !important;
 }
+.deleteImage{
+    width: 30px;
+    height: 30px;
+}
+
+.deleteProfile{
+    cursor: pointer;
+}
 
 
 @media(max-width:576px){

@@ -15,6 +15,8 @@ import { imageLoudeForDataBase, imageLoudeForDataBaseForCategory } from "../serv
 import adecryptPassword from "../middlewares/decriptPassword.js";
 import getUserDataControler from "../controllers/getUserDataControler.js";
 import getAvatarController from "../controllers/getAvatarController.js";
+import putUserDataController from "../controllers/putUserDataController.js";
+
 
 
 const upload = multer({ dest: './img' });
@@ -102,5 +104,6 @@ router.get('/api/user/refresh', refresh);
 router.get('/api/getUserData', auth, getUserDataControler);
 // getAvatar ------------------------------------------------------------------
 router.get("/api/getAvatar", auth, getAvatarController);
-
+// putUserData ------------------------------------------------
+router.put("/api/user/putUserData", auth, adecryptPassword, putUserDataController);
 export { router };
