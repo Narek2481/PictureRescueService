@@ -13,7 +13,7 @@ body {
 
 body a {
   font-family: 'Alkatra', cursive;
-  // font-size: 21px;
+  font-size: 21px;
 }
 
 .body_scroll {
@@ -54,11 +54,12 @@ button:focus{
 
 .registration button,
 .sign_in button {
+  border-radius: 5px;
   display: inline-flex;
   border: none;
   color: white;
   background-color: #385898;
-  padding: 15px 30px;
+  padding: 10px 30px;
   margin: 70px 0 70px 0;
   cursor: pointer;
   font-size: 20px;

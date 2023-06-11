@@ -29,16 +29,15 @@ function Example({ props }) {
     }
     return (
         <>
-            <Button variant="primary" onClick={() => {
+            <Button variant="primary" className='h1' onClick={() => {
                 if (auth.register_or_login) {
                     handleShow();
                 } else {
                     navigate("/sign_in")
                 }
-
             }}>
                 Share
-                <img src={btnImg} alt="" />
+                <img className='ml-3' src={btnImg} alt=""  style={{width:"20px",height:"20px",verticalAlign:"middle"}}/>
             </Button>
 
             <Modal show={show} onHide={handleClose}>

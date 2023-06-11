@@ -110,8 +110,7 @@ const User = () => {
                         </div>
                         <div className='p-5'>{userData.name}</div>
                     </div>
-                    <div className="d-flex justify-content-center align-items-center mt-2 ml-2-xl ml-5-sm flex-column text flex-sm-row">
-                        <div className="offset-1  offset-sm"></div>
+                    <div className="d-flex justify-content-center align-items-center mt-2  flex-column text flex-sm-row">
                         <div>
                             <img src={emailImage} alt="" />
                             Email

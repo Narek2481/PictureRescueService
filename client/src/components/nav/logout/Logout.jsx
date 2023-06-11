@@ -11,6 +11,7 @@ const Logout = ({props}) => {
             dispatch(editCurrentUser({ register_or_login: false }));
         }}>
             Logout
+            <div className="line"></div>
         </li>
     );
 };

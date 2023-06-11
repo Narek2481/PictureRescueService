@@ -51,12 +51,10 @@ export default function Nav() {
     return (
         <>
             <nav>
-                <ul className="container-fluid">
+                <ul className="container-fluid pt-2 pb-2">
                     <div className="logo_manue">
                         <div>
-                            <img className="img-fluid"
-                                src={logo} alt=""
-                                style={{ width: "50px", height: "40px", borderRadius: "50px" }} />
+                            <div className="slame"></div>
                         </div>
                         <div className="manue_icon" onClick={() => {
                             if (manue === '') {
@@ -84,7 +82,7 @@ export default function Nav() {
                                     text: "Home",
                                     click: clickManue
                                 }
-                            }, [auth])
+                            }, [auth,manue])
                         }
                         />
                         <LinkComponent props={
@@ -94,7 +92,7 @@ export default function Nav() {
                                     text: "About us",
                                     click: clickManue
                                 }
-                            }, [auth])
+                            }, [auth,manue])
                         }
                         />
 
@@ -102,11 +100,11 @@ export default function Nav() {
                             useMemo(() => {
                                 return {
                                     path: "sign_in",
-                                    text: "Sign in",
+                                    text: "Sign In",
                                     style: styleInLinkComponent,
                                     click: clickManue
                                 }
-                            }, [auth])
+                            }, [auth,manue])
                         }
                         />
 
@@ -114,11 +112,11 @@ export default function Nav() {
                             useMemo(() => {
                                 return {
                                     path: "registration",
-                                    text: "Registration",
+                                    text: "Sign Up",
                                     style: styleInLinkComponent,
                                     click: clickManue
                                 }
-                            }, [auth])
+                            }, [auth,manue])
                         }
                         />
                         <LinkComponent props={
@@ -129,23 +127,25 @@ export default function Nav() {
                                     style: styleInImageProfile,
                                     click: clickManue
                                 }
-                            }, [auth])
+                            }, [auth,manue])
                         }
                         />
                         <ImageProfile props={
                             useMemo(() => {
                                 return {
-                                    style: styleInImageProfile
+                                    style: styleInImageProfile,
+                                    click: clickManue
                                 }
-                            }, [auth])
+                            }, [auth,manue])
                         }
                         />
                         <Logout props={
                             useMemo(() => {
                                 return {
-                                    style: styleInImageProfile
+                                    style: styleInImageProfile,
+                                    click: clickManue
                                 }
-                            }, [auth])}
+                            }, [auth,manue])}
                         />
                     </div>
 

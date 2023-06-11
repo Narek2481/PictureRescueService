@@ -6,6 +6,7 @@ const LinkComponent = ({ props }) => {
             <Link to={props.path} onClick={props.click}>
                 {props.text}
             </Link>
+            <div className="line"></div>
         </li>
     )
 };
