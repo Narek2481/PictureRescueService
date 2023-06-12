@@ -5,6 +5,7 @@ import { ApiError } from "./error-middleware.js";
 const auth = async (req, res, next) => {
     try {
         const authorizationHeader = req.headers.authorization;
+        console.log(authorizationHeader,"nananananan");
         console.log(authorizationHeader,"authorizationHeader")
         if (!authorizationHeader) {
             return next(ApiError.UnauthorizedError());

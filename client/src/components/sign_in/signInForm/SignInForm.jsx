@@ -6,7 +6,7 @@ import StickyInputLabel from "./StickyInputLabel/StickyInputLabel";
 import "../signIn.scss"
 import { useNavigate } from 'react-router-dom';
 import env from "react-dotenv";
-import encryptPassword from "../../../encrypt/encryptPassword";
+import {encryptPassword} from "../../../encrypt/encryptPassword";
 
 
 

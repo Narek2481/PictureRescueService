@@ -5,9 +5,9 @@ import { useDispatch, } from "react-redux";
 import { editCurrentUser } from "../../redux/user/userSlice";
 import { useMemo } from "react";
 import StickyInputLabel from "../sign_in/signInForm/StickyInputLabel/StickyInputLabel";
-import { json, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 import env from "react-dotenv";
-import encryptPassword from "../../encrypt/encryptPassword";
+import {encryptPassword} from "../../encrypt/encryptPassword";
 
 const Registration = () => {
   const [email, setEmail] = useState("");

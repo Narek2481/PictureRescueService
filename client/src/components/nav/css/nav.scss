@@ -261,7 +261,7 @@ nav>ul li:hover {
     span {
       display: inline;
 
-      margin-right: 50%;
+      margin-right: 20%;
     }
   }
 
@@ -289,5 +289,13 @@ nav>ul li:hover {
 @media only screen and (max-width: 400px) {
   .manu_block {
     font-size: 20px;
+  }
+  .profileImage {
+   
+
+    span {
+
+      margin-right: 0;
+    }
   }
 }

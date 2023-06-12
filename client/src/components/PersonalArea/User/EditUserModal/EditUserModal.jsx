@@ -4,7 +4,7 @@ import Modal from 'react-bootstrap/Modal';
 import StickyInputLabel from '../../../sign_in/signInForm/StickyInputLabel/StickyInputLabel';
 import $api from '../../../../action';
 import env from 'react-dotenv';
-import encryptPassword from '../../../../encrypt/encryptPassword';
+import {encryptPassword} from '../../../../encrypt/encryptPassword';
 
 function Example() {
     const [lgShow, setLgShow] = useState(false);

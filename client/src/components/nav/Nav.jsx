@@ -2,13 +2,13 @@ import { Route, Routes, Navigate } from "react-router-dom";
 import AboutUsPage from "../../pages/AboutUsPage"
 import SignInPage from "../../pages/SignInPage"
 import RegistrationPage from "../../pages/RegistrationPage"
-import {  useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import HomePage from "../../pages/HomePage";
 import LinkComponent from "./linkComponent/linkComponent";
 import AddPicturePage from "../../pages/AddPicturePage";
-import {  useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import "./css/nav.scss"
-import logo from "../../img_logo/logo12.jpg"
+// import logo from "../../img_logo/logo12.jpg"
 import NotFoundPage from "../../pages/NotFoundPage";
 import ImageProfile from "./imageProfile/imageProfile";
 import { selectCurrentUser } from "../../redux/user/userSlice";
@@ -28,12 +28,16 @@ export default function Nav() {
     // register or login styles 
     const display = (auth.register_or_login ? "none" : "");
     const displayInImageProfile = auth.register_or_login ? "" : "none"
-    const styleInLinkComponent = {
-        display
-    }
-    const styleInImageProfile = { display: displayInImageProfile, cursor: "pointer" };
+    const styleInLinkComponent = useMemo(()=>{
+        return {
+            display
+        }
+    },[display])
+    const styleInImageProfile = useMemo(()=> {
+        return { display: displayInImageProfile, cursor: "pointer" }
+    },[displayInImageProfile]);
 
-    const clickManue = () => {
+    const clickManue = useCallback(() => {
         if (manue === '') {
             setIcon_1("manue_close_1");
             setIcon_2("manue_close_2");
@@ -45,8 +49,7 @@ export default function Nav() {
             setnone("");
             setManu('');
         }
-
-    }
+    }, [manue]);
 
     return (
         <>
@@ -82,7 +85,7 @@ export default function Nav() {
                                     text: "Home",
                                     click: clickManue
                                 }
-                            }, [auth,manue])
+                            }, [clickManue])
                         }
                         />
                         <LinkComponent props={
@@ -92,7 +95,7 @@ export default function Nav() {
                                     text: "About us",
                                     click: clickManue
                                 }
-                            }, [auth,manue])
+                            }, [clickManue])
                         }
                         />
 
@@ -104,7 +107,7 @@ export default function Nav() {
                                     style: styleInLinkComponent,
                                     click: clickManue
                                 }
-                            }, [auth,manue])
+                            }, [styleInLinkComponent,clickManue])
                         }
                         />
 
@@ -116,7 +119,7 @@ export default function Nav() {
                                     style: styleInLinkComponent,
                                     click: clickManue
                                 }
-                            }, [auth,manue])
+                            }, [styleInLinkComponent,clickManue])
                         }
                         />
                         <LinkComponent props={
@@ -127,7 +130,7 @@ export default function Nav() {
                                     style: styleInImageProfile,
                                     click: clickManue
                                 }
-                            }, [auth,manue])
+                            }, [styleInImageProfile,clickManue])
                         }
                         />
                         <ImageProfile props={
@@ -136,7 +139,7 @@ export default function Nav() {
                                     style: styleInImageProfile,
                                     click: clickManue
                                 }
-                            }, [auth,manue])
+                            }, [styleInImageProfile,clickManue])
                         }
                         />
                         <Logout props={
@@ -145,7 +148,7 @@ export default function Nav() {
                                     style: styleInImageProfile,
                                     click: clickManue
                                 }
-                            }, [auth,manue])}
+                            }, [styleInImageProfile,clickManue])}
                         />
                     </div>
 
@@ -158,8 +161,8 @@ export default function Nav() {
                 {auth.register_or_login ? "" : <Route path="/registration/*" element={<RegistrationPage />} />}
                 {auth.register_or_login ? "" : <Route path={"/sign_in/*"} element={<SignInPage />} />}
                 {auth.register_or_login ? <Route path={"/add_image/*"} element={<AddPicturePage />} /> : ""}
-                <Route path="/*" element={<NotFoundPage />} />
-                {auth.register_or_login ? <Route path={"/personalArea/*"} element={<PersonalAreaPage/>} /> : ""}
+                {auth.register_or_login ? <Route path={"/personalArea/*"} element={<PersonalAreaPage />} /> : ""}
+                <Route path="*" element={<NotFoundPage />} />
             </Routes>
         </>
     );
