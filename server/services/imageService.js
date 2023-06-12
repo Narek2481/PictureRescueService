@@ -1,3 +1,4 @@
+import { Sequelize } from 'sequelize';
 import { Public, Image, User, Announcement, Category } from "../data_base/tables.js";
 
 const categoryCreater = async (categoryData) => {
@@ -74,7 +75,7 @@ const addImageDataInDataBase = async (
             ref_or_path: imageData.name,
             width_heght: imageData.imageSizeForDataBase,
             category: myCategory,
-            public_or_private:publicOrPrivateInDataBase.id
+            public_or_private: publicOrPrivateInDataBase.id
         };
         await Image.create(newImage);
         return "ok"
@@ -85,7 +86,7 @@ const addImageDataInDataBase = async (
 
 const imageLoudeForDataBase = async (req) => {
     try {
-        
+
         const offset = req.query.offset
         let imagesInDb = await Image.findAll({
             order: [['id']],
@@ -97,13 +98,40 @@ const imageLoudeForDataBase = async (req) => {
                 limit: 9,
             })
         }
-        const imageObjArr = imagesInDb.map((e) => {
-            
-            return {
-                image_url: e.ref_or_path,
-                imageWidthHeght: e.width_heght,
-                id: e.id
+        const publicPrivateImage = imagesInDb.map(elem => {
+            return elem.id
+        })
+        console.log(publicPrivateImage, "publicPrivateImage");
+        const publicData = await Public.findAll({
+            where: {
+                id: {
+                    [Sequelize.Op.in]: publicPrivateImage
+                }
             }
+        });
+        console.log(publicData, "publicData");
+        const publicDataImage = publicData.map(elem => {
+            return Number(elem.id);
+
+        })
+        console.log(publicDataImage,"publicDataImage");
+        const publicDataArray = publicData.map(elem => {
+            return elem.public;
+        })
+        console.log(publicDataArray, "publicDataArray");
+        const imageObjArr = imagesInDb.map((e) => {
+            const indexForDataArray = publicDataImage.indexOf(e.public_or_private);
+            if (indexForDataArray > -1) {
+                if (publicDataArray[indexForDataArray] === true) {
+                    return {
+                        image_url: e.ref_or_path,
+                        imageWidthHeght: e.width_heght,
+                        id: e.id
+                    }
+                }
+            }
+
+
         })
         console.log(imageObjArr, "--------------------------")
         return imageObjArr;
@@ -154,7 +182,7 @@ const addAvatarInDB = async (imageData, userId) => {
         User.update(
             { profile_image: imageInDB.id },
             { where: { id: userId } }
-          )
+        )
         return "ok"
     } catch (e) {
         return e
@@ -162,4 +190,4 @@ const addAvatarInDB = async (imageData, userId) => {
 
 }
 
-export { imageLoudeForDataBaseForCategory, imageLoudeForDataBase, addImageDataInDataBase, publicOrPrivateCreater ,addAvatarInDB}
+export { imageLoudeForDataBaseForCategory, imageLoudeForDataBase, addImageDataInDataBase, publicOrPrivateCreater, addAvatarInDB }

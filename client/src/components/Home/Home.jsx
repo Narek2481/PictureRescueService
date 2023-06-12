@@ -112,7 +112,7 @@ function Home() {
         setIsOpen(false);
     }
     Modal.setAppElement("#root");
-    
+
     return (
         <div className="home">
             <h1 className="text-center mt-5">
@@ -172,11 +172,13 @@ function Home() {
                     // an array from the backend that is being rendered for component ImageComponent
                     useMemo(() => {
                         return nowData?.map((elem, index) => {
-                            return <ImageComponent
-                                props={elem}
+                            if (elem !== null) {
+                                return <ImageComponent
+                                    props={elem}
 
-                                key={Math.random() * 100}
-                            />
+                                    key={Math.random() * 100}
+                                />
+                            }
                         })
                     }, [nowData])
                 }

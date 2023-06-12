@@ -11,7 +11,7 @@ const returnImageWidthHeight = async path => {
 
 
 const imagePush = async (req, res) => {
-    console.log(req,"ddddddddddddd")
+    console.log(req, "ddddddddddddd")
     const userId = req.user.clientId;
     const imageSizeForDataBase = await returnImageWidthHeight(req.file.path);
     const categoryData = {
@@ -59,4 +59,13 @@ const imagePush = async (req, res) => {
     });
 }
 
-export {imagePush}
+const imagePushcontroller = async (req, res, next) => {
+    try {
+        console.log(req.user, "req.userreq.user")
+        await imagePush(req, res);
+    } catch (e) {
+        next(e)
+    }
+}
+
+export { imagePush ,imagePushcontroller}

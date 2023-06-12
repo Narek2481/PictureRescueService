@@ -9,7 +9,7 @@ const returnImageWidthHeight = async path => {
     return metadata.width + "x" + metadata.height
 }
 
-const controllerAvatarPush = async (req,res,next) => {
+const AvatarPush = async (req,res,next) => {
     console.log(req, "ddddddddddddd")
     const userId = req.user.clientId;
     const imageSizeForDataBase = await returnImageWidthHeight(req.file.path);
@@ -51,6 +51,13 @@ const controllerAvatarPush = async (req,res,next) => {
             });
         }
     });
+}
+const controllerAvatarPush = async (req, res,next) => {
+    try{
+        await AvatarPush(req, res);
+    }catch(e){
+        next(e)
+    }
 }
 
 export default controllerAvatarPush;

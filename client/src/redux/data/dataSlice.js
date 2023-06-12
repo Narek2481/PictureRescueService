@@ -55,7 +55,7 @@ export function downloudData(pastData, offset, fetchChange, categoryValue, setFa
             loudeData(offset, categoryValue)
                 .then((res) => {
                     if (res.data) { 
-                        dispatch(editData([...pastData, ...res.data[0]]));
+                        dispatch(editData([...res.data[0]]));
                         return dispatch(fetchChange)
                     }
                     setFatchNull(true);

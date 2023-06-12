@@ -77,4 +77,20 @@ const imageCategorySearchInDataBaseNesting = async category => {
     }
 }
 
-export {imageCategorySearchInDataBaseNesting,imageCategorySearchInDataBase};
+const categoryController = async (req, res,next) => {
+    try {
+        if (req.body.category) {
+            console.log(66669);
+            const categoryDataSend = await imageCategorySearchInDataBaseNesting(req.body.category);
+            res.send([[categoryDataSend[0]], categoryDataSend[1], categoryDataSend[2]]);
+        } else {
+            const categoryDataSend = await imageCategorySearchInDataBase(req);
+            res.send([[categoryDataSend[0]], categoryDataSend[1]]);
+        }
+    } catch (e) {
+        next(e)
+    }
+
+}
+
+export {categoryController};
