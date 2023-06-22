@@ -1,5 +1,6 @@
 import { Sequelize } from 'sequelize';
 import { Public, Image, User, Announcement, Category } from "../data_base/tables.js";
+import { validateAccessToken } from '../tokenWork/RefreshToken.js';
 
 const categoryCreater = async (categoryData) => {
     try {
@@ -114,12 +115,16 @@ const imageLoudeForDataBase = async (req) => {
             return Number(elem.id);
 
         })
-        console.log(publicDataImage,"publicDataImage");
+        const publicDataAuther = publicData.map(elem => {
+            return Number(elem.id);
+
+        })
+        console.log(publicDataAuther, "publicDataImage");
         const publicDataArray = publicData.map(elem => {
             return elem.public;
         })
         console.log(publicDataArray, "publicDataArray");
-        const imageObjArr = imagesInDb.map((e) => {
+        let imageObjArr = imagesInDb.map((e) => {
             const indexForDataArray = publicDataImage.indexOf(e.public_or_private);
             if (indexForDataArray > -1) {
                 if (publicDataArray[indexForDataArray] === true) {
@@ -128,16 +133,53 @@ const imageLoudeForDataBase = async (req) => {
                         imageWidthHeght: e.width_heght,
                         id: e.id
                     }
+                } else {
+                    const authorizationHeader = req.headers.authorization;
+                    const accessToken = authorizationHeader.split(' ')[1];
+                    return PublicImageDataCreater(accessToken, publicDataAuther, indexForDataArray, e)
+                        .then(elem => {
+                            return elem
+                        })
                 }
             }
-
-
         })
+        return Promise.allSettled(imageObjArr)
+            .then(results => {
+                const resolvedValues = results
+                    .filter(result => result.status === 'fulfilled')
+                    .map(result => result.value);
+                console.log(resolvedValues,"resolvedValues");
+                imageObjArr = resolvedValues
+                return resolvedValues
+                console.log(resolvedValues);
+            })
+            .catch(error => {
+                console.error(error);
+            });
         console.log(imageObjArr, "--------------------------")
         return imageObjArr;
 
     } catch (e) {
         return e;
+    }
+}
+
+async function PublicImageDataCreater(accessToken, publicDataAuther, indexForDataArray, e) {
+    const userData = await validateAccessToken(accessToken);
+    console.log("asjkassas");
+    if (publicDataAuther[indexForDataArray] && userData.clientId === publicDataAuther[indexForDataArray]) {
+        console.log({
+            image_url: e.ref_or_path,
+            imageWidthHeght: e.width_heght,
+            id: e.id,
+            text: "This photo is private and available only to you"
+        });
+        return {
+            image_url: e.ref_or_path,
+            imageWidthHeght: e.width_heght,
+            id: e.id,
+            text: "This photo is private and available only to you"
+        }
     }
 }
 

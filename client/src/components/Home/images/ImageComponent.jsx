@@ -16,6 +16,8 @@ export default memo(function ImageComponent({ props }) {
                 </div>
             </Modal>
             <Example props={props.id}/>
+            <h4 className="h5 mt-2 mb-0">{props.text ? props.text:""}</h4>
+
         </div>
     )
 });

@@ -5,7 +5,6 @@ import { ApiError } from "../middlewares/error-middleware.js";
 
 const controllreShare = async req => {
     try {
-        console.log(req.user.id, "userreq.userreq.user")
         console.log(req.user, "userreq.userreq.user")
         const sendToUser = await User.findOne({
             where: {
