@@ -1,14 +1,13 @@
 import React, { memo, useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import { RemoveScroll } from 'react-remove-scroll';
-import imgUser from "../../../img_logo/istockphoto-1130884625-612x612.jpg"
 import getUserData from '../../../action/getPersonalAreaData';
 import btn from "../../../img_logo/pencil-g9d2a08ec1_640 1.png"
 import userImage from "../../../img_logo/user_icon_150670 1.png"
 import emailImage from "../../../img_logo/email 1.png"
-import $api from '../../../action';
 import UploadAvatar from '../../Home/UploadAvatar/UploadAvatar';
-import Example from './EditUserModal/EditUserModal';
+import EditUserModal from './EditUserModal/EditUserModal';
+import { useSelector } from 'react-redux';
 
 
 const User = () => {
@@ -17,9 +16,8 @@ const User = () => {
         lastName: "",
         email: ""
     })
-    const [imageUrl, setImageUrl] = useState("");
+    const profileImage = useSelector((state) => state.ProfileImage);
     const [modalIsOpen, setIsOpen] = useState(false);
-    const styleImg = imageUrl ? {} : { width: "50px", height: " 50px", borderRadius: "25px" }
     useEffect(() => {
         getUserData()
             .then(res => {
@@ -28,22 +26,6 @@ const User = () => {
             .catch(e => console.log(e));
     }, [])
 
-
-    useEffect(() => {
-        $api
-            .get("/getAvatar", { responseType: 'arraybuffer' })
-            .then((response) => {
-                if (response.data.byteLength > 0) {
-                    const blob = new Blob([response.data], { type: 'image/png' });
-                    const url = URL.createObjectURL(blob);
-                    setImageUrl(url);
-                }
-            })
-            .catch((error) => {
-                console.log("Error fetching image:", error);
-
-            });
-    }, []);
 
     const customStyles = {
         overlay: {
@@ -68,20 +50,23 @@ const User = () => {
     const closeModal = () => {
         setIsOpen(false);
     }
-    console.log(imageUrl);
     Modal.setAppElement('#root');
     return (
-        <div className='container-fluid text-center'>
+        <div className='container text-center myUserContainer pt-5 pb-5'>
             <div className='text-center'>
                 <div className='p-1 d-flex justify-content-center align-items-center flex-column'>
                     <div>
                         <img
-                            style={styleImg}
-                            src={imageUrl ? imageUrl : imgUser}
+                            style={
+                                { 
+                                       maxWidth: "200px",
+                                borderRadius: "25px"
+                            }}
+                            src={profileImage}
                             alt="" />
 
                     </div>
-                    <div className='text mt-1'>{userData.name} {userData.lastName}</div>
+                    <div className='text mt-1 userData h2'>{userData.name} {userData.lastName}</div>
                     <div className='mt-5'>
                         <button onClick={openModal}>
                             <img src={btn} alt="" />
@@ -120,7 +105,7 @@ const User = () => {
                 </div>
             </div>
             <div>
-                <Example />
+                <EditUserModal />
             </div>
         </div>
     );

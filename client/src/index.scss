@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 * {
   margin: 0;
   padding: 0;
@@ -7,13 +8,13 @@
 body {
   color: #385898;
   background-color: #dfe3f0;
-  font-family: 'Alkatra', cursive;
+  font-family: 'Roboto', sans-serif;
 }
 
 
 body a {
-  font-family: 'Alkatra', cursive;
-  font-size: 21px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px;
 }
 
 .body_scroll {
@@ -30,7 +31,14 @@ button:focus{
   padding: 70px 0 0 0;
   text-align: center;
 }
-
+.eyeButton{
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 25%;
+  left: 90%;
+  cursor: pointer;
+}
 
 // .registration h3 {
 //   padding-bottom: 20px;

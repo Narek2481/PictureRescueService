@@ -43,9 +43,9 @@ const checkDatabaseUser = async body => {
 
 const logout = async refreshToken => {
     await User.update(
-        { refreshToken: null },
-        { where: { refreshToken } }
+        {where: { refreshToken }},
+        { refreshToken: null }
     );
 }
 
-export{addDatabaseUser ,checkDatabaseUser,logout};
+export { addDatabaseUser, checkDatabaseUser, logout };

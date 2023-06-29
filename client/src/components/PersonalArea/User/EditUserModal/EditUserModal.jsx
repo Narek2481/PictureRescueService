@@ -6,7 +6,7 @@ import $api from '../../../../action';
 import env from 'react-dotenv';
 import {encryptPassword} from '../../../../encrypt/encryptPassword';
 
-function Example() {
+function EditUserModal() {
     const [lgShow, setLgShow] = useState(false);
     const [name, setName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -122,4 +122,4 @@ function Example() {
     );
 }
 
-export default Example;
+export default EditUserModal;

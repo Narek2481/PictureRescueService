@@ -1,49 +1,25 @@
-import img from "../../../img_logo/istockphoto-1130884625-612x612.jpg"
 import { useDispatch, useSelector } from "react-redux";
-import NotificationImage from "./Notification/NotificationImage";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Cookies from "js-cookie";
+import NotificationImage from "./Notification/NotificationImage";
 import { editCurrentUser } from "../../../redux/user/userSlice";
-import $api from "../../../action";
 
 const ImageProfile = ({ props }) => {
     const name = useSelector((state) => state.currentUser.name)
     const loginState = useSelector((state) => state.currentUser.register_or_login)
     const dispatch = useDispatch()
-    const [imageUrl, setImageUrl] = useState("");
-
-    useEffect(() => {
-        $api
-            .get("/getAvatar", { responseType: 'arraybuffer' })
-            .then((response) => {
-                if (response.data.byteLength) {
-                    const blob = new Blob([response.data], { type: 'image/png' });
-                    const url = URL.createObjectURL(blob);
-                    console.log(url)
-                    setImageUrl(url);
-                }else{
-                    setImageUrl(img)
-                }
-            })
-            .catch((error) => {
-                console.log("Error fetching image:", error);
-                setImageUrl(img)
-            });
-    }, [loginState]);
-
+    const profileImage = useSelector((state) => state.ProfileImage);
     useEffect(() => {
         if (name === "") {
             const name = Cookies.get('name');
-            dispatch(editCurrentUser(
-                { name: name, register_or_login: loginState }
-            ));
+            dispatch(editCurrentUser({ name, register_or_login: loginState }));
         }
-    }, [])
+    })
 
     return (
         <li style={props.style} className="profileImage">
             <span> {name}</span>
-            <img src={imageUrl ? imageUrl : img} alt="Avatar" />
+            <img src={profileImage} alt="Avatar" />
             {loginState ? <NotificationImage /> : ""}
         </li>
     )
