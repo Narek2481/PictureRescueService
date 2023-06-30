@@ -87,7 +87,6 @@ const addImageDataInDataBase = async (
 
 const imageLoudeForDataBase = async (req) => {
     try {
-
         const offset = req.query.offset
         let imagesInDb = await Image.findAll({
             order: [['id']],
@@ -151,13 +150,10 @@ const imageLoudeForDataBase = async (req) => {
                 console.log(resolvedValues,"resolvedValues");
                 imageObjArr = resolvedValues
                 return resolvedValues
-                console.log(resolvedValues);
             })
             .catch(error => {
                 console.error(error);
             });
-        console.log(imageObjArr, "--------------------------")
-        return imageObjArr;
 
     } catch (e) {
         return e;

@@ -5,7 +5,7 @@ import { memo } from "react"
 const Social = memo(({props}) => {
 
     return (
-        <li className="col-3 mt-5">
+        <li className="col-sm-3 col-6 mt-5 ">
             <a
                 className="link-primary"
                 href="#"

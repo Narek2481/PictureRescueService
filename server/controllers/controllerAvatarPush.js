@@ -10,7 +10,6 @@ const returnImageWidthHeight = async path => {
 }
 
 const AvatarPush = async (req,res,next) => {
-    console.log(req, "ddddddddddddd")
     const userId = req.user.clientId;
     const imageSizeForDataBase = await returnImageWidthHeight(req.file.path);
     const categoryData = {

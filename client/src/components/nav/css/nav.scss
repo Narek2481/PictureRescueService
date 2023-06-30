@@ -1,6 +1,5 @@
 nav {
   background-color: #385898;
-  // padding: 3px 0;
   font-size: 22px;
 
 }
@@ -224,7 +223,7 @@ nav>ul li:hover {
   nav>ul li:hover {
     .line {
       background-color: #385898;
-
+      padding: 0 !important;
       transition: 0.5s;
     }
 
@@ -274,7 +273,8 @@ nav>ul li:hover {
   }
 
   .logo_manue {
-    width: 100%;
+
+    min-width: 100%;
   }
 }
 

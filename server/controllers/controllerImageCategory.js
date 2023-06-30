@@ -1,7 +1,80 @@
 import { Category, Image} from "../data_base/tables.js";
 
+//  add public or privet search 
+const imageLoudeForDataBase = async (req) => {
+    try {
+        const offset = req.query.offset
+        let imagesInDb = await Image.findAll({
+            order: [['id']],
+            limit: offset ? offset : 9
+        })
+        if (imagesInDb.length === 0) {
+            imagesInDb = await Image.findAll({
+                order: [['id']],
+                limit: 9,
+            })
+        }
+        const publicPrivateImage = imagesInDb.map(elem => {
+            return elem.id
+        })
+        console.log(publicPrivateImage, "publicPrivateImage");
+        const publicData = await Public.findAll({
+            where: {
+                id: {
+                    [Sequelize.Op.in]: publicPrivateImage
+                }
+            }
+        });
+        console.log(publicData, "publicData");
+        const publicDataImage = publicData.map(elem => {
+            return Number(elem.id);
 
+        })
+        const publicDataAuther = publicData.map(elem => {
+            return Number(elem.id);
 
+        })
+        console.log(publicDataAuther, "publicDataImage");
+        const publicDataArray = publicData.map(elem => {
+            return elem.public;
+        })
+        console.log(publicDataArray, "publicDataArray");
+        let imageObjArr = imagesInDb.map((e) => {
+            const indexForDataArray = publicDataImage.indexOf(e.public_or_private);
+            if (indexForDataArray > -1) {
+                if (publicDataArray[indexForDataArray] === true) {
+                    return {
+                        image_url: e.ref_or_path,
+                        imageWidthHeght: e.width_heght,
+                        id: e.id
+                    }
+                } else {
+                    const authorizationHeader = req.headers.authorization;
+                    const accessToken = authorizationHeader.split(' ')[1];
+                    return PublicImageDataCreater(accessToken, publicDataAuther, indexForDataArray, e)
+                        .then(elem => {
+                            return elem
+                        })
+                }
+            }
+        })
+        return Promise.allSettled(imageObjArr)
+            .then(results => {
+                const resolvedValues = results
+                    .filter(result => result.status === 'fulfilled')
+                    .map(result => result.value);
+                console.log(resolvedValues,"resolvedValues");
+                imageObjArr = resolvedValues
+                return resolvedValues
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+    } catch (e) {
+        return e;
+    }
+}
 
 const imageCategorySearchInDataBase = async (req) => {
     try {

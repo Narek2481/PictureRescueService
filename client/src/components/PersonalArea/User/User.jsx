@@ -52,7 +52,7 @@ const User = () => {
     }
     Modal.setAppElement('#root');
     return (
-        <div className='container text-center myUserContainer pt-5 pb-5'>
+        <div className=' text-center myUserContainer pt-5 pb-5'>
             <div className='text-center'>
                 <div className='p-1 d-flex justify-content-center align-items-center flex-column'>
                     <div>
@@ -100,7 +100,7 @@ const User = () => {
                             <img src={emailImage} alt="" />
                             Email
                         </div>
-                        <div className='ml-5'>{userData.email}</div>
+                        <div className='ml-sm-5 ml-1'>{userData.email}</div>
                     </div>
                 </div>
             </div>

@@ -31,9 +31,7 @@ const preparationRegistrationSubmit = async (body) => {
     const status = await addDatabaseUser(body);
     if (status.status === "ok") {
         try {
-
             const refreshToken = await generateRefreshToken(body.email)
-
             const userData = await User.create({
                 name: body.name,
                 email: body.email,
@@ -52,7 +50,7 @@ const preparationRegistrationSubmit = async (body) => {
                 }
             )
         } catch (e) {
-            return String(e)
+            return e
         }
     } else {
         return status.status
@@ -72,7 +70,6 @@ const registrationSubmitController = async (req, res, next) => {
         if (validation) {
             const data = await preparationRegistrationSubmit(req.body);
             if (typeof data === "object") {
-                console.log(data.tokens.refreshToken, "data.tokens.refreshToken");
                 res.cookie('refreshToken', {refreshToken:data.tokens.refreshToken}, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, path: "/" });
                 res.cookie('name', data.name, { maxAge: 60 * 60 * 1000, httpOnly: false, path: "/" });
                 res.status(201);
@@ -81,7 +78,7 @@ const registrationSubmitController = async (req, res, next) => {
                 next(ApiError.BadRequest(data));
             }
         } else {
-            next(ApiError.BadRequest(data))
+            next(ApiError.BadRequest(validation))
         }
     }
     catch (e) {

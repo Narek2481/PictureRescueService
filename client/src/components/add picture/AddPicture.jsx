@@ -57,9 +57,6 @@ const AddPicture = () => {
         return {}
 
     };
-    // useEffect(() => {
-    //     setUserToken(Cookies.get("login"));
-    // }, [])
 
     const openModal = () => {
         setIsOpen(true);
