@@ -4,7 +4,7 @@ import Modal from 'react-bootstrap/Modal';
 import StickyInputLabel from '../../../sign_in/signInForm/StickyInputLabel/StickyInputLabel';
 import $api from '../../../../action';
 import env from 'react-dotenv';
-import {encryptPassword} from '../../../../encrypt/encryptPassword';
+import { encryptPassword } from '../../../../encrypt/encryptPassword';
 
 function EditUserModal() {
     const [lgShow, setLgShow] = useState(false);
@@ -22,14 +22,14 @@ function EditUserModal() {
             );
             return
         }
-        
+
         $api.put("/user/putUserData", {
-            name, lastName, email,password:encryptPassword(password,env.ENCRYPTION_SECRET)
+            name, lastName, email, password: encryptPassword(password, env.ENCRYPTION_SECRET)
         })
             .then(response => {
 
                 if (response.status === 201) {
-                    if(eror){
+                    if (eror) {
                         setEror("")
                     }
                     setInputValidStyle({})
@@ -51,7 +51,7 @@ function EditUserModal() {
     }
     return (
         <>
-            <Button className="go_add_image" onClick={() => setLgShow(true)}>Edit User</Button>
+            <Button className="go_add_image m-0" onClick={() => setLgShow(true)}>Edit User</Button>
             <Modal
                 size="lg"
                 show={lgShow}
@@ -59,10 +59,8 @@ function EditUserModal() {
                 aria-labelledby="example-modal-sizes-title-lg"
             >
                 <Modal.Header>
-                    <Modal.Title id="example-modal-sizes-title-lg">
-                        <h3>Change youre user data</h3>
-                        <p className=' mt-1 h3 text-danger'>{eror}</p>
-                    </Modal.Title>
+                    <h3 className='text-center'>Change youre user data</h3> <br />
+                    <p className='text-danger text-center'>{eror}</p>
                 </Modal.Header>
                 <Modal.Body>
                     <StickyInputLabel props={
@@ -73,9 +71,9 @@ function EditUserModal() {
                                 type: "text",
                                 inputValue: name,
                                 setInputValue: setName,
-                                style:inputValidStyle
+                                style: inputValidStyle
                             }
-                        }, [name,inputValidStyle])
+                        }, [name, inputValidStyle])
                     } />
                     <StickyInputLabel props={
                         useMemo(() => {
@@ -85,9 +83,9 @@ function EditUserModal() {
                                 type: "text",
                                 inputValue: lastName,
                                 setInputValue: setLastName,
-                                style:inputValidStyle
+                                style: inputValidStyle
                             }
-                        }, [inputValidStyle,lastName])
+                        }, [inputValidStyle, lastName])
                     } />
                     <StickyInputLabel props={
                         useMemo(() => {
@@ -97,9 +95,9 @@ function EditUserModal() {
                                 type: "email",
                                 inputValue: email,
                                 setInputValue: setEmail,
-                                style:inputValidStyle
+                                style: inputValidStyle
                             }
-                        }, [email,inputValidStyle])
+                        }, [email, inputValidStyle])
                     } />
                     <StickyInputLabel props={
                         useMemo(() => {
@@ -109,12 +107,12 @@ function EditUserModal() {
                                 type: "password",
                                 inputValue: password,
                                 setInputValue: setPassword,
-                                style:inputValidStyle
+                                style: inputValidStyle
                             }
-                        }, [password,inputValidStyle])
+                        }, [password, inputValidStyle])
                     } />
                     <div className='text-center'>
-                        <button className="go_add_image" onClick={submitData} >Change User data</button>
+                        <button className="go_add_image mt-4" onClick={submitData} >Change User data</button>
                     </div>
                 </Modal.Body>
             </Modal>

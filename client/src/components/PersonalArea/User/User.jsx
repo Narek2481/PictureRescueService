@@ -57,6 +57,7 @@ const User = () => {
                 <div className='p-1 d-flex justify-content-center align-items-center flex-column'>
                     <div>
                         <img
+                            className='mb-2'
                             style={
                                 { 
                                        maxWidth: "200px",
@@ -67,7 +68,7 @@ const User = () => {
 
                     </div>
                     <div className='text mt-1 userData h2'>{userData.name} {userData.lastName}</div>
-                    <div className='mt-5'>
+                    <div className='mt-1'>
                         <button onClick={openModal}>
                             <img src={btn} alt="" />
                         </button>
@@ -85,26 +86,25 @@ const User = () => {
                         </RemoveScroll>
                     </Modal>
                 </div>
-                <h2 className='mt-5'>PROFILE</h2>
+                <h2 className='mt-5 mb-5'>PROFILE</h2>
                 <div className='userData'>
-                    <div className="d-flex justify-content-center align-items-center mt-2 flex-column text flex-sm-row">
-
+                    <div className="d-flex justify-content-center align-items-center mt-2 flex-sm-row ">
                         <div>
-                            <img src={userImage} alt="" />
-                            UserName
+                            <img   className='img-fluid mw-25' src={userImage} alt=""  />
+                            UserName:
                         </div>
-                        <div className='p-5'>{userData.name}</div>
+                        <div>{userData.name}</div>
                     </div>
-                    <div className="d-flex justify-content-center align-items-center mt-2  flex-column text flex-sm-row">
-                        <div>
-                            <img src={emailImage} alt="" />
-                            Email
+                    <div className="d-flex justify-content-center  align-items-center mt-3">
+                        <div className='emailData mw-50'>
+                            <img className='img-fluid mw-25' src={emailImage} alt="" />
+                            Email:
                         </div>
-                        <div className='ml-sm-5 ml-1'>{userData.email}</div>
+                        <div className='mw-50'>{userData.email}</div>
                     </div>
                 </div>
             </div>
-            <div>
+            <div className='mt-3'>
                 <EditUserModal />
             </div>
         </div>

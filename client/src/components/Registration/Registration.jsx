@@ -96,7 +96,6 @@ const Registration = () => {
 
   }
 
-  console.log(env.ENCRYPTION_SECRET)
   return (
     <div className="registration">
       <h2>Sign Up</h2>

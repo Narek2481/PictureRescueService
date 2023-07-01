@@ -37,7 +37,7 @@ const User = sequelize.define('Users',
             },
             allowNull: true
         },
-        refreshToken:{
+        refreshToken: {
             type: DataTypes.STRING(255),
             allowNull: true
         }
@@ -162,10 +162,12 @@ const Public = sequelize.define('Public', {
 }, {
     tableName: "Public"
 });
+Image.belongsTo(Public, { foreignKey: 'public_or_private' });
+Public.hasMany(Image, { foreignKey: 'public_or_private' });
 
 sequelize.sync()
     .then(() => console.log("  crated tables"))
-    .catch((e)=> e);
+    .catch((e) => e);
 export { Public, Image, User, Announcement, Category }
 
 

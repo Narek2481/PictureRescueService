@@ -49,10 +49,9 @@ export function editFatching(pyload) {
     }
 }
 export function downloudData(pastData, offset, fetchChange, categoryValue, setFatchNull) {
-    console.log(offset)
     return (dispatch) => {
         return (
-            loudeData(offset, categoryValue)
+            loudeData(pastData.length+9, categoryValue)
                 .then((res) => {
                     if (res.data) { 
                         dispatch(editData([...res.data[0]]));

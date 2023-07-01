@@ -25,7 +25,8 @@ export function downloudProfileImage() {
         return (
             downlodeImageProfile()
                 .then((url) => {
-                    if (url) {
+                    console.log(url);
+                    if (url !== undefined) {
                         dispatch(editProfileImage(url));
                     }
                 })

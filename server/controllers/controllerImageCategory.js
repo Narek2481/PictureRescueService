@@ -1,4 +1,5 @@
-import { Category, Image} from "../data_base/tables.js";
+import { Category, Image,Public} from "../data_base/tables.js";
+import { PublicImageDataCreater } from "../services/imageService.js";
 
 //  add public or privet search 
 const imageLoudeForDataBase = async (req) => {
@@ -106,8 +107,39 @@ const imageCategorySearchInDataBase = async (req) => {
 
 
 
+const imageLoudeForDataBase__ = async (req) => {
+    try {
+        const offset = req.query.offset
+        const result = await Image.findAll({
+            include: [Public],
+            limit: offset ? offset : 9
+        });
 
-const imageCategorySearchInDataBaseNesting = async category => {
+        console.log(result, "joindataatatat");
+        const imageForSendData = await Promise.all(result.map(async (image) => {
+            if (image.Public.public === true) {
+                return {
+                    image_url: image.ref_or_path,
+                    imageWidthHeght: image.width_heght,
+                    id: image.id
+                };
+            } else {
+                const authorizationHeader = req.headers.authorization;
+                const accessToken = authorizationHeader.split(' ')[1];
+                const data = await PublicImageDataCreater(accessToken, image);
+                return data;
+            }
+        }));
+
+        console.log(imageForSendData, "imageForSendData");
+        return imageForSendData;
+       
+    } catch (e) {
+        console.log(e);
+        return e;
+    }
+}
+const imageCategorySearchInDataBaseNesting = async (category,req) => {
     try {
         const limit = 9;
         if (category === "All") {
@@ -117,6 +149,7 @@ const imageCategorySearchInDataBaseNesting = async category => {
         const currentCategory = await Category.findOne({
             where: {
                 name: category
+                
             }
         });
         const categoryInDataBase = await Category.findAll({
@@ -125,26 +158,34 @@ const imageCategorySearchInDataBaseNesting = async category => {
             }
         });
         const imageDataInDb = await Image.findAll({
+            include: [Public],
+            limit:  9,
             where: {
-
                 category: currentCategory.id
-            },
-            limit: 9
+            }
         });
-
+        console.log(imageDataInDb,"imageDataInDb");
         
-
         const categoryForSend = categoryInDataBase.map((elem) => {
             return { id: elem.id, name: elem.name };
         })
-        const imageDataForSend = imageDataInDb ? imageDataInDb.map((elem) => {
-            return {
-                imageWidthHeght: elem.width_heght,
-                image_url: elem.ref_or_path
+        const imageForSendDataImages = await Promise.all(imageDataInDb.map(async (image) => {
+            console.log(image);
+            if (image.Public.public === true) {
+                return {
+                    image_url: image.ref_or_path,
+                    imageWidthHeght: image.width_heght,
+                    id: image.id
+                };
+            } else {
+                const authorizationHeader = req.headers.authorization;
+                const accessToken = authorizationHeader.split(' ')[1];
+                const data = await PublicImageDataCreater(accessToken, image);
+                return data;
             }
-        }) : [];
-
-        return [categoryForSend, imageDataForSend, limit];
+        }));
+        console.log(imageForSendDataImages,"imageForSendDataImages");
+        return [categoryForSend, imageForSendDataImages, limit];
     } catch (e) {
         return e;
     }
@@ -154,7 +195,8 @@ const categoryController = async (req, res,next) => {
     try {
         if (req.body.category) {
             console.log(66669);
-            const categoryDataSend = await imageCategorySearchInDataBaseNesting(req.body.category);
+            const categoryDataSend = await imageCategorySearchInDataBaseNesting(req.body.category,req);
+            console.log(categoryDataSend,"categoryDataSendcategoryDataSend");
             res.send([[categoryDataSend[0]], categoryDataSend[1], categoryDataSend[2]]);
         } else {
             const categoryDataSend = await imageCategorySearchInDataBase(req);

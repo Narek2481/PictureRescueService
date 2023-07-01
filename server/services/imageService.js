@@ -1,5 +1,5 @@
-import { Sequelize } from 'sequelize';
-import { Public, Image, User, Announcement, Category } from "../data_base/tables.js";
+
+import { Public, Image, User, Category } from "../data_base/tables.js";
 import { validateAccessToken } from '../tokenWork/RefreshToken.js';
 
 const categoryCreater = async (categoryData) => {
@@ -15,11 +15,17 @@ const categoryCreater = async (categoryData) => {
             if (newCategorySearch) {
                 return newCategorySearch.id
             } else {
-                const newCategoryCreate = await Category.create({
-                    name: newCategory,
-                    parent: null
-                });
-                return newCategoryCreate.id
+                if (newCategory !== "") {
+                    const newCategoryCreate = await Category.create({
+                        name: newCategory,
+                        parent: null
+                    });
+                    return newCategoryCreate.id
+                } else {
+                    return null
+                }
+
+
             }
         } else {
             const selectValueCategorySearch = await Category.findOne({
@@ -69,6 +75,7 @@ const addImageDataInDataBase = async (
     imageData, categoryData, publicImage, userId
 ) => {
     try {
+        console.log(imageData, "imageDataimageData");
         const publicOrPrivateInDataBase = await publicOrPrivateCreater(publicImage, userId);
         const myCategory = await categoryCreater(categoryData);
         console.log(myCategory, "myCategory")
@@ -79,6 +86,11 @@ const addImageDataInDataBase = async (
             public_or_private: publicOrPrivateInDataBase.id
         };
         await Image.create(newImage);
+        Public.update(
+            { ImageId: Image.id },
+            { where: { id: publicOrPrivateInDataBase.id } }
+        )
+        console.log("okokokoko");
         return "ok"
     } catch (e) {
         return "eror"
@@ -87,96 +99,88 @@ const addImageDataInDataBase = async (
 
 const imageLoudeForDataBase = async (req) => {
     try {
-        const offset = req.query.offset
-        let imagesInDb = await Image.findAll({
-            order: [['id']],
-            limit: offset ? offset : 9
-        })
-        if (imagesInDb.length === 0) {
-            imagesInDb = await Image.findAll({
-                order: [['id']],
-                limit: 9,
+        const offset = req.query.offset;
+        const category = req.query.categoryValue;
+        let categoryDataForSearch = null
+        if (category) {
+            categoryDataForSearch = await Category.findOne({
+                where: { name: category }
             })
         }
-        const publicPrivateImage = imagesInDb.map(elem => {
-            return elem.id
-        })
-        console.log(publicPrivateImage, "publicPrivateImage");
-        const publicData = await Public.findAll({
-            where: {
-                id: {
-                    [Sequelize.Op.in]: publicPrivateImage
-                }
-            }
+
+
+
+
+        const result = categoryDataForSearch !== null ? await Image.findAll({
+            include: [Public],
+            limit: offset ? offset : 9,
+            where: { category: categoryDataForSearch }
+        }) : await Image.findAll({
+            include: [Public],
+            limit: offset ? offset : 9
         });
-        console.log(publicData, "publicData");
-        const publicDataImage = publicData.map(elem => {
-            return Number(elem.id);
 
-        })
-        const publicDataAuther = publicData.map(elem => {
-            return Number(elem.id);
-
-        })
-        console.log(publicDataAuther, "publicDataImage");
-        const publicDataArray = publicData.map(elem => {
-            return elem.public;
-        })
-        console.log(publicDataArray, "publicDataArray");
-        let imageObjArr = imagesInDb.map((e) => {
-            const indexForDataArray = publicDataImage.indexOf(e.public_or_private);
-            if (indexForDataArray > -1) {
-                if (publicDataArray[indexForDataArray] === true) {
-                    return {
-                        image_url: e.ref_or_path,
-                        imageWidthHeght: e.width_heght,
-                        id: e.id
-                    }
-                } else {
-                    const authorizationHeader = req.headers.authorization;
-                    const accessToken = authorizationHeader.split(' ')[1];
-                    return PublicImageDataCreater(accessToken, publicDataAuther, indexForDataArray, e)
-                        .then(elem => {
-                            return elem
-                        })
-                }
+        console.log(result, "joindataatatat");
+        const imageForSendData = await Promise.all(result.map(async (image) => {
+            if (image.Public.public === true) {
+                return {
+                    image_url: image.ref_or_path,
+                    imageWidthHeght: image.width_heght,
+                    id: image.id
+                };
+            } else {
+                const authorizationHeader = req.headers.authorization;
+                const accessToken = authorizationHeader.split(' ')[1];
+                const data = await PublicImageDataCreater(accessToken, image);
+                return data;
             }
-        })
-        return Promise.allSettled(imageObjArr)
-            .then(results => {
-                const resolvedValues = results
-                    .filter(result => result.status === 'fulfilled')
-                    .map(result => result.value);
-                console.log(resolvedValues,"resolvedValues");
-                imageObjArr = resolvedValues
-                return resolvedValues
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        }));
+
+        console.log(imageForSendData, "imageForSendData");
+        return imageForSendData;
 
     } catch (e) {
+        console.log(e);
         return e;
     }
 }
 
-async function PublicImageDataCreater(accessToken, publicDataAuther, indexForDataArray, e) {
-    const userData = await validateAccessToken(accessToken);
-    console.log("asjkassas");
-    if (publicDataAuther[indexForDataArray] && userData.clientId === publicDataAuther[indexForDataArray]) {
-        console.log({
-            image_url: e.ref_or_path,
-            imageWidthHeght: e.width_heght,
-            id: e.id,
-            text: "This photo is private and available only to you"
-        });
-        return {
-            image_url: e.ref_or_path,
-            imageWidthHeght: e.width_heght,
-            id: e.id,
-            text: "This photo is private and available only to you"
-        }
-    }
+function PublicImageDataCreater(accessToken, image) {
+    const userData = validateAccessToken(accessToken);
+    return userData
+        .then(userData => {
+            if (image.Public.author === userData.clientId) {
+                return {
+                    image_url: image.ref_or_path,
+                    imageWidthHeght: image.width_heght,
+                    id: image.id,
+                    text: "This photo is private and available only to you"
+                }
+            } else {
+
+                return null
+            }
+        })
+        .catch(() => null)
+
+
+
+    // if (publicDataAuther[indexForDataArray] && userData.clientId === publicDataAuther[indexForDataArray]) {
+    //     console.log({
+    //         image_url: e.ref_or_path,
+    //         imageWidthHeght: e.width_heght,
+    //         id: e.id,
+    //         text: "This photo is private and available only to you"
+    //     });
+    //     return {
+    //         image_url: e.ref_or_path,
+    //         imageWidthHeght: e.width_heght,
+    //         id: e.id,
+    //         text: "This photo is private and available only to you"
+    //     }
+    // } else {
+    //     return null
+    // }
 }
 
 const imageLoudeForDataBaseForCategory = async req => {
@@ -228,4 +232,4 @@ const addAvatarInDB = async (imageData, userId) => {
 
 }
 
-export { imageLoudeForDataBaseForCategory, imageLoudeForDataBase, addImageDataInDataBase, publicOrPrivateCreater, addAvatarInDB }
+export { PublicImageDataCreater, imageLoudeForDataBaseForCategory, imageLoudeForDataBase, addImageDataInDataBase, publicOrPrivateCreater, addAvatarInDB }

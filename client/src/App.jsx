@@ -9,10 +9,10 @@ import { downloudProfileImage } from "./redux/imageProfile/imageProfile";
 function App() {
   const dispatch = useDispatch()
   useEffect(() => {
-    dispatch(downloudProfileImage())
     if (localStorage.getItem("token")) {
       checkeAuth(dispatch, editCurrentUser)
     }
+    dispatch(downloudProfileImage())
   })
   return (
     <Nav />
