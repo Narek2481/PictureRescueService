@@ -2,13 +2,13 @@ import { loudeData } from "../../action/dataApi";
 
 
 export function downlodeDataReducer(state = {}, action) {
-    
+
     if (action.type === "downlode_data_change") {
-        const limit = state.limit+=9;
+        const limit = state.limit += 9;
         return {
             ...state,
             data: action.pyload,
-            limit:limit
+            limit: limit
         };
     } else if (action.type === "change_fetching") {
         return {
@@ -28,7 +28,7 @@ export function downlodeDataReducer(state = {}, action) {
 export const initialDownlodeData = {
     data: [],
     fatching: true,
-    limit :9
+    limit: 9
 };
 export function editDataCategory(pyload) {
     return {
@@ -51,15 +51,16 @@ export function editFatching(pyload) {
 export function downloudData(pastData, offset, fetchChange, categoryValue, setFatchNull) {
     return (dispatch) => {
         return (
-            loudeData(pastData.length+9, categoryValue)
+            loudeData(pastData.length + 9, categoryValue)
                 .then((res) => {
-                    if (res.data) { 
+                    if (res.data) {
                         dispatch(editData([...res.data[0]]));
                         return dispatch(fetchChange)
                     }
                     setFatchNull(true);
                     dispatch(fetchChange);
                 })
+                .catch(e => console.log(e))
         );
     }
 }
