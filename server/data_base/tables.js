@@ -36,10 +36,6 @@ const User = sequelize.define('Users',
                 key: 'id' // The primary key of the referenced table
             },
             allowNull: true
-        },
-        refreshToken: {
-            type: DataTypes.STRING(255),
-            allowNull: true
         }
     },
     {
