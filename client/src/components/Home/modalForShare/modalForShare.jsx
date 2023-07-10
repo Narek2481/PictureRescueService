@@ -9,7 +9,7 @@ import shareImage from '../../../action/shareImage';
 import { selectCurrentUser } from '../../../redux/user/userSlice';
 
 
-function Example({ props }) {
+function Share({ props }) {
     const auth = useSelector(selectCurrentUser)
     const [dataForSend, setDataForSend] = useState("")
     const [show, setShow] = useState(false);
@@ -72,4 +72,4 @@ function Example({ props }) {
     );
 }
 
-export default memo(Example);
+export default memo(Share);

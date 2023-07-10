@@ -111,11 +111,11 @@ const imageLoudeForDataBase = async (req) => {
             include: [Public],
             limit: offset ? offset : 9,
             where: { category: categoryDataForSearch },
-            order: [['createdAt', 'DESC']] 
+            order: [['createdAt', 'DESC']]
         }) : await Image.findAll({
             include: [Public],
             limit: offset ? offset : 9,
-            order: [['createdAt', 'DESC']] 
+            order: [['createdAt', 'DESC']]
         });
 
         console.log(result, "joindataatatat");
@@ -194,7 +194,7 @@ const imageLoudeForDataBaseForCategory = async req => {
                 category: categoryData.id
 
             },
-            order: [['createdAt', 'DESC']] ,
+            order: [['createdAt', 'DESC']],
             limit: offset ? offset : 9
         })
         const imageObjArr = imagesInDb.map((e) => {
@@ -230,4 +230,21 @@ const addAvatarInDB = async (imageData, userId) => {
 
 }
 
-export { PublicImageDataCreater, imageLoudeForDataBaseForCategory, imageLoudeForDataBase, addImageDataInDataBase, publicOrPrivateCreater, addAvatarInDB }
+const findeImageForDelete = async (imageId) => {
+    try{
+        const imageData  = await Image.findOne({
+            where: {
+                id: imageId
+            }
+        });
+        const publicId = imageData.public_or_private
+        await Image.destroy({ where: { id: imageId } })
+        await Public.destroy({ where: { id: publicId } })
+        return "ok"
+    }catch(e){
+        return e
+    }
+}
+
+
+export { findeImageForDelete,PublicImageDataCreater, imageLoudeForDataBaseForCategory, imageLoudeForDataBase, addImageDataInDataBase, publicOrPrivateCreater, addAvatarInDB }

@@ -42,7 +42,7 @@ const AddPicture = () => {
         if (nesting > 0) {
             dispatch(downloudCategoryPost(requsetCategoryRedux, selectValue,categoryValue));
         }
-    }, [nesting, fetchingCategory,categoryValue,dispatch,requsetCategoryRedux,selectValue]);
+    }, [nesting, fetchingCategory]);
     const onImageChange = useCallback(event => {
         if (event.target.files && event.target.files[0]) {
             setImageData(event.target.files[0]);

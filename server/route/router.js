@@ -2,7 +2,7 @@ import multer from "multer";
 import express from "express";
 
 import { registrationSubmitController } from "../controllers/controllerRegistrationSubmit.js";
-import {  imagePushcontroller } from "../controllers/controllerImagePush.js";
+import { imagePushcontroller } from "../controllers/controllerImagePush.js";
 import controllerShareData from "../controllers/controllreShare.js";
 import { categoryController } from "../controllers/controllerImageCategory.js";
 import controllreNotificationData from "../controllers/controllreNotification.js";
@@ -17,6 +17,7 @@ import getAvatarController from "../controllers/getAvatarController.js";
 import putUserDataController from "../controllers/putUserDataController.js";
 import logoutcontroller from "../controllers/LogoutController.js";
 import imageLoudeController from "../controllers/imageLoudeController.js";
+import deletePrivetImageController from "../controllers/deletePrivetImageController.js";
 
 
 
@@ -44,7 +45,7 @@ router.get("/api/imageLoud", imageLoudeController);
 // avatarPush route -----------------------------------------------------------------------------------
 router.post("/api/avatar", auth, upload2.single('avatar'), controllerAvatarPush);
 // image category route -----------------------------------------------------------------------------------
-router.post("/api/imageCategory",categoryController );
+router.post("/api/imageCategory", categoryController);
 // share -----------------------------------------------------------------------------------------
 router.post("/api/share", auth, controllerShareData);
 // getNotification -----------------------------------------------------------
@@ -57,4 +58,7 @@ router.get('/api/getUserData', auth, getUserDataControler);
 router.get("/api/getAvatar", auth, getAvatarController);
 // putUserData ------------------------------------------------
 router.put("/api/user/putUserData", auth, adecryptPassword, putUserDataController);
+// deletePrivetImage
+router.delete("/api/deletePrivetImage", auth, deletePrivetImageController);
+
 export { router };

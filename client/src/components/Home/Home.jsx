@@ -39,7 +39,7 @@ function Home() {
             dispatch(downloudData(nowData, limit, editFatching({ fatching: false }), selectValue, setFatchNull));
             offset.current++
         }
-    }, [fatchDataRedux]);
+    });
 
     // requset category
     useEffect(() => {
@@ -175,7 +175,6 @@ function Home() {
                             if (elem !== null) {
                                 return <ImageComponent
                                     props={elem}
-
                                     key={Math.random() * 100}
                                 />
                             }
