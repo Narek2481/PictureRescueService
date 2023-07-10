@@ -1,6 +1,5 @@
 import { memo } from "react";
 import { Modal } from "../modal/Modal";
-import btnImg from "../../../img_logo/61020.png"
 import Example from "../modalForShare/modalForShare";
 
 
@@ -15,8 +14,8 @@ export default memo(function ImageComponent({ props }) {
                     <img className="img-fluid" src={"img/" + props.image_url} alt="" />
                 </div>
             </Modal>
-            <Example props={props.id}/>
-            <h4 className="h5 mt-2 mb-0">{props.text ? props.text:""}</h4>
+            <Example props={props.id} />
+            <h4 className="h5 mt-2 mb-0">{props.text ? props.text : ""}</h4>
 
         </div>
     )

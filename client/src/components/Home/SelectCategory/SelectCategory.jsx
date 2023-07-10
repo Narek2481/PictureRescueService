@@ -21,10 +21,10 @@ const SelectCategory = ({ props }) => {
                     console.log(e.target.value)
                     const newState = [];
                     for (let i = 0; i <= props.index; i++) {
-                        if(i === props.index){
+                        if (i === props.index) {
                             console.log(11)
                             newState.push(e.target.value);
-                        }else{
+                        } else {
                             console.log(22)
                             newState.push(categoryValue[i])
                         }

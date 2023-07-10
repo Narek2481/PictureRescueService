@@ -17,10 +17,10 @@ export default memo(function Footer() {
     return (
         <footer className="text-center">
             <ul className="row">
-                <li className={"col-4"+loginState.register_or_login ? "col-6" :"col-4" }>
+                <li className={loginState.register_or_login ? "col-6" :"col-4" }>
                     <Link to='/home'>Home</Link>
                 </li>
-                <li className={"col-4"+loginState.register_or_login ? "col-6" :"col-4" }>
+                <li className={loginState.register_or_login ? "col-6" :"col-4" }>
                     <Link to="/About_us">About us</Link>
                 </li>
                 {loginState.register_or_login ? "":<li className="col-4" >

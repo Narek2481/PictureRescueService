@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import imagePush from "../../action/addImage";
 import { downloudCategoryPost } from "../../redux/categorySend/categorySendSlice";
 import { downloudCategoryGet } from "../../redux/categorySend/categorySendSlice";
@@ -8,7 +9,6 @@ import SelectCategory from "../Home/SelectCategory/SelectCategory";
 import StickyInputLabel from "../sign_in/signInForm/StickyInputLabel/StickyInputLabel";
 import "./css/add_picture.scss"
 import ImageStatus from "./ImageStatus/ImageStatus";
-import { useNavigate } from "react-router-dom";
 import { selectValueCategory } from "../../redux/valueCategory/valueCategorySlice";
 
 const AddPicture = () => {
@@ -21,7 +21,6 @@ const AddPicture = () => {
     const dispatch = useDispatch();
     const [createCategory, setCreateCategory] = useState("");
     const [publicImage, setPublicImage] = useState(true);
-    // const [userToken, setUserToken] = useState("");
     const [requsetSuccessful, setRequsetSuccessful] = useState(false);
     const [reqMessige, setReqMessige] = useState("");
     const [modalIsOpen, setIsOpen] = useState(false);
@@ -43,7 +42,7 @@ const AddPicture = () => {
         if (nesting > 0) {
             dispatch(downloudCategoryPost(requsetCategoryRedux, selectValue,categoryValue));
         }
-    }, [nesting, fetchingCategory]);
+    }, [nesting, fetchingCategory,categoryValue,dispatch,requsetCategoryRedux,selectValue]);
     const onImageChange = useCallback(event => {
         if (event.target.files && event.target.files[0]) {
             setImageData(event.target.files[0]);
@@ -64,16 +63,6 @@ const AddPicture = () => {
     const closeModal = () => {
         setIsOpen(false);
     }
-    const customStyles = {
-        content: {
-            top: '50%',
-            left: '50%',
-            right: 'auto',
-            bottom: 'auto',
-            marginRight: '-50%',
-            transform: 'translate(-50%, -50%)',
-        },
-    };
     return (
         <div className="add_price">
             <input
@@ -116,7 +105,7 @@ const AddPicture = () => {
                                 class: "mb-5"
                             }
                         )
-                    }, [createCategory, selectValue])
+                    }, [createCategory])
                 }
             />
             <img

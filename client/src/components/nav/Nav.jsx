@@ -1,14 +1,13 @@
 import { Route, Routes, Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useCallback, useMemo, useState } from "react";
 import AboutUsPage from "../../pages/AboutUsPage"
 import SignInPage from "../../pages/SignInPage"
 import RegistrationPage from "../../pages/RegistrationPage"
-import { useCallback, useMemo, useState } from "react";
 import HomePage from "../../pages/HomePage";
 import LinkComponent from "./linkComponent/linkComponent";
 import AddPicturePage from "../../pages/AddPicturePage";
-import { useSelector } from "react-redux";
 import "./css/nav.scss"
-// import logo from "../../img_logo/logo12.jpg"
 import NotFoundPage from "../../pages/NotFoundPage";
 import ImageProfile from "./imageProfile/imageProfile";
 import { selectCurrentUser } from "../../redux/user/userSlice";
@@ -28,14 +27,14 @@ export default function Nav() {
     // register or login styles 
     const display = (auth.register_or_login ? "none" : "");
     const displayInImageProfile = auth.register_or_login ? "" : "none"
-    const styleInLinkComponent = useMemo(()=>{
+    const styleInLinkComponent = useMemo(() => {
         return {
             display
         }
-    },[display])
-    const styleInImageProfile = useMemo(()=> {
+    }, [display])
+    const styleInImageProfile = useMemo(() => {
         return { display: displayInImageProfile, cursor: "pointer" }
-    },[displayInImageProfile]);
+    }, [displayInImageProfile]);
 
     const clickManue = useCallback(() => {
         if (manue === '') {
@@ -107,7 +106,7 @@ export default function Nav() {
                                     style: styleInLinkComponent,
                                     click: clickManue
                                 }
-                            }, [styleInLinkComponent,clickManue])
+                            }, [styleInLinkComponent, clickManue])
                         }
                         />
 
@@ -119,7 +118,7 @@ export default function Nav() {
                                     style: styleInLinkComponent,
                                     click: clickManue
                                 }
-                            }, [styleInLinkComponent,clickManue])
+                            }, [styleInLinkComponent, clickManue])
                         }
                         />
                         <LinkComponent props={
@@ -130,7 +129,7 @@ export default function Nav() {
                                     style: styleInImageProfile,
                                     click: clickManue
                                 }
-                            }, [styleInImageProfile,clickManue])
+                            }, [styleInImageProfile, clickManue])
                         }
                         />
                         <ImageProfile props={
@@ -139,7 +138,7 @@ export default function Nav() {
                                     style: styleInImageProfile,
                                     click: clickManue
                                 }
-                            }, [styleInImageProfile,clickManue])
+                            }, [styleInImageProfile, clickManue])
                         }
                         />
                         <Logout props={
@@ -148,7 +147,7 @@ export default function Nav() {
                                     style: styleInImageProfile,
                                     click: clickManue
                                 }
-                            }, [styleInImageProfile,clickManue])}
+                            }, [styleInImageProfile, clickManue])}
                         />
                     </div>
 

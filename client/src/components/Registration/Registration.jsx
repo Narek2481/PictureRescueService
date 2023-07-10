@@ -1,13 +1,13 @@
-import Footer from "../footer/Footer";
-import { useState } from "react";
-import registrationSubmit from "../../action/registr";
-import { useDispatch, } from "react-redux";
-import { editCurrentUser } from "../../redux/user/userSlice";
-import { useMemo } from "react";
-import StickyInputLabel from "../sign_in/signInForm/StickyInputLabel/StickyInputLabel";
-import {  useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import env from "react-dotenv";
-import {encryptPassword} from "../../encrypt/encryptPassword";
+import { useState } from "react";
+import { useDispatch, } from "react-redux";
+import { useMemo } from "react";
+import Footer from "../footer/Footer";
+import { editCurrentUser } from "../../redux/user/userSlice";
+import registrationSubmit from "../../action/registr";
+import StickyInputLabel from "../sign_in/signInForm/StickyInputLabel/StickyInputLabel";
+import { encryptPassword } from "../../encrypt/encryptPassword";
 
 const Registration = () => {
   const [email, setEmail] = useState("");
@@ -53,9 +53,9 @@ const Registration = () => {
       containsValidNameOrLastName(lastName) &&
       validateEmail(email)
     ) {
-      registrationSubmit(name, lastName, email, encryptPassword(password,env.ENCRYPTION_SECRET))
+      registrationSubmit(name, lastName, email, encryptPassword(password, env.ENCRYPTION_SECRET))
         .then(res => {
-          localStorage.setItem("token",JSON.stringify(res.data.tokens.accessToken))
+          localStorage.setItem("token", JSON.stringify(res.data.tokens.accessToken))
           setInputValidStyle({ name: {}, lastName: {}, email: {}, password: {} });
           submitThen(res)
         })
@@ -103,7 +103,7 @@ const Registration = () => {
         style={validErr ? {
           padding: "20px 0",
           color: "red"
-        }:{}}
+        } : {}}
       >{validErr}</h3>
       <form >
         <StickyInputLabel

@@ -1,7 +1,8 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { editModal } from "../../../redux/modal/modalSlice";
 import { RemoveScroll } from 'react-remove-scroll';
+import { editModal } from "../../../redux/modal/modalSlice";
+
 const modal = {
   position: "fixed",
   zIndex: 1000000001,

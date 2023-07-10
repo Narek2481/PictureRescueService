@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import env from 'react-dotenv';
 import StickyInputLabel from '../../../sign_in/signInForm/StickyInputLabel/StickyInputLabel';
 import $api from '../../../../action';
-import env from 'react-dotenv';
 import { encryptPassword } from '../../../../encrypt/encryptPassword';
 
 function EditUserModal() {

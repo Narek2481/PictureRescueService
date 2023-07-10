@@ -107,17 +107,15 @@ const imageLoudeForDataBase = async (req) => {
                 where: { name: category }
             })
         }
-
-
-
-
         const result = categoryDataForSearch !== null ? await Image.findAll({
             include: [Public],
             limit: offset ? offset : 9,
-            where: { category: categoryDataForSearch }
+            where: { category: categoryDataForSearch },
+            order: [['createdAt', 'DESC']] 
         }) : await Image.findAll({
             include: [Public],
-            limit: offset ? offset : 9
+            limit: offset ? offset : 9,
+            order: [['createdAt', 'DESC']] 
         });
 
         console.log(result, "joindataatatat");
@@ -196,7 +194,7 @@ const imageLoudeForDataBaseForCategory = async req => {
                 category: categoryData.id
 
             },
-            order: [['id']],
+            order: [['createdAt', 'DESC']] ,
             limit: offset ? offset : 9
         })
         const imageObjArr = imagesInDb.map((e) => {

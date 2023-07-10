@@ -1,13 +1,13 @@
 import React, { memo, useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import { RemoveScroll } from 'react-remove-scroll';
+import { useSelector } from 'react-redux';
 import getUserData from '../../../action/getPersonalAreaData';
 import btn from "../../../img_logo/pencil-g9d2a08ec1_640 1.png"
 import userImage from "../../../img_logo/user_icon_150670 1.png"
 import emailImage from "../../../img_logo/email 1.png"
 import UploadAvatar from '../../Home/UploadAvatar/UploadAvatar';
 import EditUserModal from './EditUserModal/EditUserModal';
-import { useSelector } from 'react-redux';
 
 
 const User = () => {
@@ -59,10 +59,10 @@ const User = () => {
                         <img
                             className='mb-2'
                             style={
-                                { 
-                                       maxWidth: "200px",
-                                borderRadius: "25px"
-                            }}
+                                {
+                                    maxWidth: "200px",
+                                    borderRadius: "25px"
+                                }}
                             src={profileImage}
                             alt="" />
 
@@ -90,7 +90,7 @@ const User = () => {
                 <div className='userData'>
                     <div className="d-flex justify-content-center align-items-center mt-2 flex-sm-row ">
                         <div>
-                            <img   className='img-fluid mw-25' src={userImage} alt=""  />
+                            <img className='img-fluid mw-25' src={userImage} alt="" />
                             UserName:
                         </div>
                         <div>{userData.name}</div>

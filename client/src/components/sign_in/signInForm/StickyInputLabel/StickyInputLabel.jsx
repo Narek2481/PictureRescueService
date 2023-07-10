@@ -21,12 +21,12 @@ function StickyInputLabel({ props }) {
         onChange={(e) => props.setInputValue(e.target.value)}
         style={props.style}
       />
-        <img
-          style={{ display: props.type !== "password" ? "none" : "inline-block" }}
-          onClick={props.type === "password" ? changeInputType : ()=>{}}
-          className="img-fluid eyeButton"
-          src={inputType === "password" ? visible : invisible}
-          alt="" />
+      <img
+        style={{ display: props.type !== "password" ? "none" : "inline-block" }}
+        onClick={props.type === "password" ? changeInputType : () => { }}
+        className="img-fluid eyeButton"
+        src={inputType === "password" ? visible : invisible}
+        alt="" />
     </div>
   );
 }

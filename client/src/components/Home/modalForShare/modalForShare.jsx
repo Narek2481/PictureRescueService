@@ -1,11 +1,11 @@
 import React, { memo, useMemo, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import ShareModal from './shareModal/ShareModal';
 import btnImg from "../../../img_logo/61020.png"
 import shareImage from '../../../action/shareImage';
-import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../../redux/user/userSlice';
 
 
@@ -37,7 +37,7 @@ function Example({ props }) {
                 }
             }}>
                 Share
-                <img className='ml-3' src={btnImg} alt=""  style={{width:"20px",height:"20px",verticalAlign:"middle"}}/>
+                <img className='ml-3' src={btnImg} alt="" style={{ width: "20px", height: "20px", verticalAlign: "middle" }} />
             </Button>
 
             <Modal show={show} onHide={handleClose}>
