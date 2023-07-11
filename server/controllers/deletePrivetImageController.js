@@ -5,7 +5,7 @@ const deletePrivetImageController = async (req,res,next) =>{
     try{
         const data = await findeImageForDelete(req.query.ImageId);
         if(data === "ok"){
-            res.send("OK")
+            res.send(204)
         }else{
             res.status(500)
         }

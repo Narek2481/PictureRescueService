@@ -9,6 +9,7 @@ const Logout = ({ props }) => {
         <li style={props.style} onClick={() => {
             logout()
             dispatch(editCurrentUser({ register_or_login: false }));
+            localStorage.removeItem("token")
         }}>
             Logout
             <div className="line"></div>

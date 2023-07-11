@@ -121,17 +121,7 @@ export default function Nav() {
                             }, [styleInLinkComponent, clickManue])
                         }
                         />
-                        <LinkComponent props={
-                            useMemo(() => {
-                                return {
-                                    path: "personalArea",
-                                    text: "Own space",
-                                    style: styleInImageProfile,
-                                    click: clickManue
-                                }
-                            }, [styleInImageProfile, clickManue])
-                        }
-                        />
+                        
                         <ImageProfile props={
                             useMemo(() => {
                                 return {

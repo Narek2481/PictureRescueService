@@ -1,25 +1,25 @@
 import { memo } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Modal } from "../modal/Modal";
 import Share from "../modalForShare/modalForShare";
 import img from "../../../img_logo/delete-Icon.png"
 import { deletePrivetImage } from "../../../action/deletePrivetImage";
 import { editFatching } from "../../../redux/data/dataSlice";
-import { useDispatch, useSelector } from "react-redux";
-
+// 
 export default memo(function ImageComponent({ props }) {
     const loginState = useSelector((state) => state.currentUser.register_or_login)
     const dispatch = useDispatch();
     const deleteImage = (e) => {
         deletePrivetImage(props.id)
             .then((res) => {
-                console.log(res);
-                if (res.data === "OK") {
-                    window.location.reload(false);
+                console.log(res.status);
+                if (res.status === 204) {
+                    dispatch(editFatching({ fatching: true }));
                 }
             })
             .catch(e => console.log(e))
     }
-    
+
     return (
         <div className="col-12 col-md-4 col-sm-6 iamage_container" >
             <h4>Image Size {props.imageWidthHeght}</h4>
@@ -30,7 +30,7 @@ export default memo(function ImageComponent({ props }) {
             </Modal>
             <Share props={props.id} />
             {
-                props.text && loginState  ?
+                props.text && loginState ?
                     <img
                         onClick={deleteImage}
                         className="img-fluid removeButton"

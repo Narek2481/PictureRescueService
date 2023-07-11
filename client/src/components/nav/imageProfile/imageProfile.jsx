@@ -1,10 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
+import {  useNavigate } from "react-router-dom";
 import NotificationImage from "./Notification/NotificationImage";
 import { editCurrentUser } from "../../../redux/user/userSlice";
 
 const ImageProfile = ({ props }) => {
+    const navigate = useNavigate()
     const name = useSelector((state) => state.currentUser.name)
     const loginState = useSelector((state) => state.currentUser.register_or_login)
     const dispatch = useDispatch()
@@ -18,8 +20,9 @@ const ImageProfile = ({ props }) => {
 
     return (
         <li style={props.style} className="profileImage">
-            <span> {name}</span>
-            <img src={profileImage} alt="Avatar" />
+
+            <span onClick={()=> navigate("personalArea")}> {name}</span>
+            <img  src={profileImage} alt="Avatar" onClick={()=> navigate("personalArea")} />
             {loginState ? <NotificationImage /> : ""}
         </li>
     )
