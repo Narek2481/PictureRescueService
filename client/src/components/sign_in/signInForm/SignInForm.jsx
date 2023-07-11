@@ -82,33 +82,35 @@ export default function SignInForm() {
     return (
         <div>
             <h3 className="container text-center text-danger ">{validErr}</h3>
-            <StickyInputLabel props={
-                useMemo(() => {
-                    return {
-                        text: "Username",
-                        name: "Username",
-                        type: "email",
-                        inputValue: login,
-                        setInputValue: setLogin,
-                        style: styleValidEror.login
-                    }
-                }, [login, styleValidEror])
-            } />
-            <StickyInputLabel props={
-                useMemo(() => {
-                    return {
-                        text: "Password",
-                        name: "Password",
-                        type: "password",
-                        inputValue: password,
-                        setInputValue: setPassword,
-                        style: styleValidEror.password
-                    }
-                }, [password, styleValidEror])
-            } />
-            <div className="text-center" >
-                <button type="submit" onClick={signInSubmit}>Submit</button>
-            </div>
+            <form onSubmit={signInSubmit}>
+                <StickyInputLabel props={
+                    useMemo(() => {
+                        return {
+                            text: "Username",
+                            name: "Username",
+                            type: "email",
+                            inputValue: login,
+                            setInputValue: setLogin,
+                            style: styleValidEror.login
+                        }
+                    }, [login, styleValidEror])
+                } />
+                <StickyInputLabel props={
+                    useMemo(() => {
+                        return {
+                            text: "Password",
+                            name: "Password",
+                            type: "password",
+                            inputValue: password,
+                            setInputValue: setPassword,
+                            style: styleValidEror.password
+                        }
+                    }, [password, styleValidEror])
+                } />
+                <div className="text-center" >
+                    <button type="submit" onClick={signInSubmit}>Submit</button>
+                </div>
+            </form>
         </div>
     );
 }

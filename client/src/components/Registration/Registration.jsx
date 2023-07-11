@@ -105,7 +105,7 @@ const Registration = () => {
           color: "red"
         } : {}}
       >{validErr}</h3>
-      <form >
+      <form onSubmit={submitData} >
         <StickyInputLabel
           props={useMemo(() => {
             return (
