@@ -1,5 +1,4 @@
-Picture Rescue Service
-Picture Rescue Service is a project aimed at providing a service to rescue and restore damaged or corrupted pictures. It utilizes various algorithms and techniques to recover and enhance the quality of images.
+Picture Rescue Service is a project for storing pictures and it has registration and login. It uses different algorithms and methods to store and retrieve images.
 
 Installation
 Clone the repository:
